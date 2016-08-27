@@ -224,4 +224,3 @@ c
       j2=i-n*(i2-1)
       return
       end
-      

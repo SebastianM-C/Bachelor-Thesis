@@ -1,8 +1,8 @@
 FC = gfortran
-FCFLAGS = -march=native -O2
-FLFLAGS =
+FCFLAGS = -march=native -O2 -g -fbacktrace -ffpe-trap=list
+#FLFLAGS =
 
-EXECUTABLE_NAME=main
+EXECUTABLE_NAME=hamilt
 
 # Folders
 BIN = ../../../Bin
