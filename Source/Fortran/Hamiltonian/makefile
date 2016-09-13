@@ -1,5 +1,6 @@
 FC = gfortran
-FCFLAGS = -march=native -O2 -g -fbacktrace -ffpe-trap=list
+FCFLAGS = -march=native -O2 -g -Wall -Wextra -Wconversion \
+        	-fbacktrace -ffpe-trap=zero,overflow,underflow,denormal
 #FLFLAGS =
 
 EXECUTABLE_NAME=hamilt
