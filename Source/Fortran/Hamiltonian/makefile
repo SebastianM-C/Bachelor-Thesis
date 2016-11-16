@@ -3,8 +3,9 @@ BIN = ../../../Bin
 OBJ = $(BIN)/Obj
 
 FC = gfortran
-FCFLAGS = -march=native -O2 -g -fopt-info -Wall -Wextra -Wconversion \
-        	-fbacktrace #-ffpe-trap=zero,overflow,underflow,denormal
+FCFLAGS = -march=native -O2 -g \
+        	-fopt-info -Wall -Wextra -Wconversion -fbacktrace \
+        	#-ffpe-trap=zero,overflow,underflow,denormal
 #FLFLAGS =
 
 EXECUTABLE_NAME = hamilt
