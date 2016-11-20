@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+a=1.
+b=0.5
+d=0.4
+
+function run() {
+  ./clean
+  echo "Running with: $arg"
+  # sync input
+  echo $arg > ../Source/Fortran/Hamiltonian/hamilt.inp
+  cd ../Bin
+  echo $arg > hamilt.inp
+  time ./hamilt
+  # save output
+  dest_dir="../Output/B$b N$1"
+  if [ ! -d "$dest_dir" ]; then
+    mkdir -p "$dest_dir"
+  fi
+  cp hamilt.dat "$dest_dir"/hamilt.dat
+  cp rebde.dat "$dest_dir"/rebde.dat
+  cp reuna.dat "$dest_dir"/reuna.dat
+  cp reuns.dat "$dest_dir"/reuns.dat
+  # return to Scripts directory
+  cd ../Scripts
+}
+
+if (( $# >= 1 )); then
+  for i in $@; do
+    arg="$i $a $b $d"
+    run $i
+  done
+else
+  arg="60 $a $b $d"
+  run 60
+fi
