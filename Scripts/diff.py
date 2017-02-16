@@ -30,7 +30,7 @@ def ir_decomp(E):
 
 def statistics(A, B, D, N, f_index):
     "Compute spacing statistics"
-    path = "../Output/B" + str(B) + " N" + str(N)
+    path = "../Output/B" + str(B) + " D" + str(D) + " N" + str(N)
     os.chdir(path)
     output = open("diff.dat", 'w')
 
@@ -60,8 +60,8 @@ def statistics(A, B, D, N, f_index):
 def difference(A, B, D, N1, N2, file):
     "Compare the energy levels between different diagonalization bases"
     os.chdir("../Output")
-    path1 = "B" + str(B) + " N" + str(N1)
-    path2 = "B" + str(B) + " N" + str(N2)
+    path1 = "B" + str(B) + " D" + str(D) + " N" + str(N1)
+    path2 = "B" + str(B) + " D" + str(D) + " N" + str(N2)
     os.chdir(path1)
 
     E1 = np.loadtxt(file, usecols=(1,), unpack=True)  # Energy levels
