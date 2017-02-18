@@ -52,7 +52,7 @@ def statistics(A, B, D, N, f_index):
           D, "\nN = ", N, "\nAverage spacing: ", avgSpacing)
     relSpacing = deltaE / avgSpacing
     relSpacing.tofile(output, sep="\n")
-    plt.hist(relSpacing, bins=np.arange(0, 4, 1 / 2))
+    plt.hist(relSpacing, bins=np.arange(0, 4, 1 / 4))
     plt.show()
     os.chdir("../../Scripts")
     return (deltaE, avgSpacing, relSpacing)
@@ -83,18 +83,18 @@ def difference(A, B, D, N1, N2, file):
 
 # Hamiltonian parameters
 A = 1
-B = [0, 0.1 * A, 0.5 * A]
+B = [0, 0.1 * A, 0.4 * A, 0.5 * A]
 D = [0, 0.4 * A, 0.5 * A]
 N = [40, 60, 80, 100, 120, 140, 160]
 input = ["hamilt.dat", "rebde.dat", "reuna.dat", "reuns.dat"]
 
 # Input parameters
-b = 0
+b = 2
 d = 2
-i = 2       # first diagonalization basis size
-j = 3       # second diagonalization basis size
+i = 4       # first diagonalization basis size
+j = 5       # second diagonalization basis size
 
-# Enargy level difference at a change of basis
+# Energy level difference at a change of basis
 diff = difference(A, B[b], D[d], N[i], N[j], input[0])
 stable_levels = np.where(np.abs(diff) < 5e-2)
 print(diff[np.abs(diff) < 5e-2].size,
@@ -104,6 +104,6 @@ print("Stable levels: ", stable_levels)
 # only 0 and 1 are valid for the last argument; can't separate reuna and reuns
 stats = statistics(A, B[b], D[d], N[i], 1)
 
-print("\nEnargy level difference at a change of basis: \n")
+print("\nEnergy level difference at a change of basis: \n")
 plt.hist(diff, bins='auto')
 plt.show()
