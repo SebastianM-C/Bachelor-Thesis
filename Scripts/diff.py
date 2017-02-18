@@ -13,13 +13,14 @@ def ir_decomp(E):
 
     # in order to compute E[j] - E[j-1] using np.diff() we must shift every
     # element of the array to right with 1 position and ignore diff[0]
+    diff1 = np.diff(E)                      # E[j+1] - E[j]
     diff = np.diff(np.roll(E, 1))           # E[j] - E[j-1]
     E = np.roll(E, 1)
     E = E[1:]
-    diff1 = np.diff(E)                      # E[j+1] - E[j]
 
     # print("size of E: ", E.size, "\nsize of diff: ", diff.size)
-    print("diff: ", diff[:20])
+    print("diff: ", diff[:10])
+    print("\ndiff1: ", diff1[:10])
 
     rebde = E[diff <= 0.0005]
     rebde = rebde[1:]
@@ -90,8 +91,8 @@ input = ["hamilt.dat", "rebde.dat", "reuna.dat", "reuns.dat"]
 # Input parameters
 b = 0
 d = 2
-i = 1       # first diagonalization basis size
-j = 2       # second diagonalization basis size
+i = 2       # first diagonalization basis size
+j = 3       # second diagonalization basis size
 
 # Enargy level difference at a change of basis
 diff = difference(A, B[b], D[d], N[i], N[j], input[0])
