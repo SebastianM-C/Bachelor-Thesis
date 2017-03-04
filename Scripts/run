@@ -2,7 +2,7 @@
 
 a=1.
 b=0
-d=0.5
+d=0
 
 function run() {
   ./clean
@@ -18,6 +18,7 @@ function run() {
     mkdir -p "$dest_dir"
   fi
   cp hamilt.dat "$dest_dir"/hamilt.dat
+  cp hamilt.out "$dest_dir"/hamilt.out
   cp rebde.dat "$dest_dir"/rebde.dat
   cp reuna.dat "$dest_dir"/reuna.dat
   cp reuns.dat "$dest_dir"/reuns.dat

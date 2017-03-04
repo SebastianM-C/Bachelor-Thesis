@@ -67,7 +67,7 @@ c199        write(20,2002)j,dd(j)
 c        do k=1, nn
 c          write(*, *)j, k, xx((j-1)*nn+k), dd(j)
 c        enddo
-        write(*,*) (xx((j-1)*nn+k), k=1,nn)
+        write(20, *) (xx((j - 1) * nn + k), k=1, nn)
         write(30,2003)j,dd(j)
           if(j.eq.1) then
           m2=m2+1
