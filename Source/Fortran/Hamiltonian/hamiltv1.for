@@ -2,7 +2,7 @@ c compute matrix elements of a boson hamiltonian
 c and diagonalise it
 c
 c     implicit double precision (a-h,o-z)
-      parameter(nd1=6000000,nd2=10000)
+      parameter(nd1=200000000,nd2=100000)
       dimension aa(nd1),xx(nd1),ee(nd2)
       dimension index(nd2)
       common/param/a,b,d
@@ -61,8 +61,13 @@ c199      write(20,2001)
 c199      write(20,2010)(dd(i),i=1,nn)
 c199      write(20,2004)
 c199      write(20,2020)(index(i),i=1,nn)
+c      write(*,*)"eigenvectors: ", (xx(i),i=1,nn*nn)
       do j=1,nn
 c199        write(20,2002)j,dd(j)
+c        do k=1, nn
+c          write(*, *)j, k, xx((j-1)*nn+k), dd(j)
+c        enddo
+        write(*,*) (xx((j-1)*nn+k), k=1,nn)
         write(30,2003)j,dd(j)
           if(j.eq.1) then
           m2=m2+1
@@ -173,7 +178,7 @@ c ind = 1 : write from  line  n1 to  line  n2
 c       2 : write from column n1 to column n2
 c
 c     implicit double precision (a-h,o-z)
-      parameter(nd1=6000000,nd2=10000)
+      parameter(nd1=200000000,nd2=100000)
       dimension bb(nd1)
       common/pinteg/m1,m2,m3,iii
       common/ener/dd(nd2)
