@@ -18,12 +18,12 @@ def eig(i):
 A = 1
 B = [0, 0.1 * A, 0.4 * A, 0.5 * A]
 D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
-N = [2, 3, 4, 40, 60, 80, 100, 120, 140, 160]
+N = [2, 3, 4, 5, 40, 60, 80, 100, 120, 140, 160]
 
 # Input parameters
 b = 0
 d = 0
-n = 2
+n = 3
 nn = N[n] * (N[n] + 1) / 2
 
 os.chdir("../Output/B" + str(B[b]) + " D" + str(D[d]) + " N" + str(N[n]))
@@ -43,7 +43,7 @@ with open("eigenvectors.tex", "w") as f:
     for i in range(int(nn - 2)):
         if i % 5 == 0 and i != 0:
             f.write("\\\\")
-        f.write("\t\tv_" + str(i + 2) + ' =\n')
+        f.write("\t\tv_{" + str(i + 2) + '} =\n')
         f.write(eig(i + 1))
     # write the last eigenvector separately
     f.write("\t\tv_{" + str(int(nn)) + '} =\n')

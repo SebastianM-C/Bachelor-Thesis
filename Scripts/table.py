@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import numpy as np
 from timeit import default_timer as timer
@@ -15,15 +17,16 @@ def color(x, exists):
     return ''
 
 
+# Hamiltonian parameters
 A = 1
 B = [0, 0.1 * A, 0.4 * A, 0.5 * A]
-D = [0, 0.4 * A, 0.5 * A]
+D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
 N = [40, 60, 80, 100, 120, 140, 160]
 
 # Input parameters
-b = 2
-d = 2
-n = 3
+b = 3
+d = 3
+n = 1
 stable_only = True   # choose all levels or only the stable ones
 
 start = timer()

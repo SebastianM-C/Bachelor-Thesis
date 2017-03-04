@@ -60,15 +60,15 @@ def difference(A, B, D, N1, N2, file):
 # Hamiltonian parameters
 A = 1
 B = [0, 0.1 * A, 0.4 * A, 0.5 * A]
-D = [0, 0.4 * A, 0.5 * A]
+D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
 N = [40, 60, 80, 100, 120, 140, 160]
 input = ["hamilt.dat", "rebde.dat", "reuna.dat", "reuns.dat"]
 
 # Input parameters
-b = 2
-d = 2
-i = 3       # first diagonalization basis size
-j = 4       # second diagonalization basis size
+b = 3
+d = 3
+i = 1       # first diagonalization basis size
+j = 2       # second diagonalization basis size
 
 # Energy level difference at a change of basis
 diff = difference(A, B[b], D[d], N[i], N[j], input[0])
