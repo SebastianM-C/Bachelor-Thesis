@@ -20,6 +20,7 @@ function run() {
   cp hamilt.dat "$dest_dir"/hamilt.dat
   cp hamilt.out "$dest_dir"/hamilt.out
   cp eigenvectors.out "$dest_dir"/eigenvectors.out
+  cp index.out "$dest_dir"/index.out
   cp rebde.dat "$dest_dir"/rebde.dat
   cp reuna.dat "$dest_dir"/reuna.dat
   cp reuns.dat "$dest_dir"/reuns.dat

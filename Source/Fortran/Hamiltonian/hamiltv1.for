@@ -27,6 +27,7 @@ c     implicit double precision (a-h,o-z)
       open(unit=50,file='reuns.dat',status='new')
       open(unit=60,file='reuna.dat',status='new')
       open(unit=70,file='eigenvectors.out',status='new')
+      open(unit=80,file='index.out',status='new')
 
       read(10,*) n,a,b,d
 c     nn=n*n
@@ -36,6 +37,7 @@ c     nn=n*n
         do i2=1,n-i1+1
           i=i+1
           index(i)=i1*100+i2
+          write(80, *) i1 - 1, " ", i2 - 1
 c         i=n*(i1-1)+i2
           j=0
           do j1=1,n
@@ -64,21 +66,22 @@ c199      write(20,2004)
 c199      write(20,2020)(index(i),i=1,nn)
       write(*, *) char(10), " index:"
       write(*, *) (index(i), i = 1, nn)
-      write(*, *) "H transposed:", char(10)
-      do i = 1, nn
-        do j = 1, nn
-          write(20, '(f12.8,$)') aa((i - 1) * nn + j)
-        end do
-        write(20, *) char(10)
-      end do
-      write(*, *) "eigenvectors: ", char(10)
-      do i = 1, nn
-        write(*, '(a, i2)') "v", i
-        do j = 1, nn
-          write(*, '(f12.8,$)') xx((i - 1) * nn + j)
-        end do
-        write(*, *) char(10)
-      end do
+c      write(80, *) (index(i), i = 1, nn)
+C      write(*, *) "H transposed:", char(10)
+c      do i = 1, nn
+c        do j = 1, nn
+c          write(20, '(f12.8,$)') aa((i - 1) * nn + j)
+c        end do
+c        write(20, *) char(10)
+c      end do
+c      write(*, *) "eigenvectors: ", char(10)
+c      do i = 1, nn
+c        write(*, '(a, i5)') "v", i
+c        do j = 1, nn
+c          write(*, '(f12.8,$)') xx((i - 1) * nn + j)
+c        end do
+c        write(*, *) char(10)
+c      end do
 c      write(*,*) "eigenvectors: ", char(10), (xx(i),i=1,nn*nn)
       do j=1,nn
 c199        write(20,2002)j,dd(j)
@@ -86,6 +89,7 @@ c        do k=1, nn
 c          write(*, *) ((j-1)*nn+k), k, xx((j-1)*nn+k), dd(j)
 c        enddo
         write(70, *) (xx((j - 1) * nn + k), k = 1, nn)
+        write(20, *) (aa((j - 1) * nn + k), k = 1, nn)
         write(30,2003)j,dd(j)
           if(j.eq.1) then
           m2=m2+1
