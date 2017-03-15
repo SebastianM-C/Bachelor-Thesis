@@ -160,9 +160,12 @@ with open("eigenvectors.tex", "w") as f:
     f.write("\tHamiltonian:\n")
     f.write("\t\\[\n\tH=\n\t\\begin{pmatrix}\n")
     for i in range(int(nn)):
+        dgc = b == 0 and d == 0     # degenerate case
         f.write("\t\t")
         f.write(' & '.join(
             h_elem(H[i][j], color=colors[int(round(H[i][j]))]
+                if dgc and i == j else '',
+                skip_zero=True if dgc and not (i == 0 and j == 0) else False)
                 for j in range(H[i].size)))
         f.write('\\\\\n')
     f.write("\t\\end{pmatrix}\n\t\\]\n")
