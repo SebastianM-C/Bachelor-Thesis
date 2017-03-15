@@ -16,7 +16,7 @@ def eigv_string(eigv, color='', k=-1, sep=',\\ '):
     Add \color{} to the eigenvector (optional)
     Add \mathbf{} to the k-th element (optional)'''
 
-    v = ('\t\t{\\color{' if color else '') + color + ('}' if color else '') + \
+    v = ('\t\t{\\color{' + color + '}' if color else '') + \
         '\\begin{pmatrix}\n\t\t\t'
     v += ' \\\\ '.join((('\\mathbf{' if k == j else '') + format_float(eigv[j])
                         + ('}' if k == j else ''))
@@ -40,6 +40,11 @@ def np_eig():
                           k=np.argmax(np.abs(eigvec[i]))))
 
 
+def h_elem(elem, color='', skip_zero=False):
+    return (('\\color{' + color + '}' if color else '') + format_float(elem)
+            ) if (not skip_zero) or elem != 0 else ''
+
+
 # Hamiltonian parameters
 A = 1
 B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A]
@@ -58,7 +63,9 @@ colors = ('black', 'red', 'teal', 'blue', 'orange', 'olive',
 
 colormap = [''] * int(nn)   # colors used
 
-# skip_zero = True
+# Try to cd to the given path. In case of an error go back to ../../Scripts
+# and try again (maybe the last run had an error or
+# the script did not reach the end)
 try:
     os.chdir("../Output/B" + str(B[b]) + " D" + str(D[d]) + " N" + str(N[n]))
 except FileNotFoundError as fnf:
@@ -152,9 +159,11 @@ with open("eigenvectors.tex", "w") as f:
 
     f.write("\tHamiltonian:\n")
     f.write("\t\\[\n\tH=\n\t\\begin{pmatrix}\n")
-    for line in H:
+    for i in range(int(nn)):
         f.write("\t\t")
-        f.write(' & '.join(format_float(line[i]) for i in range(line.size)))
+        f.write(' & '.join(
+            h_elem(H[i][j], color=colors[int(round(H[i][j]))]
+                for j in range(H[i].size)))
         f.write('\\\\\n')
     f.write("\t\\end{pmatrix}\n\t\\]\n")
 
