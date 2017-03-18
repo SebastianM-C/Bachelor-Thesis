@@ -4,11 +4,17 @@ import os
 import re
 import string
 import numpy as np
+from scipy import linalg
 
 
 def format_float(n):
     '''Converts the number to int if possible'''
-    return ('{:n}' if n == int(n) else '{:.10g}').format(n)
+    return ('{:n}' if n == int(n) else '{:.8g}').format(n)
+
+
+def optional_color(element, color):
+    '''Add optional color to the element'''
+    return '{\\color{' + color + '}' + element + '}' if color else element
 
 
 def eigv_string(eigv, color='', k=-1, sep=',\\ '):
@@ -25,43 +31,35 @@ def eigv_string(eigv, color='', k=-1, sep=',\\ '):
     return v
 
 
-def np_eig():
-    '''Compute eigenvalues and eigenvectors with NumPy'''
-    eigval, eigvec = np.linalg.eigh(H)
-    eigvec = np.transpose(eigvec)
-    # If the colormap element corresponding to the i-th eigenvalue is empty,
-    # skip adding \color
-    print(', '.join(('\\color{' + colormap[i] + '}' if colormap[i] else '') +
-                    format_float(eigval[i]) for i in range(eigval.size)))
-    print('\n')
-    for i in range(int(nn)):
-        print("v_{" + str(int(i + 1)) + '} =')
-        print(eigv_string(eigvec[i], color=colormap[i],
-                          k=np.argmax(np.abs(eigvec[i]))))
-
-
 def h_elem(elem, color='', skip_zero=False):
-    return (('\\color{' + color + '}' if color else '') + format_float(elem)
-            ) if (not skip_zero) or elem != 0 else ''
+    '''Build Hamiltonian element string
+    Optionally add color and skip zeros'''
+    return (optional_color(format_float(elem), color)) \
+        if (not skip_zero) or elem != 0 else ''
 
 
 # Hamiltonian parameters
 A = 1
-B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A]
+B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A, 0.6 * A, 0.8 * A]
 D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
-N = [2, 3, 4, 5, 10, 15]
+N = [2, 3, 4, 5, 6, 10, 15]
 
 # Input parameters
-b = 0
-d = 0
-n = 2
-nn = N[n] * (N[n] + 1) / 2
+b = 2
+d = 1
+n = 6
+nn = int(N[n] * (N[n] + 1) / 2)
+
+# Use hamilt or SciPy for eigenvalues and eigenvectors
+use_sc = False
 
 # All available colors
 colors = ('black', 'red', 'teal', 'blue', 'orange', 'olive',
           'magenta', 'cyan', 'Brown', 'Goldenrod', 'Green', 'Violet')
 
-colormap = [''] * int(nn)   # colors used
+colormap = [''] * nn   # colors used
+
+dgc = b == 0 and d == 0     # degenerate case
 
 # Try to cd to the given path. In case of an error go back to ../../Scripts
 # and try again (maybe the last run had an error or
@@ -79,13 +77,19 @@ except FileNotFoundError as fnf:
         print('Check the filename\n' + 'Now in: ' + os.getcwd())
 
 # Load files
-eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
 H = np.loadtxt("hamilt.out")    # Hamiltonian
-E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
 index = np.loadtxt("index.out")
+c_max = np.empty([nn], dtype=int)
 
 # Transpose matrices
 H = np.transpose(H)
+# Get eigenvalues and eigenvectors
+if use_sc:
+    E, eigenvectors = linalg.eigh(H)
+else:
+    E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
+    eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
+
 eigenvectors = np.transpose(eigenvectors)   # each eigenvector is on one row
 eigenvalues = ''
 # Group energy levels such that a level contains all the eigenvalues with
@@ -103,69 +107,86 @@ for i in range(len(levels)):
 # If the colormap element corresponding to the i-th eigenvalue is empty,
 # skip adding \color
 eigenvalues = ', '.join(
-    ('\\color{' + colormap[i] + '}' if colormap[i] else '') +
-    format_float(E[i]) for i in range(E.size))
+    optional_color(format_float(E[i]), colormap[i]) +
+    ('\n\t' if i % 5 == 0 and i else '')   # add newline for shorter lines
+    for i in range(E.size))
 
 # np_eig()
 
-with open("eigenvectors.tex", "w") as f:
+with open("eigenvectors B" +
+          str(B[b]) + ' D' + str(D[d]) + ' N' + str(N[n]) +
+          ('_np' if use_sc else '') +
+          ".tex", "w") as f:
     # Set paper size according to the imput
-    if n < 4:
-        paper_size = str(6 - n)
-        if n < 2:
+    if n < 5:
+        # Set paper size and number of eigenvectors on a single row
+        if n < 3:
             paper_size = str(4)
+            no_eigv = 5
+        if n == 3:
+            paper_size = str(2)
+            no_eigv = 10
+        if n == 4:
+            paper_size = str(1)
+            no_eigv = 15
+        if dgc:
+            no_eigv *= 2
+
         f.write("\\documentclass[a" + paper_size +
                 "paper,12pt,landscape]{article}\n\n")
-        # Number of eigenvectors on a single row
-        no_eigv = 10 if b == 0 and d == 0 else 5
     else:
+        paper_width = str(int(2**(n - 3)) * 50) + 'cm'
+        paper_height = str(int(2**(n - 4)) * 50) + 'cm'
         f.write("\\documentclass[12pt,landscape]{article}\n")
-        f.write("\\setlength{\paperwidth}{" + str(int(2**(n - 3))) + "00cm}\n")
-        f.write("\\setlength{\paperheight}{" + str(int(2**(n - 4))) + "00cm}")
-        no_eigv = 20
+        f.write("\\setlength{\paperwidth}{" + paper_width + "}\n")
+        f.write("\\setlength{\paperheight}{" + paper_height + "}\n")
+        no_eigv = (n - 3) * 20 + 10
+
     # LaTeX packages
     f.write("\\usepackage[margin=1cm]{geometry}\n")
     f.write("\\usepackage{amsmath,amsfonts,amssymb}\n")
     f.write("\\usepackage{physics}")
     f.write("\\usepackage[dvipsnames]{xcolor}\n")
     # Additional options
-    f.write("\\setcounter{MaxMatrixCols}{200}\n")
+    f.write("\\setcounter{MaxMatrixCols}{" + nn + 10 + "}\n")
     f.write("\\allowdisplaybreaks\n\n")
     # The document begins here
     f.write("\\begin{document}\n\n")
 
     f.write("\tEigenvectors:\n")
     f.write("\t\\begin{align*}\n")
-    for i in range(int(nn)):
+    for i in range(nn):
         f.write(('\\\\' if i % no_eigv == 0 and i != 0 else '') +
                 '\t\tv_{' + str(i + 1) + '} ' +
                 ('&' if i % no_eigv == 0 else '') +
                 '=\n')
         # The index of the largest coefficient
-        c_max = np.argmax(eigenvectors[i])
+        c_max[i] = np.argmax(eigenvectors[i])
         # The energy corresponding to the eigenvector is given by the
         # (i+1)-th eigenvalue
         # Test if the eigenvectors correspond to the eigenvalues
-        if b == 0 and d == 0 and \
-                np.where(np.abs(H[c_max] - E[i]) < 1e-6)[0].size == 0:
+        # in the degenerate case
+        if dgc and np.where(np.abs(H[c_max[i]] - E[i]) < 1e-6)[0].size == 0:
             print('Warning: v' + str(i + 1) +
                   ' does not correspond to the eigenvalue ' + str(E[i]))
 
-        if i != int(nn) - 1:
-            f.write(eigv_string(eigenvectors[i], colormap[i], c_max))
+        if i != nn - 1:
+            f.write(eigv_string(eigenvectors[i], colormap[i], c_max[i]))
         else:   # now new line after the last eigenvector
-            f.write(eigv_string(eigenvectors[i], colormap[i], c_max, sep=''))
+            f.write(eigv_string(eigenvectors[i],
+                                colormap[i], c_max[i], sep=''))
     f.write("\t\\end{align*}\n")
 
     f.write("\tHamiltonian:\n")
     f.write("\t\\[\n\tH=\n\t\\begin{pmatrix}\n")
-    for i in range(int(nn)):
-        dgc = b == 0 and d == 0     # degenerate case
+    for i in range(nn):
         f.write("\t\t")
+        # Add colors on the diagonal and remove zeros in the degenerate case
         f.write(' & '.join(
-            h_elem(H[i][j], color=colors[int(round(H[i][j]))]
-                if dgc and i == j else '',
-                skip_zero=True if dgc and not (i == 0 and j == 0) else False)
+            h_elem(H[i][j]) if not dgc else
+            h_elem(H[i][j],
+                   color=colors[int(round(H[i][j]))] if i == j else '',
+                   skip_zero=True if not (i == j) else False)
                 for j in range(H[i].size)))
         f.write('\\\\\n')
     f.write("\t\\end{pmatrix}\n\t\\]\n")
@@ -173,11 +194,26 @@ with open("eigenvectors.tex", "w") as f:
     f.write("\tEigenvalues:\n")
     f.write("\t\\[\lambda = " + eigenvalues + '\\]\n')
 
-    f.write("\tStates: \\[")
+    f.write("\tStates: \n\t\\[")
     for i in index:
         f.write("\\ket{" + format_float(i[0]) +
-                '\, ' + format_float(i[1]) + "}")
-    f.write("\\]")
+                '\, ' + format_float(i[1]) + "} ")
+
+    f.write("\\]\n")
+    f.write("\tOrdering: \n\t\\[")
+    for i in range(nn):
+        n1 = index[int(c_max[i])][0]
+        n2 = index[int(c_max[i])][1]
+        f.write(optional_color(
+            '\\ket{' + format_float(n1) + '\, ' + format_float(n2) + '}',
+            colormap[i]) +
+            '\, ' +
+            # add newline for shorter lines
+            ('\n\t' if i % 4 == 0 and i else '')
+        )
+
+    f.write("\\]\n")
+
     # End of the document
     f.write("\n\n\\end{document}")
 
