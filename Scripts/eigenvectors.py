@@ -42,7 +42,7 @@ def h_elem(elem, color='', skip_zero=False):
 A = 1
 B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A, 0.6 * A, 0.8 * A]
 D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
-N = [2, 3, 4, 5, 6, 10, 15]
+N = [2, 3, 4, 5, 6, 10, 15, 50]
 
 # Input parameters
 b = 2
@@ -111,9 +111,7 @@ eigenvalues = ', '.join(
     ('\n\t' if i % 5 == 0 and i else '')   # add newline for shorter lines
     for i in range(E.size))
 
-# np_eig()
-
-with open("eigenvectors B" +
+with open("results B" +
           str(B[b]) + ' D' + str(D[d]) + ' N' + str(N[n]) +
           ('_np' if use_sc else '') +
           ".tex", "w") as f:
@@ -148,13 +146,14 @@ with open("eigenvectors B" +
     f.write("\\usepackage{physics}")
     f.write("\\usepackage[dvipsnames]{xcolor}\n")
     # Additional options
-    f.write("\\setcounter{MaxMatrixCols}{" + nn + 10 + "}\n")
+    f.write("\\setcounter{MaxMatrixCols}{" + str(nn + 10) + "}\n")
     f.write("\\allowdisplaybreaks\n\n")
     # The document begins here
     f.write("\\begin{document}\n\n")
 
     f.write("\tEigenvectors:\n")
     f.write("\t\\begin{align*}\n")
+
     for i in range(nn):
         f.write(('\\\\' if i % no_eigv == 0 and i != 0 else '') +
                 '\t\tv_{' + str(i + 1) + '} ' +
