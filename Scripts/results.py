@@ -54,7 +54,7 @@ n = 7
 nn = int(N[n] * (N[n] + 1) / 2)
 
 # Use hamilt or SciPy for eigenvalues and eigenvectors
-use_sc = True
+use_sc = False
 
 # Maximum number of elements to display
 max_display = 300
@@ -100,7 +100,8 @@ eigenvectors = np.transpose(eigenvectors)   # each eigenvector is on one row
 eigenvalues = ''
 # Group energy levels such that a level contains all the eigenvalues with
 # the same value
-levels = np.split(E, np.where(np.diff(E) > 1e-6)[0] + 1)
+epsilon = 5e-4 if not use_sc else 1e-6
+levels = np.split(E, np.where(np.diff(E) > epsilon)[0] + 1)
 
 k = 0
 for i in range(len(levels)):
@@ -249,7 +250,7 @@ with open("results B" +
         f.write("\tDuplicates: \n\t\\[")
         for i in (index[unique[counts > 1]])[:max_display]:
             f.write("\\ket{" + str(i[0]) + '\, ' + str(i[1]) + "} ")
-    f.write("\\]\n")
+        f.write("\\]\n")
 
     # End of the document
     f.write("\n\n\\end{document}")
