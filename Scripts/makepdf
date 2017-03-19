@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+a=1.
+
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+reset=`tput sgr0`
+
+function run() {
+  echo "${green}Running with: $arg${reset}"
+  # go to the specified directory
+  dest_dir="../Output/B$b D$d N$n"
+  # check if folder exists
+  if [ ! -d "$dest_dir" ]; then
+    echo "${red}$dest_dir not found${reset}"
+    exit
+  fi
+  cd "$dest_dir"
+  # LaTeX files
+  hamilt_file="results B$b D$d N$n.tex"
+  sc_file="results B$b D$d N$n_sc.tex"
+  # check if files exist
+  if [ ! -f "$hamilt_file" ]; then
+    echo "${red}$hamilt_file not found${reset}"
+    exit
+  fi
+  echo "${yellow}Compiling $hamilt_file${reset}"
+  pdflatex "$hamilt_file"
+
+  # check if files exist
+  if [ ! -f "$sc_file" ]; then
+    echo "${red}$sc_file not found${reset}"
+    exit
+  fi
+  echo "${yellow}Compiling $sc_file${reset}"
+  pdflatex "$sc_file"
+
+  # return to Scripts directory
+  cd ../../Scripts
+}
+
+
+for i in "$@"
+do
+case $i in
+    -b=*)
+    b="${i#*=}"
+    shift # past argument=value
+    ;;
+    -d=*)
+    d="${i#*=}"
+    shift # past argument=value
+    ;;
+    -n=*)
+    n="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+if [ -z "$b" ]; then
+  echo "b empty: using B = 0.2"
+  b=0.2
+fi
+if [ -z "$n" ]; then
+  echo "n empty: using N = 4"
+  n=4
+fi
+if [ -z "$d" ]; then
+  echo "d empty: using D = 0.4"
+  d=0.4
+fi
+for i in $d; do
+  for i in $b; do
+    for j in $n; do
+      arg="$j $a $i $d"
+      run
+    done
+  done
+done
