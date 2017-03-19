@@ -41,6 +41,13 @@ def h_elem(elem, color='', skip_zero=False):
         if (not skip_zero) or elem != 0 else ''
 
 
+def ket(n1, n2, color='', bf=False):
+    '''Build \ket{} with optional color and optional bold face'''
+    k = '\\ket{' + str(n1) + '\, ' + str(n2) + '}'
+    k = '\\mathbf{' + k + '}' if bf else k
+    return optional_color(k, color)
+
+
 # Hamiltonian parameters
 A = 1
 B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A, 0.6 * A, 0.8 * A]
@@ -50,7 +57,7 @@ N = [2, 3, 4, 5, 6, 10, 15, 50]
 # Input parameters
 b = 2
 d = 1
-n = 7
+n = 2
 nn = int(N[n] * (N[n] + 1) / 2)
 
 # Use hamilt or SciPy for eigenvalues and eigenvectors
@@ -224,7 +231,7 @@ with open("results B" +
     f.write("\tStates: \n\t\\[")
     # Limit the number of displayed elements
     for i in index[:max_display]:
-        f.write("\\ket{" + str(i[0]) + '\, ' + str(i[1]) + "} ")
+        f.write(ket(i[0], i[1]))
     f.write("\\]\n")
 
     f.write("\tOrdering: \n\t\\[")
@@ -235,9 +242,7 @@ with open("results B" +
             break
         n1 = index[c_max[i]][0]
         n2 = index[c_max[i]][1]
-        f.write(optional_color('\\ket{' + str(n1) + '\, ' + str(n2) + '}',
-                               colormap[i]) +
-                '\, ' +
+        f.write(ket(n1, n2, colormap[i]) + '\, ' +
                 # add newline for shorter lines
                 ('\n\t' if i % 4 == 0 and i else '')
                 )
@@ -249,7 +254,7 @@ with open("results B" +
         # print("Warning: Duplicates")
         f.write("\tDuplicates: \n\t\\[")
         for i in (index[unique[counts > 1]])[:max_display]:
-            f.write("\\ket{" + str(i[0]) + '\, ' + str(i[1]) + "} ")
+            f.write(ket(i[0], i[1]))
         f.write("\\]\n")
 
     # End of the document
