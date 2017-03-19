@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 
 a=1.
-b=0
-d=0
+
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+reset=`tput sgr0`
 
 function run() {
   ./clean
-  echo "Running with: $arg"
+  echo "${green}Running with: $arg${reset}"
   # sync input
-  echo $arg > ../Source/Fortran/Hamiltonian/hamilt.inp
+  echo "$arg" > ../Source/Fortran/Hamiltonian/hamilt.inp
   cd ../Bin
-  echo $arg > hamilt.inp
+  echo "$arg" > hamilt.inp
   time ./hamilt
   # save output
-  dest_dir="../Output/B$b D$d N$1"
+  dest_dir="../Output/B$b D$d N$n"
   if [ ! -d "$dest_dir" ]; then
     mkdir -p "$dest_dir"
   fi
@@ -28,12 +31,43 @@ function run() {
   cd ../Scripts
 }
 
-if (( $# >= 1 )); then
-  for i in $@; do
-    arg="$i $a $b $d"
-    run $i
-  done
-else
-  arg="60 $a $b $d"
-  run 60
+for i in "$@"
+do
+case $i in
+    -b=*)
+    b="${i#*=}"
+    shift # past argument=value
+    ;;
+    -d=*)
+    d="${i#*=}"
+    shift # past argument=value
+    ;;
+    -n=*)
+    n="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+if [ -z "$b" ]; then
+  echo "b empty: using B = 0.2"
+  b=0.2
 fi
+if [ -z "$n" ]; then
+  echo "n empty: using N = 4"
+  n=4
+fi
+if [ -z "$d" ]; then
+  echo "d empty: using D = 0.4"
+  d=0.4
+fi
+for i in $d; do
+  for i in $b; do
+    for j in $n; do
+      arg="$j $a $i $d"
+      run
+    done
+  done
+done
