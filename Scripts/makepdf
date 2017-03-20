@@ -57,15 +57,15 @@ for i in "$@"
 do
 case $i in
     -b=*)
-    b="${i#*=}"
+    b_list="${i#*=}"
     shift # past argument=value
     ;;
     -d=*)
-    d="${i#*=}"
+    d_list="${i#*=}"
     shift # past argument=value
     ;;
     -n=*)
-    n="${i#*=}"
+    n_list="${i#*=}"
     shift # past argument=value
     ;;
     -sc=*)
@@ -81,17 +81,17 @@ case $i in
     ;;
 esac
 done
-if [ -z "$b" ]; then
+if [ -z "$b_list" ]; then
   echo "b empty: using B = 0.2"
-  b=0.2
+  b_list=0.2
 fi
-if [ -z "$n" ]; then
+if [ -z "$n_list" ]; then
   echo "n empty: using N = 4"
-  n=4
+  n_list=4
 fi
-if [ -z "$d" ]; then
+if [ -z "$d_list" ]; then
   echo "d empty: using D = 0.4"
-  d=0.4
+  d_list=0.4
 fi
 if [ -z "$sc" ]; then
   sc=false
@@ -99,10 +99,10 @@ fi
 if [ -z "$h" ]; then
   h=true
 fi
-for i in $d; do
-  for i in $b; do
-    for j in $n; do
-      arg="$j $a $i $d"
+for b in $b_list; do
+  for d in $d_list; do
+    for n in $n_list; do
+      arg="$n $a $b $d"
       run
     done
   done
