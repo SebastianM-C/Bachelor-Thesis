@@ -57,7 +57,7 @@ N = [2, 3, 4, 5, 6, 10, 15, 50]
 # Input parameters
 b = 2
 d = 1
-n = 2
+n = 7
 nn = int(N[n] * (N[n] + 1) / 2)
 
 # Use hamilt or SciPy for eigenvalues and eigenvectors
@@ -92,7 +92,6 @@ except FileNotFoundError as fnf:
 # Load files
 H = np.loadtxt("hamilt.out")    # Hamiltonian
 index = np.loadtxt("index.out", dtype=int)
-c_max = np.empty([nn], dtype=int)
 
 # Transpose matrices
 H = np.transpose(H)
@@ -105,6 +104,8 @@ else:
 
 eigenvectors = np.transpose(eigenvectors)   # each eigenvector is on one row
 eigenvalues = ''
+c_max = np.empty([nn], dtype=int)   # max coefficient in eigenvector
+deg_sp = np.zeros([nn], dtype=bool)     # degenerate subspace index
 # Group energy levels such that a level contains all the eigenvalues with
 # the same value
 epsilon = 5e-4 if not use_sc else 1e-6
@@ -113,10 +114,9 @@ levels = np.split(E, np.where(np.diff(E) > epsilon)[0] + 1)
 k = 0
 for i in range(len(levels)):
     for j in range(levels[i].size):
-        if i < len(colors):
-            colormap[i + j + k] = colors[i]
-        else:
-            colormap[i + j + k] = ''
+        colormap[i + j + k] = colors[i % len(colors)]
+        if levels[i].size > 1:
+            deg_sp[i + j + k] = True
     k += levels[i].size - 1
 
 # The index of the largest coefficient
@@ -242,7 +242,7 @@ with open("results B" +
             break
         n1 = index[c_max[i]][0]
         n2 = index[c_max[i]][1]
-        f.write(ket(n1, n2, colormap[i]) + '\, ' +
+        f.write(ket(n1, n2, colormap[i], deg_sp[i]) + '\, ' +
                 # add newline for shorter lines
                 ('\n\t' if i % 4 == 0 and i else '')
                 )
