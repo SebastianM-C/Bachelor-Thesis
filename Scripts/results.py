@@ -248,6 +248,19 @@ with open("results B" +
                 )
     f.write("\\]\n")
 
+    f.write("\tIrreductible representations: \n\t\\[")
+    for i in range(nn):
+        # Limit the number of displayed elements
+        if i == max_display:
+            f.write("\t\t\cdots")
+            break
+        n1 = index[c_max[i]][0]
+        n2 = index[c_max[i]][1]
+        unidim_repr = not deg_sp[i]
+        f.write(ket(n1, n2, colors[n2 % 2 + 1] if unidim_repr else '',
+                    deg_sp[i]))
+    f.write("\\]\n")
+
     # Check for duplicate states
     unique, counts = np.unique(c_max, return_counts=True)
     if np.any(counts > 1):
