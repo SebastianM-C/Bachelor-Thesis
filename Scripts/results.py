@@ -55,17 +55,20 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
     max_display = 150   # maximum number of elements to display
     with open(filename, "w") as f:
         # Set paper size according to the imput
-        if nn < 55:
+        if nn < 45:
             # Set paper size and number of eigenvectors on a single row
             if nn < 15:
                 paper_size = str(4)
                 no_eigv = 5
-            if nn == 15:
+            if nn >= 15:
                 paper_size = str(2)
                 no_eigv = 10
-            if nn == 21:
+            if nn >= 21:
                 paper_size = str(1)
                 no_eigv = 15
+            if nn >= 28:
+                paper_size = str(0)
+                no_eigv = 20
             if dgc:
                 no_eigv *= 2
 
@@ -74,18 +77,20 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
         else:
             paper_w = int(2**(nn - 53)) * 50
             paper_h = int(2**(nn - 54)) * 50
+            if nn < 55:
+                paper_w = 130
+                paper_h = 80
             # Limit paper size
             if paper_w > 500:
-                paper_w = 200
+                paper_w = 200 if nn > max_display else 250
             if paper_h > 500:
-                paper_h = 150
+                paper_h = 110
             f.write("\\documentclass[12pt,landscape]{article}\n")
             f.write("\\setlength{\paperwidth}{" + str(paper_w) + 'cm' + "}\n")
             f.write("\\setlength{\paperheight}{" + str(paper_h) + 'cm' + "}\n")
             # Use ~6cm for an eigenvector
             no_eigv = int(paper_w / 6) \
                 if nn < max_display else int(max_display / 5)
-
         # LaTeX packages
         f.write("\\usepackage[margin=1cm]{geometry}\n")
         f.write("\\usepackage{amsmath,amsfonts,amssymb}\n")
@@ -130,7 +135,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
 
         f.write("\t\\end{align*}\n")
         # Skip displaying the Hamiltonian if the size is too large
-        if nn < max_display:
+        if nn < max_display - 50:
             f.write("\tHamiltonian:\n")
             f.write("\t\\[\n\tH=\n\t\\begin{pmatrix}\n")
             for i in range(nn):
