@@ -1,17 +1,12 @@
 #!/usr/bin/env python
 
 import os
-import argparse
-import re
-import string
 import numpy as np
-from scipy import linalg
-from timeit import default_timer as timer
+# from timeit import default_timer as timer
 
-
-def format_float(n):
-    """Converts the number to int if possible"""
-    return ('{:n}' if n == int(n) else '{:.8g}').format(n)
+import eigensystem
+from tools import cd, format_float
+from custom_parser import parse
 
 
 def optional_color(element, color):
@@ -50,7 +45,7 @@ def ket(n1, n2, color='', bf=False):
 
 
 def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
-               deg_sp, colors, colormap, dgc):
+               ir_reps, colors, colormap, dgc):
     """Write the LaTeX file"""
     max_display = 150   # maximum number of elements to display
     with open(filename, "w") as f:
@@ -170,7 +165,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
                 break
             n1 = index[c_max[i]][0]
             n2 = index[c_max[i]][1]
-            f.write(ket(n1, n2, colormap[i], deg_sp[i]) + '\, ' +
+            f.write(ket(n1, n2, colormap[i]) + '\, ' +
                     # add newline for shorter lines
                     ('\n\t' if i % 4 == 0 and i else '')
                     )
@@ -184,9 +179,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
                 break
             n1 = index[c_max[i]][0]
             n2 = index[c_max[i]][1]
-            unidim_repr = not deg_sp[i]
-            f.write(ket(n1, n2, colors[n2 % 2 + 1] if unidim_repr else '',
-                        deg_sp[i]))
+            f.write(ket(n1, n2, colors[ir_reps[i]], ir_reps[i] == 2))
         f.write("\\]\n")
 
         # Check for duplicate states
@@ -202,66 +195,21 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
         f.write("\n\n\\end{document}")
 
 
-def run(b, d, n, use_sc):
-    """Write the results for the given parameters and optionally
+def get(b, d, n, use_sc):
+    """Get the results for the given parameters and optionally
     use SciPy to compute the eigenvalues and eigenvectors"""
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     nn = int(n * (n + 1) / 2)
 
-    # Try to cd to the given path. In case of an error go back to ../../Scripts
-    # and try again (maybe the last run had an error or
-    # the script did not reach the end)
-    try:
-        os.chdir("../Output/B" + str(b) + " D" + str(d) + " N" + str(n))
-    except FileNotFoundError as fnf:
-        try:
-            print(fnf.strerror + ':' + fnf.filename + '\nTrying again')
-            os.chdir("../../Scripts")
-            os.chdir("../Output/B" + str(b) +
-                     " D" + str(d) + " N" + str(n))
-            print('Succes\n' + 'Now in: ' + os.getcwd())
-        except FileNotFoundError:
-            print('Check the filename\n' + 'Now in: ' + os.getcwd())
+    cd(b, d, n)
 
-    # Load files
-    H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
-    index = np.loadtxt("index.out", dtype=int)
-
-    H = np.transpose(H)
-    # Get eigenvalues and eigenvectors
-    if use_sc:
-        E, eigenvectors = linalg.eigh(H)
-    else:
-        E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
-        eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
-
-    eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
-    eigenvalues = ''
-    c_max = np.empty([nn], dtype=int)   # max coefficient in eigenvector
-    deg_sp = np.zeros([nn], dtype=bool)     # degenerate subspace index
+    E, eigenvectors, index, c_max, H = eigensystem.get(use_sc, return_H=True)
 
     # All available colors
     colors = ('black', 'red', 'teal', 'blue', 'orange', 'olive',
               'magenta', 'cyan', 'Brown', 'Goldenrod', 'Green', 'Violet')
 
-    colormap = [''] * nn   # colors used
-
-    # Group energy levels such that a level contains all the eigenvalues with
-    # the same value
-    epsilon = 5e-4 if not use_sc else 1e-6
-    levels = np.split(E, np.where(np.diff(E) > epsilon)[0] + 1)
-
-    k = 0
-    for i in range(len(levels)):
-        for j in range(levels[i].size):
-            colormap[i + j + k] = colors[i % len(colors)]
-            if levels[i].size > 1:
-                deg_sp[i + j + k] = True
-        k += levels[i].size - 1
-
-    # The index of the largest coefficient
-    for i in range(nn):
-        c_max[i] = np.argmax(np.abs(eigenvectors[i]))
+    ir_reps, colormap = eigensystem.levels(E, index[c_max], use_sc, colors)
 
     # Build eigenvalue string
     # If the colormap element corresponding to the i-th eigenvalue is empty,
@@ -269,43 +217,24 @@ def run(b, d, n, use_sc):
     eigenvalues = ', '.join(optional_color(format_float(E[i]), colormap[i])
                             for i in range(E.size))
 
-    write_file("results B" + str(b) + ' D' + str(d) + ' N' + str(n) +
-               ('_sc' if use_sc else '') +
-               ".tex", nn, H, E, eigenvalues, eigenvectors, index, c_max,
-               deg_sp, colors, colormap,
+    return nn, H, E, eigenvalues, eigenvectors, index, c_max, ir_reps, \
+        colors, colormap
+
+
+def main(B, D, N, use_sc):
+    filename = "results B" + str(b) + ' D' + str(d) + ' N' + str(n) + \
+               ('_sc' if use_sc else '') + \
+               ".tex"
+    write_file(filename, *get(b, d, n, use_sc),
                dgc=(b == 0 and d == 0)  # degenerate case
                )
-
     os.chdir("../../Scripts")
     print("Done")
 
 
-def main():
-    # Parse arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-b', type=np.float64, nargs='+', default=[0.2],
-                        help='Hamiltonian B parameter')
-    parser.add_argument('-d', type=np.float64, nargs='+', default=[0.4],
-                        help='Hamiltonian D parameter')
-    parser.add_argument('-n', type=np.int64, nargs='+', default=[4],
-                        help='diagonalisation basis size')
-    parser.add_argument('-sc', action='store_true', default=False,
-                        help='Specify whether to use SciPy or not for \
-                        diagonalisation')
-    # args = parser.parse_args(input().split())
-    args = parser.parse_args()
-
-    # Hamiltonian parameters
-    B = args.b
-    D = args.d
-    N = args.n
-    use_sc = args.sc    # Optionally use SciPy for eigenvalues and eigenvectors
-
+if __name__ == '__main__':
+    B, D, N, use_sc = parse()
     for b in B:
         for d in D:
             for n in N:
-                run(b, d, n, use_sc)
-
-
-if __name__ == '__main__':
-    main()
+                main(B, D, N, use_sc)
