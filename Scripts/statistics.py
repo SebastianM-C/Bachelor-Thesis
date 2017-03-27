@@ -46,6 +46,14 @@ def main(b, d, n, use_sc, select=True, show=False):
     plt.legend()
     plt.savefig('P(S)' + ('_sc.png' if use_sc else '.png'))
     # plt.show()
+    plt.close()
+    plt.hist(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4),
+             normed=True, label=reps)
+    plt.ylabel('P(S)')
+    plt.xlabel('S')
+    plt.legend()
+    plt.savefig('Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
+    # plt.show()
 
     os.chdir("../../Scripts")
 
