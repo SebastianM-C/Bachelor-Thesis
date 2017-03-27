@@ -52,22 +52,24 @@ case $i in
 esac
 done
 if [ -z "$b_list" ]; then
-  echo "b empty: using B = 0.2"
+  echo "b empty: using B = 0.2" >> log
   b_list=0.2
 fi
 if [ -z "$n_list" ]; then
-  echo "n empty: using N = 4"
+  echo "n empty: using N = 4" >> log
   n_list=4
 fi
 if [ -z "$d_list" ]; then
-  echo "d empty: using D = 0.4"
+  echo "d empty: using D = 0.4" >> log
   d_list=0.4
 fi
 for b in $b_list; do
   for d in $d_list; do
     for n in $n_list; do
       arg="$n $a $b $d"
-      run
+      run >> log 2>&1
     done
   done
 done
+echo "Done" >> log
+

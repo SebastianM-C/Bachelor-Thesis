@@ -1,3 +1,5 @@
 Bin/
 Output/
 Questions/
+Scripts/__pycache__
+Scripts/log
