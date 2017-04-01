@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os
+# import os
 import numpy as np
 from scipy import linalg
 from timeit import default_timer as timer
@@ -12,7 +12,7 @@ def get(use_sc, return_H=False):
     # Load files
     H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
-    print("Now in: ", os.getcwd())
+    # print("Now in: ", os.getcwd())
     H = np.transpose(H)
     # Get eigenvalues and eigenvectors
     if use_sc:
@@ -36,15 +36,27 @@ def get(use_sc, return_H=False):
 
 
 def eigv(use_sc):
-    """Return the eigenvalues"""
+    """Return the eigenvalues and the eigenvectors"""
     H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
+    index = np.loadtxt("index.out", dtype=int)
     H = np.transpose(H)
     # Get eigenvalues and eigenvectors
     if use_sc:
-        E = linalg.eigvalsh(H)
+        E, eigenvectors = linalg.eigh(H)
     else:
         E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
-    return E
+        eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
+
+    eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
+
+    # max coefficient in eigenvector
+    c_max = np.empty_like(eigenvectors[0], dtype=int)
+
+    # The index of the largest coefficient
+    for i in range(eigenvectors[0].size):
+        c_max[i] = np.argmax(np.abs(eigenvectors[i]))
+
+    return E, eigenvectors, index[c_max]
 
 
 def levels(E, ket, use_sc, colors=''):
