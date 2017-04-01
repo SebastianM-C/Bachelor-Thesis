@@ -9,10 +9,24 @@ def exists(b, d, n):
                          str(b) + " D" + str(d) + " N" + str(n))
 
 
+def clean_dir(directory):
+    """If the directory doesn't exists create it, else clean it."""
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    else:
+        for the_file in os.listdir(directory):
+            file_path = os.path.join(directory, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(e)
+
+
 def cd(b, d, n):
-    """ Try to cd to the given path. In case of an error go back to ../../Scripts
+    """Try to cd to the given path. In case of an error go back to ../../Scripts
     and try again (maybe the last run had an error or
-    the script did not reach the end)"""
+    the script did not reach the end)."""
 
     try:
         os.chdir("../Output/B" + str(b) + " D" + str(d) + " N" + str(n))
