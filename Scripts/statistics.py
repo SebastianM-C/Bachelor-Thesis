@@ -22,12 +22,13 @@ def histogram(data, name, use_sc, show, save=True):
         plt.savefig(name + ('_sc.png' if use_sc else '.png'))
     if show:
         plt.show()
-    plt.clf()
+    plt.close()
 
 
-def main(b, d, n, use_sc, select=True, show=False):
-    if select:
-        select_rep.main(b, d, n, use_sc, stable_only=True)
+def main(b, d, n, use_sc, re_select=True, show=False):
+    if re_select:
+        delta_n = 10 if not use_sc else 20
+        select_rep.main(b, d, n, use_sc, delta_n)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
     rel_sp = []
@@ -54,6 +55,7 @@ def main(b, d, n, use_sc, select=True, show=False):
     plt.legend()
     plt.savefig('Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
     # plt.show()
+    plt.close()
 
     os.chdir("../../Scripts")
 
