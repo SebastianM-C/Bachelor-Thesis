@@ -4,6 +4,10 @@ import os
 import numpy as np
 from timeit import default_timer as timer
 
+import tools
+import diff
+import eigensystem
+
 
 def color(x, exists):
     if x == 1 and exists:
@@ -18,35 +22,45 @@ def color(x, exists):
 
 
 # Hamiltonian parameters
-A = 1
-B = [0, 0.1 * A, 0.4 * A, 0.5 * A]
-D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
-N = [40, 60, 80, 100, 120, 140, 160]
+# A = 1
+# B = [0, 0.1 * A, 0.2 * A, 0.4 * A, 0.5 * A]
+# D = [0, 0.4 * A, 0.5 * A, 0.6 * A]
+# N = [40, 60, 80, 100, 120, 140, 160]
 
 # Input parameters
-b = 3
-d = 3
-n = 1
+b = 0.2
+d = 0.4
+n = 100
 stable_only = True   # choose all levels or only the stable ones
+use_sc = True
 
 start = timer()
-os.chdir("../Output/B" + str(B[b]) + " D" + str(D[d]) + " N" + str(N[n]))
+# os.chdir("../Output/B" + str(B[b]) + " D" + str(D[d]) + " N" + str(N[n]))
+tools.cd(b, d, n)
 
 # Read data
+# if stable_only:
+#     E = np.loadtxt("s_hamilt.dat", usecols=(0,), unpack=True)
+E, ket = eigensystem.get(use_sc)
+ir_reps = eigensystem.levels(E, ket, use_sc)
 if stable_only:
-    E = np.loadtxt("s_hamilt.dat", usecols=(0,), unpack=True)
-else:
-    E = np.loadtxt("hamilt.dat", usecols=(1,), unpack=True)
-rebde = np.loadtxt("rebde.dat", usecols=(1,), unpack=True)
-reuna = np.loadtxt("reuna.dat", usecols=(1,), unpack=True)
-reuns = np.loadtxt("reuns.dat", usecols=(1,), unpack=True)
+    delta_n = 10 if not use_sc else 20
+    stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
+    E = E[:stable_levels]
+
+rebde = np.loadtxt("rebde2" + ('_sc.dat' if use_sc else '.dat'),
+                   usecols=0, unpack=True)
+reuna = np.loadtxt("reuna2" + ('_sc.dat' if use_sc else '.dat'),
+                   usecols=0, unpack=True)
+reuns = np.loadtxt("reuns2" + ('_sc.dat' if use_sc else '.dat'),
+                   usecols=0, unpack=True)
 
 # Bi-directional search
-E_in_rebde = np.in1d(E, rebde, assume_unique=True)
+E_in_rebde = np.in1d(E, rebde, assume_unique=False)
 E_in_reuna = np.in1d(E, reuna, assume_unique=True)
 E_in_reuns = np.in1d(E, reuns, assume_unique=True)
 
-rebde_in_E = np.in1d(rebde, E, assume_unique=True)
+rebde_in_E = np.in1d(rebde, E, assume_unique=False)
 reuna_in_E = np.in1d(reuna, E, assume_unique=True)
 reuns_in_E = np.in1d(reuns, E, assume_unique=True)
 
