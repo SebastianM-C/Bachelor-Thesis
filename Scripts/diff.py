@@ -28,10 +28,10 @@ def difference(E1, ir_reps1, b, d, n, delta_n, use_sc=False):
     return np.abs(E_diff), ir_diff
 
 
-def stable(E1, ir_reps, b, d, n, use_sc):
+def stable(E1, ir_reps, b, d, n, use_sc, delta_n):
     """Return the number of stable levels"""
     epsilon = 1e-2 if not use_sc else 1e-12
-    delta_n = 10 if not use_sc else 20
+    # delta_n = 10 if not use_sc else 20
     E_diff, ir_diff = difference(E1, ir_reps, b, d, n, delta_n, use_sc)
 
     plt.hist(E_diff,
@@ -47,4 +47,6 @@ def stable(E1, ir_reps, b, d, n, use_sc):
     print("E_diff > epsilon :",
           np.where(E_diff > epsilon)[0][:5], "\nepsilon: ", epsilon)
     print("ir_diff: ", np.where(ir_diff > 0)[0][:5])
+    # Cache the result
+    np.save('cache', np.where(E_diff > epsilon)[0][1])
     return np.where(E_diff > epsilon)[0][1]
