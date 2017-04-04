@@ -35,28 +35,32 @@ def get(use_sc, return_H=False):
     return E, index[c_max]
 
 
-def eigv(use_sc):
+def get_state(use_sc):
     """Return the eigenvalues and the eigenvectors"""
     H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
     H = np.transpose(H)
+    # Define the state array
+    nn = H.shape[0]
+    state = np.zeros(nn, [('E', np.float64), ('eigvec', np.float64, nn)])
     # Get eigenvalues and eigenvectors
     if use_sc:
-        E, eigenvectors = linalg.eigh(H)
+        state['E'], state['eigvec'] = linalg.eigh(H)
     else:
-        E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
-        eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
+        state['E'] = np.loadtxt("hamilt.dat", usecols=1, unpack=True)
+        state['eigvec'] = np.loadtxt("eigenvectors.out", unpack=True)
 
-    eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
+    # each eigenvector is on one row
+    state['eigvec'] = np.transpose(state['eigvec'])
 
     # max coefficient in eigenvector
-    c_max = np.empty_like(eigenvectors[0], dtype=int)
+    c_max = np.empty_like(state['eigvec'][0], dtype=int)
 
     # The index of the largest coefficient
-    for i in range(eigenvectors[0].size):
-        c_max[i] = np.argmax(np.abs(eigenvectors[i]))
+    for i in range(state['eigvec'][0].size):
+        c_max[i] = np.argmax(np.abs(state['eigvec'][i]))
 
-    return E, eigenvectors, index[c_max]
+    return state, index[c_max], index
 
 
 def levels(E, ket, use_sc, colors=''):
