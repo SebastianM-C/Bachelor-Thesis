@@ -2,8 +2,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from os.path import isfile
 
-import diff
 import eigensystem
 from tools import cd
 from tools import clean_dir
@@ -21,11 +21,11 @@ def main(b, d, n, use_sc):
     # Sort the eigenvector coefficients
     state['eigvec'] = state['eigvec'][:, sort_idx]
     # stable_levels = np.load('cache.npy')    # get cached stable levels
-    stable_levels = 10
+    no_eigv = 20        # number of eigenvectors to plot
     # Select the states corresponding to stable levels
-    state = state[:stable_levels]
-    ket = ket[:stable_levels]
-
+    state = state[:no_eigv]
+    ket = ket[:no_eigv]
+    state['eigvec'][11][:20]
     # Get irreductible representation index
     ir_reps = eigensystem.levels(state['E'], ket, use_sc)
     # Build irreductible representation string
@@ -37,39 +37,67 @@ def main(b, d, n, use_sc):
     w = 1 / (k + 1) - 0.01                  # bar widths
     r = [j for i in range(n + 1) for j in range(i)]
     x = k - 0.5 + r / (k + 1)               # positions
-    x = x[:stable_levels]
-    w = w[:stable_levels]
+
+    d_no = 0   # number of duplicate states
 
     clean_dir('eigenvectors')
-    minor_ticks = np.arange(0, 10, 0.5)
     for i in range(state.shape[0]):
+        # Determine the number of significant eigenvector elements based on the
+        # partial norm
+        sq_sum = 0
+        for j in range(state['eigvec'][i].shape[0]):
+            sq_sum += state['eigvec'][i][j]**2
+            if np.sqrt(sq_sum) >= 0.95:
+                eigv_len = j + 3
+                if eigv_len < 10:
+                    eigv_len = 10
+                print('eigv_len: ', eigv_len, '\npartial norm:',
+                      np.sqrt(sq_sum))
+                break
+        minor_ticks = np.arange(0, eigv_len, 0.5)
+        # Plot label
+        label = 'E = ' + str(state['E'][i]) + '\n' + '$\\left|' + \
+            str(ket[i][0]) + str(ket[i][1]) + '\\right\\rangle$\t' + ir_str[i]
+        fname = str(ket[i][0]) + ' ' + str(ket[i][1])   # filename
+
         # Index plot
-        plt.bar(range(10), np.abs(state['eigvec'][i, :10]), label='E = ' +
-                str(state['E'][i]) + '\n' + '$\\left|' +
-                str(ket[i][0]) + str(ket[i][1]) + '\\right\\rangle$\t' +
-                ir_str[i])
+        plt.bar(range(eigv_len), np.abs(state['eigvec'][i, :eigv_len]),
+                label=label)
         plt.legend()
-        plt.xticks(range(10),
+        plt.xticks(range(eigv_len),
                    ['$c_{' + str(index[sort_idx][i][0]) +
                     str(index[sort_idx][i][1]) + '}$'
                     for i in range(index.shape[0])],
                    )
         plt.ylabel('$C_{ij}$')
-        plt.savefig('eigenvectors/ket_i' + str(ket[i][0]) + ' '
-                    + str(ket[i][1]), dpi=300)
+        # Prevent overwriting for repeated states
+        if not isfile('eigenvectors/ket_i' + fname + '.png'):
+            plt.savefig('eigenvectors/ket_i' + fname, dpi=300)
+        else:
+            d_no += 1
+            plt.savefig('eigenvectors/ket_i' + fname + '_' + str(d_no),
+                        dpi=300)
+            print('|' + fname, '> is not unique')
         # plt.show()
         plt.close()
+
         # Energy plot
-        plt.bar(x, np.abs(state['eigvec'][i, :10]), width=w, align='edge',
-                label='E = ' + str(state['E'][i]) + '\n' + '$\\left|' +
-                str(ket[i][0]) + str(ket[i][1]) + '\\right\\rangle$\t' +
-                ir_str[i])
+        plt.bar(x[:eigv_len], np.abs(state['eigvec'][i, :eigv_len]),
+                width=w[:eigv_len], align='edge', label=label)
         plt.legend()
-        plt.xticks(range(10), ['$E_{' + str(i) + '}$' for i in range(10)])
+        # Reduce the length of the Ox axis
+        eigv_len = int(eigv_len / 2)
+        minor_ticks = np.arange(0, eigv_len, 0.5)
+        plt.xticks(range(eigv_len),
+                   ['$E_{' + str(j) + '}$' for j in range(eigv_len)])
         plt.axes().set_xticks(minor_ticks, minor=True)
         plt.ylabel('$C_{ij}$')
-        plt.savefig('eigenvectors/ket_e' + str(ket[i][0]) + ' ' +
-                    str(ket[i][1]), dpi=300)
+        # Prevent overwriting for repeated states
+        if not isfile('eigenvectors/ket_e' + fname + '.png'):
+            plt.savefig('eigenvectors/ket_e' + fname, dpi=300)
+        else:
+            plt.savefig('eigenvectors/ket_e' + fname + '_' + str(d_no),
+                        dpi=300)
         # plt.show()
         plt.close()
 
