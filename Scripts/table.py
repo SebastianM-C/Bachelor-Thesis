@@ -30,7 +30,7 @@ def color(x, exists):
 # Input parameters
 b = 0.2
 d = 0.4
-n = 100
+n = 120
 stable_only = True   # choose all levels or only the stable ones
 use_sc = True
 

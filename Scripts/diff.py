@@ -30,17 +30,28 @@ def difference(E1, ir_reps1, b, d, n, delta_n, use_sc=False):
 
 def stable(E1, ir_reps, b, d, n, use_sc, delta_n):
     """Return the number of stable levels"""
-    epsilon = 1e-2 if not use_sc else 1e-12
-    # delta_n = 10 if not use_sc else 20
+    epsilon = 1e-11 if use_sc else 5e-2
     E_diff, ir_diff = difference(E1, ir_reps, b, d, n, delta_n, use_sc)
-
+    # Energy difference (between two diagonalization bases) histogram
     plt.hist(E_diff,
-             bins=[0, 1e-14, 1e-13, 1e-12, 1e-11, 1e-10, 1e-9, 1e-8,
-                   1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2],
+             bins=np.pad(np.geomspace(1e-14, 1e-2, 13), (1, 0),
+                         mode='constant'),
              label='B' + str(b) + ' D' + str(d) + ' N' + str(n)
              )
-    plt.xscale('log', nonposy='clip')
-    plt.savefig('E_diff' + ('_sc.png' if use_sc else '.png'))
+    plt.xscale('log')
+    plt.savefig('hist_E_diff' + ('_sc.png' if use_sc else '.png'))
+    # plt.show()
+    plt.close()
+    # Energy difference bar plot
+    plt.figure(figsize=(20, 4))
+    plt.bar(range(1000), E_diff[:1000],
+            label='B' + str(b) + ' D' + str(d) + ' N' + str(n))
+    plt.axhline(y=epsilon)
+    plt.legend()
+    plt.yscale('log', nonposy='clip')
+    plt.xscale('log')
+    plt.savefig('bar_E_diff' + ('_sc.png' if use_sc else '.png'), dpi=600,
+                bbox_inches='tight')
     # plt.show()
     plt.close()
 
@@ -48,5 +59,6 @@ def stable(E1, ir_reps, b, d, n, use_sc, delta_n):
           np.where(E_diff > epsilon)[0][:5], "\nepsilon: ", epsilon)
     print("ir_diff: ", np.where(ir_diff > 0)[0][:5])
     # Cache the result
-    np.save('cache', np.where(E_diff > epsilon)[0][1])
+    np.where(E_diff > epsilon)[0][1].tofile('cache.txt', sep=' ')
     return np.where(E_diff > epsilon)[0][1]
+    # return np.where(ir_diff > 0)[0][1]

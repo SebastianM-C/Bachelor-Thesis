@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import re
 
 
 def exists(b, d, n):
@@ -44,3 +45,10 @@ def cd(b, d, n):
 def format_float(n):
     """Converts the number to int if possible"""
     return ('{:n}' if n == int(n) else '{:.8g}').format(n)
+
+
+def get_input():
+    """Return the input parameters (b, d, n) of the current path"""
+    regex = r"""B(0.[0-9])+ D(0.[0-9])+ N([0-9]+)"""
+    return [float(i) for i in
+            re.compile(regex).search(os.getcwd()).group(1, 2, 3)]

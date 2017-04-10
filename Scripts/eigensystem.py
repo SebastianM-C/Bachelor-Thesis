@@ -1,19 +1,35 @@
 #!/usr/bin/env python
-# import os
+
 import numpy as np
 from scipy import linalg
+from scipy.io import FortranFile
 from timeit import default_timer as timer
 import matplotlib.pyplot as plt
+
+from tools import get_input
+
+
+def readH(format):
+    """Read the Hamiltonian using the given format"""
+    if format == 'fortran_bin':
+        _, _, n = get_input()
+        nn = int(n * (n + 1) / 2)
+        hamilt = FortranFile('hamilt.bin', 'r')
+        H = np.empty((nn, nn))
+        for i in range(nn):
+            H[i] = hamilt.read_reals(dtype='float32').reshape(nn)
+        return H
+    if format == 'text':
+        H = np.loadtxt("hamilt.out")
+        return H
 
 
 def get(use_sc, return_H=False):
     """Return the eigenvalues and the eigenvectors (along with the state index
     and max coefficient index) and optionally the Hamiltonian"""
     # Load files
-    H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
+    H = readH('fortran_bin').T    # read transposed Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
-    # print("Now in: ", os.getcwd())
-    H = np.transpose(H)
     # Get eigenvalues and eigenvectors
     if use_sc:
         E, eigenvectors = linalg.eigh(H)
@@ -24,10 +40,10 @@ def get(use_sc, return_H=False):
     eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
 
     # max coefficient in eigenvector
-    c_max = np.empty_like(eigenvectors[0], dtype=int)
+    c_max = np.empty(eigenvectors.shape[0], dtype=int)
 
     # The index of the largest coefficient
-    for i in range(eigenvectors[0].size):
+    for i in range(eigenvectors.shape[0]):
         c_max[i] = np.argmax(np.abs(eigenvectors[i]))
 
     if return_H:
@@ -37,12 +53,12 @@ def get(use_sc, return_H=False):
 
 def get_state(use_sc):
     """Return the eigenvalues and the eigenvectors"""
-    H = np.loadtxt("hamilt.out")    # transposed Hamiltonian
+    # Load files
+    H = readH('fortran_bin').T    # read transposed Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
-    H = np.transpose(H)
     # Define the state array
-    nn = H.shape[0]
-    state = np.zeros(nn, [('E', np.float64), ('eigvec', np.float64, nn)])
+    state = np.zeros(H.shape[0],
+                     [('E', np.float64), ('eigvec', np.float64, H.shape[0])])
     # Get eigenvalues and eigenvectors
     if use_sc:
         state['E'], state['eigvec'] = linalg.eigh(H)
@@ -76,19 +92,55 @@ def levels(E, ket, use_sc, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    epsilon = 1e-3 if not use_sc else 1e-5
-    levels = np.split(E, np.where(np.diff(E) > epsilon)[0] + 1)
+    # epsilon = 1e2   # if use_sc else 5e-2
+    epsilon = 1e-5
+    delta = np.diff(E)
+    # delta_left = np.pad(delta, (1, 0), 'constant', constant_values=1)[:-1]
+    # delta_right = np.pad(delta, (0, 1), 'constant', constant_values=1)[1:]
+    # delta_avg = (delta_left + delta_right) / 2
+    # delta_avg = np.sqrt(delta_left * delta_right)
 
-    plt.hist(np.diff(E),
-             bins=[0, 1e-7, 5e-7, 1e-6, 5e-6, 1e-5, 5e-5, 1e-4, 5e-4, 1e-3,
-                   5e-3, 1e-2, 5e-2, 0.1, 0.5, 1]
+    # levels = np.split(E, np.where(delta_avg / delta < epsilon)[0] + 1)
+    levels = np.split(E, np.where(delta > epsilon)[0] + 1)
+
+    # plt.hist(delta_avg / delta,
+    #          bins=np.pad(np.geomspace(1e-9, 1e9, 19), (1, 0), mode='constant'),
+    #          label='$\\frac{\\sqrt{\\Delta_l\\,\\Delta_r}}{\\Delta}$'
+    #          )
+    # plt.legend()
+    # plt.xscale('log', nonposy='clip')
+    # plt.savefig('delta_r' + ('_sc.png' if use_sc else '.png'))
+    # plt.show()
+    # plt.close()
+    # Energy difference (between two consecutive levels) histogram
+    plt.hist(delta,
+             bins=np.pad(np.geomspace(1e-9, 1e3, 13), (1, 0), mode='constant'),
+             label='$\\Delta = E_{n+1} - E_n$'
              )
-    plt.xscale('log', nonposy='clip')
-    plt.savefig('np.diff(E)' + ('_sc.png' if use_sc else '.png'))
+    plt.legend()
+    plt.xscale('log')
+    plt.savefig('hist_delta' + ('_sc.png' if use_sc else '.png'))
+    # plt.show()
+    plt.close()
+    # Energy difference bar plot
+    plt.figure(figsize=(20, 4))
+    plt.bar(range(1000), delta[:1000], label='$\\Delta = E_{n+1} - E_n$')
+    plt.axhline(y=epsilon)
+    plt.legend()
+    plt.yscale('log', nonposy='clip')
+    # plt.xscale('log')
+    plt.savefig('bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
+                bbox_inches='tight')
+    plt.show()
     plt.close()
 
     k = 0
     for i in range(len(levels)):
+        # Check for bidimensional representation selection problems
+        if levels[i].size > 2:
+            print('Warning: bidimensional representation selection',
+                  'problem: size: ', levels[i].size, 'at', i,
+                  '\nenergy: ', levels[i], '\ndelta: ', np.diff(levels[i]))
         for j in range(levels[i].size):
             if return_colors:
                 colormap[i + j + k] = colors[i % len(colors)]
