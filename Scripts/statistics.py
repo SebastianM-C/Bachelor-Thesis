@@ -27,7 +27,7 @@ def histogram(data, name, use_sc, show, save=True):
 
 def main(b, d, n, use_sc, re_select=True, show=False):
     if re_select:
-        delta_n = 10 if not use_sc else 20
+        delta_n = 20    # if use_sc else 10
         select_rep.main(b, d, n, use_sc, delta_n)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
