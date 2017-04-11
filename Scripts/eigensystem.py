@@ -19,16 +19,19 @@ def readH(format):
         for i in range(nn):
             H[i] = hamilt.read_reals(dtype='float32').reshape(nn)
         return H
+    if format == 'npz':
+        hamilt = np.load('hamilt.npz')
+        return hamilt['H']
     if format == 'text':
         H = np.loadtxt("hamilt.out")
-        return H
+        return H.T
 
 
 def get(use_sc, return_H=False):
     """Return the eigenvalues and the eigenvectors (along with the state index
     and max coefficient index) and optionally the Hamiltonian"""
     # Load files
-    H = readH('fortran_bin').T    # read transposed Hamiltonian
+    H = readH('fortran_bin')    # read the Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
     # Get eigenvalues and eigenvectors
     if use_sc:
@@ -54,8 +57,9 @@ def get(use_sc, return_H=False):
 def get_state(use_sc):
     """Return the eigenvalues and the eigenvectors"""
     # Load files
-    H = readH('fortran_bin').T    # read transposed Hamiltonian
+    H = readH('fortran_bin')    # read the Hamiltonian
     index = np.loadtxt("index.out", dtype=int)
+    # index = [(n1, n2) for n1 in range(n) for n2 in range(n - n1)]
     # Define the state array
     state = np.zeros(H.shape[0],
                      [('E', np.float64), ('eigvec', np.float64, H.shape[0])])
@@ -92,26 +96,11 @@ def levels(E, ket, use_sc, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    # epsilon = 1e2   # if use_sc else 5e-2
     epsilon = 1e-5
     delta = np.diff(E)
-    # delta_left = np.pad(delta, (1, 0), 'constant', constant_values=1)[:-1]
-    # delta_right = np.pad(delta, (0, 1), 'constant', constant_values=1)[1:]
-    # delta_avg = (delta_left + delta_right) / 2
-    # delta_avg = np.sqrt(delta_left * delta_right)
 
-    # levels = np.split(E, np.where(delta_avg / delta < epsilon)[0] + 1)
     levels = np.split(E, np.where(delta > epsilon)[0] + 1)
 
-    # plt.hist(delta_avg / delta,
-    #          bins=np.pad(np.geomspace(1e-9, 1e9, 19), (1, 0), mode='constant'),
-    #          label='$\\frac{\\sqrt{\\Delta_l\\,\\Delta_r}}{\\Delta}$'
-    #          )
-    # plt.legend()
-    # plt.xscale('log', nonposy='clip')
-    # plt.savefig('delta_r' + ('_sc.png' if use_sc else '.png'))
-    # plt.show()
-    # plt.close()
     # Energy difference (between two consecutive levels) histogram
     plt.hist(delta,
              bins=np.pad(np.geomspace(1e-9, 1e3, 13), (1, 0), mode='constant'),
@@ -131,7 +120,7 @@ def levels(E, ket, use_sc, colors=''):
     # plt.xscale('log')
     plt.savefig('bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
                 bbox_inches='tight')
-    plt.show()
+    # plt.show()
     plt.close()
 
     k = 0
