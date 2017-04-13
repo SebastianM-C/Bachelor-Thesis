@@ -15,11 +15,16 @@ def main(b, d, n, use_sc, delta_n):
     cd(b, d, n)
     start = timer()
     E, ket = eigensystem.get(use_sc)
-    ir_reps = eigensystem.levels(E, ket, use_sc)
+    # Select irreductible representations
+    # ir_reps = eigensystem.levels(E, ket, use_sc)
 
     # Select only the stable levels
-    stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
+    # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
+    stable_levels = diff.stable(E, b, d, n, use_sc, delta_n)
     E = E[:stable_levels]
+    # Select irreductible representations
+    ir_reps = eigensystem.levels(E, ket, use_sc)
+
     stop = timer()
     print("get data: ", stop - start)
     rebde = open('rebde2' + ('_sc.dat' if use_sc else '.dat'), 'w')

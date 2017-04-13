@@ -4,9 +4,12 @@ import numpy as np
 from scipy import linalg
 from scipy.io import FortranFile
 from timeit import default_timer as timer
-import matplotlib.pyplot as plt
+from os.path import isfile
 
 from tools import get_input
+from diff import relSpacing
+from hamiltonian import main as hamiltonian
+from plots import bar_plot, histogram
 
 
 def readH(format):
@@ -20,8 +23,13 @@ def readH(format):
             H[i] = hamilt.read_reals(dtype='float32').reshape(nn)
         return H
     if format == 'npz':
-        hamilt = np.load('hamilt.npz')
-        return hamilt['H']
+        if isfile('hamilt.npz'):
+            hamilt = np.load('hamilt.npz')
+            return hamilt['H']
+        else:
+            print('Hamiltonian file not found. Computing again.')
+            b, d, n = get_input()
+            return hamiltonian(1, b, d, n)
     if format == 'text':
         H = np.loadtxt("hamilt.out")
         return H.T
@@ -96,32 +104,24 @@ def levels(E, ket, use_sc, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    epsilon = 1e-5
+    epsilon = 1e-4
     delta = np.diff(E)
+    relsp = relSpacing(E)
 
-    levels = np.split(E, np.where(delta > epsilon)[0] + 1)
+    levels = np.split(E, np.where(relsp > epsilon)[0] + 1)
 
     # Energy difference (between two consecutive levels) histogram
-    plt.hist(delta,
-             bins=np.pad(np.geomspace(1e-9, 1e3, 13), (1, 0), mode='constant'),
-             label='$\\Delta = E_{n+1} - E_n$'
-             )
-    plt.legend()
-    plt.xscale('log')
-    plt.savefig('hist_delta' + ('_sc.png' if use_sc else '.png'))
-    # plt.show()
-    plt.close()
+    histogram(relsp, label='$\\frac{\\Delta E}{N}$', xscale='log', show=True,
+              bins=np.pad(np.geomspace(1e-9, 10, 10), (1, 0), mode='constant'),
+              fname='hist_relsp' + ('_sc.png' if use_sc else '.png'))
     # Energy difference bar plot
-    plt.figure(figsize=(20, 4))
-    plt.bar(range(1000), delta[:1000], label='$\\Delta = E_{n+1} - E_n$')
-    plt.axhline(y=epsilon)
-    plt.legend()
-    plt.yscale('log', nonposy='clip')
-    # plt.xscale('log')
-    plt.savefig('bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
-                bbox_inches='tight')
-    # plt.show()
-    plt.close()
+    bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
+             fname='delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
+             bbox_inches='tight')
+    # Relative spacing bar plot
+    bar_plot(relsp, figsize=(20, 4), label='$\\frac{\\Delta E}{N}$',
+             yscale='log', fname='delta' + ('_sc.png' if use_sc else '.png'),
+             dpi=600, axhline_y=epsilon, bbox_inches='tight', show=True)
 
     k = 0
     for i in range(len(levels)):

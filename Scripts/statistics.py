@@ -7,24 +7,12 @@ import matplotlib.pyplot as plt
 import select_rep
 from tools import cd
 from custom_parser import parse
+from diff import relSpacing
+from eigensystem import get_state
+from plots import bar_plot, histogram
 
 
-def relSpacing(rep):
-    deltaE = np.diff(rep)
-    avgSpacing = (rep[-1] - rep[0]) / rep.size
-    return deltaE / avgSpacing
-
-
-def histogram(data, name, use_sc, show, save=True):
-    plt.hist(data, bins=np.arange(0, 4, 1 / 4), label=name)
-    plt.legend()
-    if save:
-        plt.savefig(name + ('_sc.png' if use_sc else '.png'))
-    if show:
-        plt.show()
-    plt.close()
-
-
+# b, d, n = 0.2, 0.4, 60
 def main(b, d, n, use_sc, re_select=True, show=False):
     if re_select:
         delta_n = 20    # if use_sc else 10
@@ -38,24 +26,32 @@ def main(b, d, n, use_sc, re_select=True, show=False):
                          usecols=0)
         rel_sp.append(relSpacing(rep))
         w.append(np.ones(rel_sp[-1].shape) / 3)
-        histogram(rel_sp[-1], r, use_sc, show)
+        histogram(rel_sp[-1], bins=np.arange(0, 4, 1 / 4), label=r,
+                  fname=r + ('_sc.png' if use_sc else '.png'), show=show)
+        bar_plot(rel_sp[-1], label=r, ylabel='S',
+                 fname='bar_P(S)_' + r + ('_sc.png' if use_sc else '.png'),
+                 dpi=400)
 
-    plt.hist(rel_sp, bins=np.arange(0, 4, 1 / 4), weights=w, stacked=True,
-             normed=True, label=reps)
-    plt.ylabel('P(S)')
-    plt.xlabel('S')
-    plt.legend()
-    plt.savefig('P(S)' + ('_sc.png' if use_sc else '.png'))
-    # plt.show()
-    plt.close()
-    plt.hist(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4),
-             normed=True, label=reps)
-    plt.ylabel('P(S)')
-    plt.xlabel('S')
-    plt.legend()
-    plt.savefig('Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
-    # plt.show()
-    plt.close()
+    histogram(rel_sp, bins=np.arange(0, 4, 1 / 4), weights=w, stacked=True,
+              normed=True, label=reps, ylabel='P(S)', xlabel='S',
+              fname='P(S)' + ('_sc.png' if use_sc else '.png'))
+    histogram(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4), label=reps,
+              normed=True, ylabel='P(S)', xlabel='S',
+              fname='Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
+    # Energy difference (between two consecutive levels) histogram
+    state, _, _ = get_state(use_sc)
+    stable = int(np.loadtxt('cache.txt'))
+    delta = np.diff(state['E'])[:stable]
+    epsilon = 1e-5
+    histogram(delta, label='$\\Delta = E_{n+1} - E_n$ stable',
+              bins=np.pad(np.geomspace(1e-9, 1e3, 13), (1, 0),
+                          mode='constant'), xscale='log',
+              fname='hist_delta_stable' + ('_sc.png' if use_sc else '.png'))
+    # Energy difference bar plot
+    bar_plot(delta, label='$\\Delta = E_{n+1} - E_n$ stable',
+             figsize=(20, 4), yscale='log', axhline_y=epsilon, dpi=600,
+             fname='bar_delta_stable' + ('_sc.png' if use_sc else '.png'),
+             bbox_inches='tight')
 
     os.chdir("../../Scripts")
 
