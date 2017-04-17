@@ -4,3 +4,5 @@ Questions/
 Scripts/__pycache__
 Scripts/log
 Templates/
+Source/Fortran/Hamiltonian/*.dep
+Source/Fortran/Hamiltonian/*.mod
