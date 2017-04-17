@@ -26,7 +26,7 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True):
         rel_sp.append(relSpacing(rep))
         w.append(np.ones(rel_sp[-1].shape) / 3)
         histogram(rel_sp[-1], bins=np.arange(0, 4, 1 / 4), label=r,
-                  fname=r + ('_sc.png' if use_sc else '.png'), show=show)
+                  fname=r + ('_sc.png' if use_sc else '.png'), show=False)
         bar_plot(rel_sp[-1], label=r, ylabel='S',
                  fname='bar_P(S)_' + r + ('_sc.png' if use_sc else '.png'),
                  dpi=400)
@@ -58,8 +58,8 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect =
-    parse(advanced=True, reselect=True)
+    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect = \
+        parse(advanced=True, select=True)
 
     for b in B:
         for d in D:

@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-# from scipy import integrate
+from scipy import integrate
 
 
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
@@ -16,13 +16,15 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         def wigner_dist(s): return np.pi / 2 * s * np.exp(- np.pi / 4 * s**2)
         bin_size = 1 / 4
         bins = np.arange(0, 4, bin_size)
-        # wigner_hist = [integrate.quad(wigner_dist, bins[i-1], bins[i])[0]
-        #                for i in range(1, bins.size)]
+        # The area of a bar should be the integral of the Wigner distribution
+        # between the edges of the bar
+        # The are of a bar: A = h * bin_size => h = A / bin_size
+        wigner_hist = [1 / bin_size *
+                       integrate.quad(wigner_dist, bins[i-1], bins[i])[0]
+                       for i in range(1, bins.size)]
         x = np.linspace(0, 4, 100)
-        # ax.bar(bins[:-1], wigner_hist, width=bin_size, align='center',
-        #        alpha=0.4)
-        ax.bar(bins[:-1], wigner_dist(bins[1:]), width=bin_size, align='edge',
-               label='Wigner bar', fill=False, linestyle='-')
+        ax.bar(bins[:-1], wigner_hist, width=bin_size,
+               align='edge', label='Wigner bar', fill=False, linestyle='-')
         ax.plot(x, wigner_dist(x), 'r:', label='Wigner')
     if ylabel:
         ax.set_ylabel(ylabel)
