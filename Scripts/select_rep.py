@@ -22,11 +22,12 @@ def main(b, d, n, use_sc, delta_n):
     # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
     stable_levels = diff.stable(E, b, d, n, use_sc, delta_n)
     E = E[:stable_levels]
+    print('avgSpacing: ', (E[-1] - E[0]) / E.size)
     # Select irreductible representations
     ir_reps = eigensystem.levels(E, ket, use_sc)
 
     stop = timer()
-    print("get data: ", stop - start)
+    print('get data: ', stop - start, ' seconds')
     rebde = open('rebde2' + ('_sc.dat' if use_sc else '.dat'), 'w')
     reuna = open('reuna2' + ('_sc.dat' if use_sc else '.dat'), 'w')
     reuns = open('reuns2' + ('_sc.dat' if use_sc else '.dat'), 'w')

@@ -42,7 +42,7 @@ def difference(E1, b, d, n, delta_n, use_sc=False, ir_reps1=np.empty(0)):
 
 def stable(E1, b, d, n, use_sc, delta_n, ir_reps=np.empty(0)):
     """Return the number of stable levels"""
-    epsilon = 1e-10 if use_sc else 5e-2
+    epsilon = 1e-11 if use_sc else 5e-2
     if ir_reps.size == 0:
         E_diff = difference(E1, b, d, n, delta_n, use_sc)
     else:
@@ -60,7 +60,7 @@ def stable(E1, b, d, n, use_sc, delta_n, ir_reps=np.empty(0)):
              bbox_inches='tight')
 
     print("E_diff > epsilon :",
-          np.where(E_diff > epsilon)[0][:5], "\nepsilon: ", epsilon)
+          np.where(E_diff > epsilon)[0][:5], "\nstability epsilon: ", epsilon)
     if ir_reps.size:
         print("ir_diff: ", np.where(ir_diff > 0)[0][:5])
     # Cache the result

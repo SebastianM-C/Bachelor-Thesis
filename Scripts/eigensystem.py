@@ -2,7 +2,6 @@
 
 import numpy as np
 from scipy import linalg
-from scipy.io import FortranFile
 from timeit import default_timer as timer
 from os.path import isfile
 
@@ -17,10 +16,10 @@ def readH(format):
     if format == 'fortran_bin':
         _, _, n = get_input()
         nn = int(n * (n + 1) / 2)
-        hamilt = FortranFile('hamilt.bin', 'r')
         H = np.empty((nn, nn))
-        for i in range(nn):
-            H[i] = hamilt.read_reals(dtype='float32').reshape(nn)
+        with open('hamilt.bin', 'rb') as h:
+            for i in range(nn):
+                H[i] = np.fromfile(h, dtype='float64', count=nn).reshape(nn)
         return H
     if format == 'npz':
         if isfile('hamilt.npz'):
@@ -104,24 +103,32 @@ def levels(E, ket, use_sc, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    epsilon = 1e-4
+    epsilon = 1e-8
+    print('levels epsilon: ', epsilon)
     delta = np.diff(E)
     relsp = relSpacing(E)
+    avgSpacing = (E[-1] - E[0]) / E.size
 
     levels = np.split(E, np.where(relsp > epsilon)[0] + 1)
 
     # Energy difference (between two consecutive levels) histogram
-    histogram(relsp, label='$\\frac{\\Delta E}{N}$', xscale='log', show=True,
-              bins=np.pad(np.geomspace(1e-9, 10, 10), (1, 0), mode='constant'),
-              fname='hist_relsp' + ('_sc.png' if use_sc else '.png'))
+    histogram(delta, label='$\\Delta E$', xscale='log',
+              bins=np.pad(np.geomspace(1e-15, 10, 17), (1, 0), mode='constant'),
+              fname='hist_delta' + ('_sc.png' if use_sc else '.png'))
+    # Relative spacing histogram
+    histogram(relsp, label='$N \\frac{\\Delta E}{E_n - E_0}$', xscale='log',
+              bins=np.pad(np.geomspace(1e-13, 10, 15), (1, 0), mode='constant'),
+              fname='hist_relsp' + ('_sc.png' if use_sc else '.png'),
+              xlabel='S', show=False)
     # Energy difference bar plot
     bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
-             fname='delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
+             fname='bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
              bbox_inches='tight')
     # Relative spacing bar plot
-    bar_plot(relsp, figsize=(20, 4), label='$\\frac{\\Delta E}{N}$',
-             yscale='log', fname='delta' + ('_sc.png' if use_sc else '.png'),
-             dpi=600, axhline_y=epsilon, bbox_inches='tight', show=True)
+    bar_plot(relsp, figsize=(20, 4), label='$N \\frac{\\Delta E}{E_n - E_0}$',
+             yscale='log', fname='relsp' + ('_sc.png' if use_sc else '.png'),
+             dpi=600, axhline_y=epsilon, bbox_inches='tight', ylabel='S',
+             show=False)
 
     k = 0
     for i in range(len(levels)):
@@ -129,7 +136,8 @@ def levels(E, ket, use_sc, colors=''):
         if levels[i].size > 2:
             print('Warning: bidimensional representation selection',
                   'problem: size: ', levels[i].size, 'at', i,
-                  '\nenergy: ', levels[i], '\ndelta: ', np.diff(levels[i]))
+                  '\nenergy: ', levels[i], '\ndelta: ', np.diff(levels[i]),
+                  '\nrelsp: ', np.diff(levels[i]) / avgSpacing)
         for j in range(levels[i].size):
             if return_colors:
                 colormap[i + j + k] = colors[i % len(colors)]
