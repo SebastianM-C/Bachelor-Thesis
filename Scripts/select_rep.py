@@ -10,7 +10,7 @@ from custom_parser import parse
 from tools import cd
 
 
-def main(b, d, n, use_sc, delta_n):
+def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon):
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     cd(b, d, n)
     start = timer()
@@ -20,11 +20,11 @@ def main(b, d, n, use_sc, delta_n):
 
     # Select only the stable levels
     # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
-    stable_levels = diff.stable(E, b, d, n, use_sc, delta_n)
+    stable_levels = diff.stable(E, b, d, n, use_sc, delta_n, st_epsilon)
     E = E[:stable_levels]
     print('avgSpacing: ', (E[-1] - E[0]) / E.size)
     # Select irreductible representations
-    ir_reps = eigensystem.levels(E, ket, use_sc)
+    ir_reps = eigensystem.levels(E, ket, use_sc, lvl_epsilon)
 
     stop = timer()
     print('get data: ', stop - start, ' seconds')
@@ -61,8 +61,9 @@ def main(b, d, n, use_sc, delta_n):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc = parse()
+    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon = parse(advanced=True)
+
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc, 20)
+                main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon)

@@ -90,7 +90,7 @@ def get_state(use_sc):
     return state, index[c_max], index
 
 
-def levels(E, ket, use_sc, colors=''):
+def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
     """Return the degenerate subspace index and optionally the colormap"""
     # Irreductible representations
     # 0 - unidimensional symmetric representation (reuns)
@@ -103,7 +103,6 @@ def levels(E, ket, use_sc, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    epsilon = 1e-8
     print('levels epsilon: ', epsilon)
     delta = np.diff(E)
     relsp = relSpacing(E)

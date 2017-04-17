@@ -40,9 +40,8 @@ def difference(E1, b, d, n, delta_n, use_sc=False, ir_reps1=np.empty(0)):
     return np.abs(E_diff), ir_diff
 
 
-def stable(E1, b, d, n, use_sc, delta_n, ir_reps=np.empty(0)):
+def stable(E1, b, d, n, use_sc, delta_n, epsilon, ir_reps=np.empty(0)):
     """Return the number of stable levels"""
-    epsilon = 1e-11 if use_sc else 5e-2
     if ir_reps.size == 0:
         E_diff = difference(E1, b, d, n, delta_n, use_sc)
     else:

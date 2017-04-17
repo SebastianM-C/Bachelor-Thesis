@@ -13,10 +13,9 @@ from plots import bar_plot, histogram
 
 
 # b, d, n = 0.2, 0.4, 60
-def main(b, d, n, use_sc, re_select=True, show=False):
-    if re_select:
-        delta_n = 20
-        select_rep.main(b, d, n, use_sc, delta_n)
+def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True):
+    if reselect:
+        select_rep.main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
     rel_sp = []
@@ -59,8 +58,11 @@ def main(b, d, n, use_sc, re_select=True, show=False):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc = parse()
+    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect =
+    parse(advanced=True, reselect=True)
+
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc)
+                main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon,
+                     reselect)
