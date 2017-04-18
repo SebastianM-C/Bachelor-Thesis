@@ -18,11 +18,11 @@ def parse(advanced=False, select=False):
                         default=20,
                         help='Size difference between diagonalization bases')
     parser.add_argument('-st_eps', '--stability_epsilon', type=np.float64,
-                        nargs=1, default=1e-11,
+                        default=1e-11,
                         help='Maximum difference between two stable levels' +
                         'when the diagonalization basis size is increased by' +
                         'delta_n')
-    parser.add_argument('-l_eps', '--levels_epsilon', type=np.float64, nargs=1,
+    parser.add_argument('-l_eps', '--levels_epsilon', type=np.float64,
                         default=1e-8,
                         help='Minimum difference between two consecutive' +
                         'levels from one of the irreductible' +

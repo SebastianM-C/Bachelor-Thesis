@@ -6,8 +6,8 @@ from scipy import integrate
 
 
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
-              ylabel='', xlabel='', stacked=False, normed=False,
-              cumulative=False, weights=None, use_wigner=False):
+              ylabel='', xlabel='', stacked=False, normed=False, weights=None,
+              cumulative=False, use_wigner=False, use_poisson=False):
     fig, ax = plt.subplots()
     ax.hist(data, bins=bins, label=label, stacked=stacked, normed=normed,
             cumulative=cumulative, weights=weights)
@@ -25,7 +25,11 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         x = np.linspace(0, 4, 100)
         ax.bar(bins[:-1], wigner_hist, width=bin_size,
                align='edge', label='Wigner bar', fill=False, linestyle='-')
-        ax.plot(x, wigner_dist(x), 'r:', label='Wigner')
+        ax.plot(x, wigner_dist(x), 'r-.', label='Wigner')
+    if use_poisson:
+        def poisson(s): return np.exp(-s)
+        x = np.linspace(0, 4, 100)
+        ax.plot(x, poisson(x), 'c:', label='Poisson')
     if ylabel:
         ax.set_ylabel(ylabel)
     if xlabel:

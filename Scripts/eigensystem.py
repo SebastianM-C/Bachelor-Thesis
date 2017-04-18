@@ -6,7 +6,6 @@ from timeit import default_timer as timer
 from os.path import isfile
 
 from tools import get_input
-from diff import relSpacing
 from hamiltonian import main as hamiltonian
 from plots import bar_plot, histogram
 
@@ -34,18 +33,32 @@ def readH(format):
         return H.T
 
 
-def get(use_sc, return_H=False):
-    """Return the eigenvalues and the eigenvectors (along with the state index
-    and max coefficient index) and optionally the Hamiltonian"""
+def get(use_sc, return_eigv=False, return_ket=False, return_index=False,
+        return_cmax=False, return_H=False):
+    """Return the eigenvalues and optionally the eigenvectors,
+    the number operator form of the states(ket), the state index of the states,
+    the max coefficient index and the Hamiltonian"""
     # Load files
     H = readH('fortran_bin')    # read the Hamiltonian
-    index = np.loadtxt("index.out", dtype=int)
+    b, d, n = get_input()
+    n = int(n)
+    index = np.array([(n1, n2) for n1 in range(n) for n2 in range(n - n1)])
     # Get eigenvalues and eigenvectors
-    if use_sc:
-        E, eigenvectors = linalg.eigh(H)
+    if isfile('eigensystem.npz'):
+        print('Used cached result for: B =', b, ' D =', d, ' N =', n)
+        eigensystem = np.load('eigensystem.npz')
+        E = eigensystem['E']
+        eigenvectors = eigensystem['eigenvectors']
     else:
-        E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
-        eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
+        start = timer()
+        E, eigenvectors = linalg.eigh(H)
+        end = timer()
+        print('Diagonalisation for N =', n, ':', end - start, 'seconds')
+        # Save the results
+        np.savez_compressed('eigensystem.npz', E=E, eigenvectors=eigenvectors)
+    # else:
+    #     E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
+    #     eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
 
     eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
 
@@ -56,38 +69,18 @@ def get(use_sc, return_H=False):
     for i in range(eigenvectors.shape[0]):
         c_max[i] = np.argmax(np.abs(eigenvectors[i]))
 
+    results = (E, )
+    if return_eigv:
+        results = results + (eigenvectors, )
+    if return_ket:
+        results = results + (index[c_max], )
+    if return_index:
+        results = results + (index, )
+    if return_cmax:
+        results = results + (c_max, )
     if return_H:
-        return E, eigenvectors, index, c_max, H
-    return E, index[c_max]
-
-
-def get_state(use_sc):
-    """Return the eigenvalues and the eigenvectors"""
-    # Load files
-    H = readH('fortran_bin')    # read the Hamiltonian
-    index = np.loadtxt("index.out", dtype=int)
-    # index = [(n1, n2) for n1 in range(n) for n2 in range(n - n1)]
-    # Define the state array
-    state = np.zeros(H.shape[0],
-                     [('E', np.float64), ('eigvec', np.float64, H.shape[0])])
-    # Get eigenvalues and eigenvectors
-    if use_sc:
-        state['E'], state['eigvec'] = linalg.eigh(H)
-    else:
-        state['E'] = np.loadtxt("hamilt.dat", usecols=1, unpack=True)
-        state['eigvec'] = np.loadtxt("eigenvectors.out", unpack=True)
-
-    # each eigenvector is on one row
-    state['eigvec'] = np.transpose(state['eigvec'])
-
-    # max coefficient in eigenvector
-    c_max = np.empty_like(state['eigvec'][0], dtype=int)
-
-    # The index of the largest coefficient
-    for i in range(state['eigvec'][0].size):
-        c_max[i] = np.argmax(np.abs(state['eigvec'][i]))
-
-    return state, index[c_max], index
+        results = results + (H, )
+    return results
 
 
 def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
@@ -103,22 +96,22 @@ def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
 
     # Group energy levels such that a level contains all the eigenvalues with
     # the same value
-    print('levels epsilon: ', epsilon)
     delta = np.diff(E)
-    relsp = relSpacing(E)
     avgSpacing = (E[-1] - E[0]) / E.size
+    relsp = delta / avgSpacing
+    print('levels epsilon: ', epsilon)
+    print('avgSpacing: ', avgSpacing)
 
     levels = np.split(E, np.where(relsp > epsilon)[0] + 1)
 
     # Energy difference (between two consecutive levels) histogram
     histogram(delta, label='$\\Delta E$', xscale='log',
-              bins=np.pad(np.geomspace(1e-15, 10, 17), (1, 0), mode='constant'),
-              fname='hist_delta' + ('_sc.png' if use_sc else '.png'))
+              bins=np.pad(np.geomspace(1e-15, 10, 17), (1, 0),
+                          mode='constant'), fname='hist_delta.png')
     # Relative spacing histogram
     histogram(relsp, label='$N \\frac{\\Delta E}{E_n - E_0}$', xscale='log',
-              bins=np.pad(np.geomspace(1e-13, 10, 15), (1, 0), mode='constant'),
-              fname='hist_relsp' + ('_sc.png' if use_sc else '.png'),
-              xlabel='S', show=False)
+              bins=np.pad(np.geomspace(1e-13, 10, 15), (1, 0),
+                          mode='constant'), fname='hist_relsp.png', xlabel='S')
     # Energy difference bar plot
     bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
              fname='bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,

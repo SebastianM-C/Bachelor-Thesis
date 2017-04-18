@@ -8,11 +8,9 @@ import select_rep
 from tools import cd
 from custom_parser import parse
 from diff import relSpacing
-from eigensystem import get_state
 from plots import bar_plot, histogram
 
 
-# b, d, n = 0.2, 0.4, 60
 def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True):
     if reselect:
         select_rep.main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon)
@@ -34,25 +32,12 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True):
     # Relative spacing histogram
     histogram(rel_sp, bins=np.arange(0, 4, 1 / 4), weights=w, stacked=True,
               normed=True, label=reps, ylabel='P(S)', xlabel='S',
-              fname='P(S)' + ('_sc.png' if use_sc else '.png'),
-              use_wigner=True)
+              fname='P(S)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
+              '{:.0e}'.format(lvl_epsilon) + '.png',
+              use_wigner=True, use_poisson=True)
     histogram(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4), label=reps,
               normed=True, ylabel='P(S)', xlabel='S',
               fname='Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
-    # # Energy difference (between two consecutive levels) histogram
-    # state, _, _ = get_state(use_sc)
-    # stable = int(np.loadtxt('cache.txt'))
-    # delta = np.diff(state['E'])[:stable]
-    # epsilon = 1e-5
-    # histogram(delta, label='$\\Delta = E_{n+1} - E_n$ stable',
-    #           bins=np.pad(np.geomspace(1e-9, 1e3, 13), (1, 0),
-    #                       mode='constant'), xscale='log',
-    #           fname='hist_delta_stable' + ('_sc.png' if use_sc else '.png'))
-    # # Energy difference bar plot
-    # bar_plot(delta, label='$\\Delta = E_{n+1} - E_n$ stable',
-    #          figsize=(20, 4), yscale='log', axhline_y=epsilon, dpi=600,
-    #          fname='bar_delta_stable' + ('_sc.png' if use_sc else '.png'),
-    #          bbox_inches='tight')
 
     os.chdir("../../Scripts")
 

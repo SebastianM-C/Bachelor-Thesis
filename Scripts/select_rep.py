@@ -14,7 +14,7 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon):
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     cd(b, d, n)
     start = timer()
-    E, ket = eigensystem.get(use_sc)
+    E, ket = eigensystem.get(use_sc, return_ket=True)
     # Select irreductible representations
     # ir_reps = eigensystem.levels(E, ket, use_sc)
 
@@ -22,12 +22,11 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon):
     # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
     stable_levels = diff.stable(E, b, d, n, use_sc, delta_n, st_epsilon)
     E = E[:stable_levels]
-    print('avgSpacing: ', (E[-1] - E[0]) / E.size)
     # Select irreductible representations
     ir_reps = eigensystem.levels(E, ket, use_sc, lvl_epsilon)
 
     stop = timer()
-    print('get data: ', stop - start, ' seconds')
+    print('Get data:', stop - start, 'seconds')
     rebde = open('rebde2' + ('_sc.dat' if use_sc else '.dat'), 'w')
     reuna = open('reuna2' + ('_sc.dat' if use_sc else '.dat'), 'w')
     reuns = open('reuns2' + ('_sc.dat' if use_sc else '.dat'), 'w')

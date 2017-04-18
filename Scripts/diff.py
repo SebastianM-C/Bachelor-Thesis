@@ -3,7 +3,6 @@
 import os
 import numpy as np
 import eigensystem
-import matplotlib.pyplot as plt
 
 import tools
 from plots import bar_plot, histogram
@@ -21,7 +20,7 @@ def difference(E1, b, d, n, delta_n, use_sc=False, ir_reps1=np.empty(0)):
     diagonalization basis and n + delta_n"""
     # Load the energy levels in the second basis
     os.chdir("../B" + str(b) + " D" + str(d) + " N" + str(n + delta_n))
-    E2, ket2 = eigensystem.get(use_sc)
+    E2, ket2 = eigensystem.get(use_sc, return_ket=True)
     if ir_reps1.size:
         ir_reps2 = eigensystem.levels(E2, ket2, use_sc)
 
@@ -53,7 +52,8 @@ def stable(E1, b, d, n, use_sc, delta_n, epsilon, ir_reps=np.empty(0)):
               fname='hist_E_diff' + ('_sc.png' if use_sc else '.png')
               )
     # Energy difference bar plot
-    bar_plot(E_diff[:1000], label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
+    bar_plot(E_diff[E_diff < 0.01],
+             label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
              figsize=(20, 4), axhline_y=epsilon, yscale='log', dpi=600,
              fname='bar_E_diff' + ('_sc.png' if use_sc else '.png'),
              bbox_inches='tight')

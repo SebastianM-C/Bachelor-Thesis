@@ -6,7 +6,7 @@ import re
 
 def get_input():
     """Return the input parameters (b, d, n) of the current path"""
-    regex = r"""B(0.[0-9])+ D(0.[0-9])+ N([0-9]+)"""
+    regex = r"""B(0.[0-9]+)+ D(0.[0-9]+)+ N([0-9]+)"""
     return [float(i) for i in
             re.compile(regex).search(os.getcwd()).group(1, 2, 3)]
 

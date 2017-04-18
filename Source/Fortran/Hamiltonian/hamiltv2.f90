@@ -55,37 +55,37 @@ program hamilt
       n1 = index(1, j)
       n2 = index(2, j)
 
-      h(i, j) = a * (elem(m1, n1, 1, 1) * elem(m2, n2, 0, 0) +          &
-                     elem(m1, n1, 0, 0) * elem(m2, n2, 1, 1))           &
-              + 0.25 * b * (3 * elem(m1, n1, 1, 0) * elem(m2, n2, 2, 0) &
-              + 3 * elem(m1, n1, 0, 1) * elem(m2, n2, 0, 2)             &
-              - elem(m1, n1, 3, 0) * elem(m2, n2, 0, 0)                 &
-              - elem(m1, n1, 0, 3) * elem(m2, n2, 0, 0))                &
-              + 0.75 * b * (elem(m1, n1, 0, 1) * elem(m2, n2, 2, 0)     &
-              + elem(m1, n1, 1, 0) * elem(m2, n2, 0, 2)                 &
-              - elem(m1, n1, 1, 2) * elem(m2, n2, 0, 0)                 &
-              - elem(m1, n1, 2, 1) * elem(m2, n2, 0, 0)                 &
-              + 2 * elem(m1, n1, 0, 1) * elem(m2, n2, 1, 1)             &
-              + 2 * elem(m1, n1, 1, 0) * elem(m2, n2, 1, 1))            &
-              + 0.375 * d * (elem(m1, n1, 2, 2) * elem(m2, n2, 0, 0)    &
-              + elem(m1, n1, 0, 0) * elem(m2, n2, 2, 2))                &
-              + 0.125 * d * (elem(m1, n1, 2, 0) * elem(m2, n2, 0, 2)    &
-              + elem(m1, n1, 0, 2) * elem(m2, n2, 2, 0))                &
-              + 0.500 * d * elem(m1, n1, 1, 1) * elem(m2, n2, 1, 1)     &
-              + 0.250 * d * (elem(m1, n1, 1, 3) * elem(m2, n2, 0, 0)    &
-              + elem(m1, n1, 3, 1) * elem(m2, n2, 0, 0)                 &
-              + elem(m1, n1, 0, 0) * elem(m2, n2, 1, 3)                 &
-              + elem(m1, n1, 0, 0) * elem(m2, n2, 3, 1)                 &
-              + elem(m1, n1, 0, 2) * elem(m2, n2, 1, 1)                 &
-              + elem(m1, n1, 2, 0) * elem(m2, n2, 1, 1)                 &
-              + elem(m1, n1, 1, 1) * elem(m2, n2, 0, 2)                 &
-              + elem(m1, n1, 1, 1) * elem(m2, n2, 2, 0))                &
-              + 0.0625 * d * (elem(m1, n1, 4, 0) * elem(m2, n2, 0, 0)   &
-              + elem(m1, n1, 0, 4) * elem(m2, n2, 0, 0)                 &
-              + elem(m1, n1, 0, 0) * elem(m2, n2, 4, 0)                 &
-              + elem(m1, n1, 0, 0) * elem(m2, n2, 0, 4)                 &
-              + 2 * elem(m1, n1, 2, 0) * elem(m2, n2, 2, 0)             &
-              + 2 * elem(m1, n1, 0, 2) * elem(m2, n2, 0, 2))
+      h(i, j) = a * (elem(m1, n1, 1, 1) * elem(m2, n2, 0, 0) +               &
+                     elem(m1, n1, 0, 0) * elem(m2, n2, 1, 1))                &
+   + 0.25 * b * (3 * elem(m1, n1, 1, 0) * elem(m2, n2, 2, 0)                 &
+               + 3 * elem(m1, n1, 0, 1) * elem(m2, n2, 0, 2)                 &
+                   - elem(m1, n1, 3, 0) * elem(m2, n2, 0, 0)                 &
+                   - elem(m1, n1, 0, 3) * elem(m2, n2, 0, 0))                &
+       + 0.75 * b * (elem(m1, n1, 0, 1) * elem(m2, n2, 2, 0)                 &
+                   + elem(m1, n1, 1, 0) * elem(m2, n2, 0, 2)                 &
+                   - elem(m1, n1, 1, 2) * elem(m2, n2, 0, 0)                 &
+                   - elem(m1, n1, 2, 1) * elem(m2, n2, 0, 0)                 &
+               + 2 * elem(m1, n1, 0, 1) * elem(m2, n2, 1, 1)                 &
+               + 2 * elem(m1, n1, 1, 0) * elem(m2, n2, 1, 1))                &
+      + 0.375 * d * (elem(m1, n1, 2, 2) * elem(m2, n2, 0, 0)                 &
+                   + elem(m1, n1, 0, 0) * elem(m2, n2, 2, 2))                &
+      + 0.125 * d * (elem(m1, n1, 2, 0) * elem(m2, n2, 0, 2)                 &
+                   + elem(m1, n1, 0, 2) * elem(m2, n2, 2, 0))                &
+      + 0.500 * d *  elem(m1, n1, 1, 1) * elem(m2, n2, 1, 1)                 &
+      + 0.250 * d * (elem(m1, n1, 1, 3) * elem(m2, n2, 0, 0)                 &
+                   + elem(m1, n1, 3, 1) * elem(m2, n2, 0, 0)                 &
+                   + elem(m1, n1, 0, 0) * elem(m2, n2, 1, 3)                 &
+                   + elem(m1, n1, 0, 0) * elem(m2, n2, 3, 1)                 &
+                   + elem(m1, n1, 0, 2) * elem(m2, n2, 1, 1)                 &
+                   + elem(m1, n1, 2, 0) * elem(m2, n2, 1, 1)                 &
+                   + elem(m1, n1, 1, 1) * elem(m2, n2, 0, 2)                 &
+                   + elem(m1, n1, 1, 1) * elem(m2, n2, 2, 0))                &
+     + 0.0625 * d * (elem(m1, n1, 4, 0) * elem(m2, n2, 0, 0)                 &
+                   + elem(m1, n1, 0, 4) * elem(m2, n2, 0, 0)                 &
+                   + elem(m1, n1, 0, 0) * elem(m2, n2, 4, 0)                 &
+                   + elem(m1, n1, 0, 0) * elem(m2, n2, 0, 4)                 &
+               + 2 * elem(m1, n1, 2, 0) * elem(m2, n2, 2, 0)                 &
+               + 2 * elem(m1, n1, 0, 2) * elem(m2, n2, 0, 2))
     enddo
   enddo
 

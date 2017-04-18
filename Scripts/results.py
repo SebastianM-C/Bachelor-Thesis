@@ -203,13 +203,16 @@ def get(b, d, n, use_sc):
 
     cd(b, d, n)
 
-    E, eigenvectors, index, c_max, H = eigensystem.get(use_sc, return_H=True)
+    E, eigenvectors, index, c_max, H = \
+        eigensystem.get(use_sc, return_eigv=True, return_index=True,
+                        return_cmax=True, return_H=True)
 
     # All available colors
     colors = ('black', 'red', 'teal', 'blue', 'orange', 'olive',
               'magenta', 'cyan', 'Brown', 'Goldenrod', 'Green', 'Violet')
 
-    ir_reps, colormap = eigensystem.levels(E, index[c_max], use_sc, colors)
+    ir_reps, colormap = eigensystem.levels(E, index[c_max], use_sc,
+                                           colors=colors)
 
     # Build eigenvalue string
     # If the colormap element corresponding to the i-th eigenvalue is empty,

@@ -74,19 +74,22 @@ def main(b, d, n, use_sc):
     """Create bar plots for eigenvectors"""
     cd(b, d, n)
     # Get states
-    state, ket, index = eigensystem.get_state(use_sc)
+    E, eigenvectors, ket, index = \
+        eigensystem.get(use_sc, return_eigv=True, return_ket=True,
+                        return_index=True)
     # Get the index array that sorts the eigenvector coefficients
-    # such that n1 + n2 is incerasing
+    # such that n1 + n2 is increasing
     sort_idx = np.argsort(index.sum(axis=1))
     # Sort the eigenvector coefficients
-    state['eigvec'] = state['eigvec'][:, sort_idx]
+    eigenvectors = eigenvectors[:, sort_idx]
     # stable_levels = np.load('cache.npy')    # get cached stable levels
     no_eigv = 40        # number of eigenvectors to plot
     # Select the states corresponding to stable levels
-    state = state[:no_eigv]
+    E = E[:no_eigv]
+    eigenvectors = eigenvectors[:no_eigv]
     ket = ket[:no_eigv]
     # Get irreductible representation index
-    ir_reps = eigensystem.levels(state['E'], ket, use_sc)
+    ir_reps = eigensystem.levels(E, ket, use_sc)
     # Build irreductible representation string
     reps = 'reuns', 'reuna', 'rebde'
     ir_str = [reps[i] for i in ir_reps]
@@ -100,19 +103,19 @@ def main(b, d, n, use_sc):
     d_no = 0   # number of duplicate states
 
     clean_dir('eigenvectors')
-    for i in range(state.shape[0]):
-        eigv_len = no_signif_el(state['eigvec'][i])
+    for i in range(eigenvectors.shape[0]):
+        eigv_len = no_signif_el(eigenvectors[i])
         minor_ticks = np.arange(0, eigv_len, 0.5)
         # Plot label
-        label = 'E = ' + str(state['E'][i]) + '\n' + '$\\left|' + \
+        label = 'E = ' + str(E[i]) + '\n' + '$\\left|' + \
             str(ket[i][0]) + '\\,' + str(ket[i][1]) + '\\right\\rangle$\t' + \
             ir_str[i]
         fname = str(ket[i][0]) + ' ' + str(ket[i][1])   # filename
 
-        index_plot(state['eigvec'][i], eigv_len, label, index, sort_idx, fname,
+        index_plot(eigenvectors[i], eigv_len, label, index, sort_idx, fname,
                    d_no)
 
-        energy_plot(state['eigvec'][i], eigv_len, x, w, label, index, sort_idx,
+        energy_plot(eigenvectors[i], eigv_len, x, w, label, index, sort_idx,
                     fname, d_no)
 
 
