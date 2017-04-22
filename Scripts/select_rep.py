@@ -10,7 +10,7 @@ from custom_parser import parse
 from tools import cd
 
 
-def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon):
+def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, cut=0):
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     cd(b, d, n)
     start = timer()
@@ -21,6 +21,8 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon):
     # Select only the stable levels
     # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
     stable_levels = diff.stable(E, b, d, n, use_sc, delta_n, st_epsilon)
+    # Reduce the number of stable levels to check the convergence
+    stable_levels = int((1 - cut) * stable_levels)
     E = E[:stable_levels]
     # Select irreductible representations
     ir_reps = eigensystem.levels(E, ket, use_sc, lvl_epsilon)

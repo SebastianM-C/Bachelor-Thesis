@@ -12,6 +12,16 @@ from plots import bar_plot, histogram
 
 def readH(format):
     """Read the Hamiltonian using the given format"""
+    if format == 'npz':
+        if isfile('hamilt.npz'):
+            hamilt = np.load('hamilt.npz')
+            return hamilt['H']
+        else:
+            # Fallback to Fortran binary
+            format = 'fortran_bin'
+            # print('Hamiltonian file not found. Computing again.')
+            # b, d, n = get_input()
+            # return hamiltonian(1, b, d, n)
     if format == 'fortran_bin':
         _, _, n = get_input()
         nn = int(n * (n + 1) / 2)
@@ -20,14 +30,6 @@ def readH(format):
             for i in range(nn):
                 H[i] = np.fromfile(h, dtype='float64', count=nn).reshape(nn)
         return H
-    if format == 'npz':
-        if isfile('hamilt.npz'):
-            hamilt = np.load('hamilt.npz')
-            return hamilt['H']
-        else:
-            print('Hamiltonian file not found. Computing again.')
-            b, d, n = get_input()
-            return hamiltonian(1, b, d, n)
     if format == 'text':
         H = np.loadtxt("hamilt.out")
         return H.T
@@ -39,7 +41,10 @@ def get(use_sc, return_eigv=False, return_ket=False, return_index=False,
     the number operator form of the states(ket), the state index of the states,
     the max coefficient index and the Hamiltonian"""
     # Load files
-    H = readH('fortran_bin')    # read the Hamiltonian
+    H = readH('npz')    # read the Hamiltonian
+    # Save to npz to save sapce
+    if not isfile('hamilt.npz'):
+        np.savez_compressed('hamilt.npz', H=H)
     b, d, n = get_input()
     n = int(n)
     index = np.array([(n1, n2) for n1 in range(n) for n2 in range(n - n1)])

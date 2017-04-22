@@ -18,7 +18,7 @@ def parse(advanced=False, select=False):
                         default=20,
                         help='Size difference between diagonalization bases')
     parser.add_argument('-st_eps', '--stability_epsilon', type=np.float64,
-                        default=1e-11,
+                        default=1e-9,
                         help='Maximum difference between two stable levels' +
                         'when the diagonalization basis size is increased by' +
                         'delta_n')
@@ -30,6 +30,10 @@ def parse(advanced=False, select=False):
     parser.add_argument('-r', '--reselect', action='store_false',
                         default=True, help='Specify whether to reselect the' +
                         'irreductible representations or not')
+    parser.add_argument('-c', '--cut', type=np.float64,
+                        default=0,
+                        help='Factor by which to reduce the number of stable' +
+                        'levels when checking the convergence of the results')
 
     # args = parser.parse_args(input().split())
     args = parser.parse_args()
@@ -43,9 +47,10 @@ def parse(advanced=False, select=False):
     st_epsilon = args.stability_epsilon
     lvl_epsilon = args.levels_epsilon
     reselect = args.reselect
+    cut = args.cut
 
     if advanced and select:
-        return B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect
+        return B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect, cut
     if advanced:
         return B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon
     return B, D, N, use_sc
