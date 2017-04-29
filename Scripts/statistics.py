@@ -2,7 +2,6 @@
 
 import os
 import numpy as np
-# import matplotlib.pyplot as plt
 
 import select_rep
 from tools import cd
@@ -37,6 +36,12 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True,
               '{:.0e}'.format(lvl_epsilon) +
               ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
               use_wigner=True, use_poisson=True)
+    histogram(rel_sp, bins=np.arange(0, 4, 1 / 4), weights=w, stacked=True,
+              normed=True, label=reps, ylabel='P(S)', xlabel='S',
+              fname='P(S)' + '_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
+              '{:.0e}'.format(lvl_epsilon) +
+              ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
+              fit=True)
     histogram(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4), label=reps,
               normed=True, ylabel='P(S)', xlabel='S', use_wigner=True,
               fname='Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
