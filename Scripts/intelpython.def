@@ -1,0 +1,11 @@
+Bootstrap: docker
+From:intelpython/intelpython3_core
+
+
+%runscript
+ 
+	exec /opt/conda/bin/python "$@"
+
+%post
+
+	/opt/conda/bin/pip install matplotlib
