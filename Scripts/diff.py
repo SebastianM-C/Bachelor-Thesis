@@ -14,15 +14,15 @@ def relSpacing(E):
     return deltaE / avgSpacing
 
 
-def difference(E1, b, d, n, delta_n, use_sc=False, ir_reps1=np.empty(0)):
+def difference(E1, b, d, n, delta_n, ir_reps1=np.empty(0)):
     """Return the differences between the energy levels and of the
     structure of the irreductible representations (optional) for the given
     diagonalization basis and n + delta_n"""
     # Load the energy levels in the second basis
     os.chdir("../B" + str(b) + " D" + str(d) + " N" + str(n + delta_n))
-    E2, ket2 = eigensystem.get(use_sc, return_ket=True)
+    E2, ket2 = eigensystem.get(return_ket=True)
     if ir_reps1.size:
-        ir_reps2 = eigensystem.levels(E2, ket2, use_sc)
+        ir_reps2 = eigensystem.levels(E2, ket2)
 
     if E2.size > E1.size:
         E_diff = (E2[:E1.size] - E1) / E1
@@ -39,32 +39,28 @@ def difference(E1, b, d, n, delta_n, use_sc=False, ir_reps1=np.empty(0)):
     return np.abs(E_diff), ir_diff
 
 
-def stable(E1, b, d, n, use_sc, delta_n, epsilon, ir_reps=np.empty(0)):
+def stable(E1, b, d, n, delta_n, epsilon, ir_reps=np.empty(0)):
     """Return the number of stable levels"""
     if ir_reps.size == 0:
-        E_diff = difference(E1, b, d, n, delta_n, use_sc)
+        E_diff = difference(E1, b, d, n, delta_n)
     else:
-        E_diff, ir_diff = difference(E1, b, d, n, delta_n, use_sc, ir_reps)
+        E_diff, ir_diff = difference(E1, b, d, n, delta_n, ir_reps)
     # Energy difference (between two diagonalization bases) histogram
     histogram(E_diff, label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
-              bins=np.pad(np.logspace(-14, -2, 13), (1, 0),
-                          mode='constant'), xscale='log',
-              fname='hist_E_diff' + ('_sc.png' if use_sc else '.png')
-              )
+              bins=np.pad(np.logspace(-14, -2, 13), (1, 0), mode='constant'),
+              xscale='log', fname='hist_E_diff.png')
     # Energy difference bar plot
     bar_plot(E_diff[E_diff < 0.01],
              label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
              figsize=(20, 4), axhline_y=epsilon, yscale='log', dpi=600,
-             fname='bar_E_diff' + ('_sc.png' if use_sc else '.png'),
-             bbox_inches='tight')
+             fname='bar_E_diff.png', bbox_inches='tight')
 
+    last_stable = np.where(E_diff > epsilon)[0][1]
+    # Cache the result
+    last_stable.tofile('stable.txt', sep=' ')
     print("E_diff > epsilon :",
           np.where(E_diff > epsilon)[0][:5], "\nstability epsilon: ", epsilon)
-    print("E0 = ", E1[0], "\nE", np.where(E_diff > epsilon)[0][1],
-          E1[np.where(E_diff > epsilon)[0][1]])
+    print("E 0 =", E1[0], "\nE", last_stable, "=", E1[last_stable])
     if ir_reps.size:
         print("ir_diff: ", np.where(ir_diff > 0)[0][:5])
-    # Cache the result
-    np.where(E_diff > epsilon)[0][1].tofile('stable.txt', sep=' ')
-    return np.where(E_diff > epsilon)[0][1]
-    # return np.where(ir_diff > 0)[0][1]
+    return last_stable

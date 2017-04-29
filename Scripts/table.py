@@ -22,23 +22,20 @@ def color(x, exists):
     return ''
 
 
-def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
+def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
     start = timer()
     tools.cd(b, d, n)
 
     # Get data
-    E, ket = eigensystem.get(use_sc, return_ket=True)
-    ir_reps = eigensystem.levels(E, ket, use_sc, lvl_epsilon)
+    E, ket = eigensystem.get(return_ket=True)
+    ir_reps = eigensystem.levels(E, ket, lvl_epsilon)
     if stable_only:     # choose all levels or only the stable ones
         stable_levels = int(np.loadtxt('stable.txt'))
         E = E[:stable_levels]
 
-    rebde = np.loadtxt("rebde2" + ('_sc.dat' if use_sc else '.dat'),
-                       usecols=0, unpack=True)
-    reuna = np.loadtxt("reuna2" + ('_sc.dat' if use_sc else '.dat'),
-                       usecols=0, unpack=True)
-    reuns = np.loadtxt("reuns2" + ('_sc.dat' if use_sc else '.dat'),
-                       usecols=0, unpack=True)
+    rebde = np.loadtxt('rebde.dat', usecols=(0,), unpack=True)
+    reuna = np.loadtxt('reuna.dat', usecols=(0,), unpack=True)
+    reuns = np.loadtxt('reuns.dat', usecols=(0,), unpack=True)
 
     # Bi-directional search
     E_in_rebde = np.in1d(E, rebde, assume_unique=False)
@@ -102,9 +99,9 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon = parse(advanced=True)
+    B, D, N, delta_n, st_epsilon, lvl_epsilon = parse(advanced=True)
 
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon)
+                main(b, d, n, delta_n, st_epsilon, lvl_epsilon)

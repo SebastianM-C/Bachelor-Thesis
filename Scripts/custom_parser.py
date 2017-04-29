@@ -11,9 +11,6 @@ def parse(advanced=False, select=False):
                         help='Hamiltonian D parameter')
     parser.add_argument('-n', type=np.int64, nargs='+', default=[4],
                         help='Diagonalisation basis size')
-    parser.add_argument('-sc', action='store_true', default=False,
-                        help='Specify whether to use SciPy or not for' +
-                        'diagonalisation')
     parser.add_argument('-dn', '--delta_n', type=np.int64, nargs=1,
                         default=20,
                         help='Size difference between diagonalization bases')
@@ -42,7 +39,6 @@ def parse(advanced=False, select=False):
     B = args.b
     D = args.d
     N = args.n
-    use_sc = args.sc    # Optionally use SciPy for eigenvalues and eigenvectors
     delta_n = args.delta_n
     st_epsilon = args.stability_epsilon
     lvl_epsilon = args.levels_epsilon
@@ -50,7 +46,7 @@ def parse(advanced=False, select=False):
     cut = args.cut
 
     if advanced and select:
-        return B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect, cut
+        return B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut
     if advanced:
-        return B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon
-    return B, D, N, use_sc
+        return B, D, N, delta_n, st_epsilon, lvl_epsilon
+    return B, D, N

@@ -10,28 +10,28 @@ from custom_parser import parse
 from tools import cd
 
 
-def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, cut=0):
+def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut=0):
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     cd(b, d, n)
     start = timer()
-    E, ket = eigensystem.get(use_sc, return_ket=True)
+    E, ket = eigensystem.get(return_ket=True)
     # Select irreductible representations
-    # ir_reps = eigensystem.levels(E, ket, use_sc)
+    # ir_reps = eigensystem.levels(E, ket)
 
     # Select only the stable levels
-    # stable_levels = diff.stable(E, ir_reps, b, d, n, use_sc, delta_n)
-    stable_levels = diff.stable(E, b, d, n, use_sc, delta_n, st_epsilon)
+    # stable_levels = diff.stable(E, ir_reps, b, d, n, delta_n)
+    stable_levels = diff.stable(E, b, d, n, delta_n, st_epsilon)
     # Reduce the number of stable levels to check the convergence
     stable_levels = int((1 - cut) * stable_levels)
     E = E[:stable_levels]
     # Select irreductible representations
-    ir_reps = eigensystem.levels(E, ket, use_sc, lvl_epsilon)
+    ir_reps = eigensystem.levels(E, ket, lvl_epsilon)
 
     stop = timer()
     print('Get data:', stop - start, 'seconds')
-    rebde = open('rebde2' + ('_sc.dat' if use_sc else '.dat'), 'w')
-    reuna = open('reuna2' + ('_sc.dat' if use_sc else '.dat'), 'w')
-    reuns = open('reuns2' + ('_sc.dat' if use_sc else '.dat'), 'w')
+    rebde = open('rebde.dat', 'w')
+    reuna = open('reuna.dat', 'w')
+    reuns = open('reuns.dat', 'w')
 
     # Write only one level corresponding to the bidimensional representation
     skip_next = False
@@ -62,9 +62,9 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, cut=0):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon = parse(advanced=True)
+    B, D, N, delta_n, st_epsilon, lvl_epsilon = parse(advanced=True)
 
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon)
+                main(b, d, n, delta_n, st_epsilon, lvl_epsilon)

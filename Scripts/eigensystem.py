@@ -35,7 +35,7 @@ def readH(format):
         return H.T
 
 
-def get(use_sc, return_eigv=False, return_ket=False, return_index=False,
+def get(return_eigv=False, return_ket=False, return_index=False,
         return_cmax=False, return_H=False):
     """Return the eigenvalues and optionally the eigenvectors,
     the number operator form of the states(ket), the state index of the states,
@@ -61,9 +61,6 @@ def get(use_sc, return_eigv=False, return_ket=False, return_index=False,
         print('Diagonalisation for N =', n, ':', end - start, 'seconds')
         # Save the results
         np.savez_compressed('eigensystem.npz', E=E, eigenvectors=eigenvectors)
-    # else:
-    #     E = np.loadtxt("hamilt.dat", usecols=1, unpack=True)    # energy levels
-    #     eigenvectors = np.loadtxt("eigenvectors.out", unpack=True)
 
     eigenvectors = np.transpose(eigenvectors)  # each eigenvector is on one row
 
@@ -88,7 +85,7 @@ def get(use_sc, return_eigv=False, return_ket=False, return_index=False,
     return results
 
 
-def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
+def levels(E, ket, epsilon=1e-8, colors=''):
     """Return the degenerate subspace index and optionally the colormap"""
     # Irreductible representations
     # 0 - unidimensional symmetric representation (reuns)
@@ -104,8 +101,8 @@ def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
     delta = np.diff(E)
     avgSpacing = (E[-1] - E[0]) / E.size
     relsp = delta / avgSpacing
-    print('levels epsilon: ', epsilon)
-    print('avgSpacing: ', avgSpacing)
+    print('levels epsilon:', epsilon)
+    print('avgSpacing:', avgSpacing)
 
     levels = np.split(E, np.where(relsp > epsilon)[0] + 1)
 
@@ -119,22 +116,20 @@ def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
                           mode='constant'), fname='hist_relsp.png', xlabel='S')
     # Energy difference bar plot
     bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
-             fname='bar_delta' + ('_sc.png' if use_sc else '.png'), dpi=600,
-             bbox_inches='tight')
+             fname='bar_delta.png', dpi=600, bbox_inches='tight')
     # Relative spacing bar plot
     bar_plot(relsp, figsize=(20, 4), label='$N \\frac{\\Delta E}{E_n - E_0}$',
-             yscale='log', fname='relsp' + ('_sc.png' if use_sc else '.png'),
-             dpi=600, axhline_y=epsilon, bbox_inches='tight', ylabel='S',
-             show=False)
+             yscale='log', fname='relsp.png', dpi=600, axhline_y=epsilon,
+             bbox_inches='tight', ylabel='S')
 
     k = 0
     for i in range(len(levels)):
         # Check for bidimensional representation selection problems
         if levels[i].size > 2:
             print('Warning: bidimensional representation selection',
-                  'problem: size: ', levels[i].size, 'at', i,
-                  '\nenergy: ', levels[i], '\ndelta: ', np.diff(levels[i]),
-                  '\nrelsp: ', np.diff(levels[i]) / avgSpacing)
+                  'problem: size:', levels[i].size, 'at', i,
+                  '\nenergy:', levels[i], '\ndelta:', np.diff(levels[i]),
+                  '\nrelsp:', np.diff(levels[i]) / avgSpacing)
         for j in range(levels[i].size):
             if return_colors:
                 colormap[i + j + k] = colors[i % len(colors)]

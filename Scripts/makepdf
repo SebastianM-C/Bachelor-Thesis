@@ -9,10 +9,6 @@ reset=`tput sgr0`
 
 function run() {
   echo "${green}Running with: $arg${reset}"
-  if [[ "$h" != true  &&  "$sc" != true ]]; then
-    echo "${yellow}Nothing to be done${reset}"
-    return
-  fi
   # go to the specified directory
   dest_dir="../Output/B$b D$d N$n"
   # check if folder exists
@@ -23,30 +19,15 @@ function run() {
   cd "$dest_dir"
   # LaTeX files
   hamilt_file="results B$b D$d N$n.tex"
-  sc_file="results B$b D$d N$n"_sc.tex
 
-  # complie hamilt_file
-  if [[ "$h" == true ]]; then
-    # check if files exist
-    if [ ! -f "$hamilt_file" ]; then
-      echo "${red}"$hamilt_file" not found${reset}"
-      cd ../../Scripts
-      return
-    fi
-    echo "${yellow}Compiling $hamilt_file${reset}"
-    pdflatex "$hamilt_file"
+  # check if files exist
+  if [ ! -f "$hamilt_file" ]; then
+    echo "${red}"$hamilt_file" not found${reset}"
+    cd ../../Scripts
+    return
   fi
-  # complie sc_file
-  if [[ "$sc" == true ]]; then
-    # check if files exist
-    if [ ! -f "$sc_file" ]; then
-      echo "${red}"$sc_file" not found${reset}"
-      cd ../../Scripts
-      return
-    fi
-    echo "${yellow}Compiling $sc_file${reset}"
-    pdflatex "$sc_file"
-  fi
+  echo "${yellow}Compiling $hamilt_file${reset}"
+  pdflatex "$hamilt_file"
 
   # return to Scripts directory
   cd ../../Scripts
@@ -68,14 +49,6 @@ case $i in
     n_list="${i#*=}"
     shift # past argument=value
     ;;
-    -sc=*)
-    sc="${i#*=}"
-    shift # past argument=value
-    ;;
-    -h=*)
-    h="${i#*=}"
-    shift # past argument=value
-    ;;
     *)
             # unknown option
     ;;
@@ -92,12 +65,6 @@ fi
 if [ -z "$d_list" ]; then
   echo "d empty: using D = 0.4"
   d_list=0.4
-fi
-if [ -z "$sc" ]; then
-  sc=false
-fi
-if [ -z "$h" ]; then
-  h=true
 fi
 for b in $b_list; do
   for d in $d_list; do

@@ -195,7 +195,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
         f.write("\n\n\\end{document}")
 
 
-def get(b, d, n, use_sc):
+def get(b, d, n):
     """Get the results for the given parameters and optionally
     use SciPy to compute the eigenvalues and eigenvectors"""
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
@@ -204,15 +204,14 @@ def get(b, d, n, use_sc):
     cd(b, d, n)
 
     E, eigenvectors, index, c_max, H = \
-        eigensystem.get(use_sc, return_eigv=True, return_index=True,
+        eigensystem.get(return_eigv=True, return_index=True,
                         return_cmax=True, return_H=True)
 
     # All available colors
     colors = ('black', 'red', 'teal', 'blue', 'orange', 'olive',
               'magenta', 'cyan', 'Brown', 'Goldenrod', 'Green', 'Violet')
 
-    ir_reps, colormap = eigensystem.levels(E, index[c_max], use_sc,
-                                           colors=colors)
+    ir_reps, colormap = eigensystem.levels(E, index[c_max], colors=colors)
 
     # Build eigenvalue string
     # If the colormap element corresponding to the i-th eigenvalue is empty,
@@ -224,11 +223,9 @@ def get(b, d, n, use_sc):
         colors, colormap
 
 
-def main(B, D, N, use_sc):
-    filename = "results B" + str(b) + ' D' + str(d) + ' N' + str(n) + \
-               ('_sc' if use_sc else '') + \
-               ".tex"
-    write_file(filename, *get(b, d, n, use_sc),
+def main(B, D, N):
+    filename = 'results B' + str(b) + ' D' + str(d) + ' N' + str(n) + '.tex'
+    write_file(filename, *get(b, d, n),
                dgc=(b == 0 and d == 0)  # degenerate case
                )
     os.chdir("../../Scripts")
@@ -236,8 +233,8 @@ def main(B, D, N, use_sc):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc = parse()
+    B, D, N = parse()
     for b in B:
         for d in D:
             for n in N:
-                main(B, D, N, use_sc)
+                main(B, D, N)

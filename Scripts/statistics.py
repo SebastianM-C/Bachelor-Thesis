@@ -10,23 +10,21 @@ from diff import relSpacing
 from plots import bar_plot, histogram
 
 
-def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True,
-         cut=0):
+def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0):
     if reselect:
-        select_rep.main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, cut)
+        select_rep.main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
     rel_sp = []
     w = []          # weights
     for r in reps:
-        rep = np.loadtxt(r + '2' + ('_sc.dat' if use_sc else '.dat'),
-                         usecols=(0,))
+        rep = np.loadtxt(r + '.dat', usecols=(0,))
         rel_sp.append(relSpacing(rep))
         w.append(np.ones(rel_sp[-1].shape) / 3)
         histogram(rel_sp[-1], bins=np.arange(0, 4, 1 / 4), label=r,
-                  fname=r + ('_sc.png' if use_sc else '.png'), show=False)
+                  fname=r + '.png')
         bar_plot(rel_sp[-1], label=r, ylabel='S',
-                 fname='bar_P(S)_' + r + ('_sc.png' if use_sc else '.png'),
+                 fname='bar_P(S)_' + r + '.png',
                  dpi=400)
 
     # Relative spacing histogram
@@ -44,17 +42,16 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True,
               fit=True)
     histogram(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4), label=reps,
               normed=True, ylabel='P(S)', xlabel='S', use_wigner=True,
-              fname='Cumulative P(S)' + ('_sc.png' if use_sc else '.png'))
+              fname='Cumulative P(S).png')
 
     os.chdir("../../Scripts")
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect, cut = \
+    B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut = \
         parse(advanced=True, select=True)
 
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon,
-                     reselect, cut)
+                main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect, cut)

@@ -20,13 +20,7 @@ function run() {
   if [ ! -d "$dest_dir" ]; then
     mkdir -p "$dest_dir"
   fi
-  cp hamilt.dat "$dest_dir"/hamilt.dat
-  cp hamilt.out "$dest_dir"/hamilt.out
-  cp eigenvectors.out "$dest_dir"/eigenvectors.out
-  cp index.out "$dest_dir"/index.out
-  cp rebde.dat "$dest_dir"/rebde.dat
-  cp reuna.dat "$dest_dir"/reuna.dat
-  cp reuns.dat "$dest_dir"/reuns.dat
+  cp hamilt.bin "$dest_dir"/hamilt.bin
   # return to Scripts directory
   cd ../Scripts
 }
@@ -72,4 +66,3 @@ for b in $b_list; do
   done
 done
 echo "Done" >> log
-

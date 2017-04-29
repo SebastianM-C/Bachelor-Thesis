@@ -70,12 +70,12 @@ def energy_plot(eigvec, eigv_len, x, w, label, index, sort_idx, fname, d_no):
     plt.close()
 
 
-def main(b, d, n, use_sc):
+def main(b, d, n):
     """Create bar plots for eigenvectors"""
     cd(b, d, n)
     # Get states
     E, eigenvectors, ket, index = \
-        eigensystem.get(use_sc, return_eigv=True, return_ket=True,
+        eigensystem.get(return_eigv=True, return_ket=True,
                         return_index=True)
     # Get the index array that sorts the eigenvector coefficients
     # such that n1 + n2 is increasing
@@ -89,7 +89,7 @@ def main(b, d, n, use_sc):
     eigenvectors = eigenvectors[:no_eigv]
     ket = ket[:no_eigv]
     # Get irreductible representation index
-    ir_reps = eigensystem.levels(E, ket, use_sc)
+    ir_reps = eigensystem.levels(E, ket)
     # Build irreductible representation string
     reps = 'reuns', 'reuna', 'rebde'
     ir_str = [reps[i] for i in ir_reps]
@@ -120,8 +120,8 @@ def main(b, d, n, use_sc):
 
 
 if __name__ == '__main__':
-    B, D, N, use_sc = parse()
+    B, D, N = parse()
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, use_sc)
+                main(b, d, n)
