@@ -21,7 +21,7 @@ def main(b, d, n, use_sc, delta_n, st_epsilon, lvl_epsilon, reselect=True,
     w = []          # weights
     for r in reps:
         rep = np.loadtxt(r + '2' + ('_sc.dat' if use_sc else '.dat'),
-                         usecols=0)
+                         usecols=(0,))
         rel_sp.append(relSpacing(rep))
         w.append(np.ones(rel_sp[-1].shape) / 3)
         histogram(rel_sp[-1], bins=np.arange(0, 4, 1 / 4), label=r,

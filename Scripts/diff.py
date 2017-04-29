@@ -47,7 +47,7 @@ def stable(E1, b, d, n, use_sc, delta_n, epsilon, ir_reps=np.empty(0)):
         E_diff, ir_diff = difference(E1, b, d, n, delta_n, use_sc, ir_reps)
     # Energy difference (between two diagonalization bases) histogram
     histogram(E_diff, label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
-              bins=np.pad(np.geomspace(1e-14, 1e-2, 13), (1, 0),
+              bins=np.pad(np.logspace(-14, -2, 13), (1, 0),
                           mode='constant'), xscale='log',
               fname='hist_E_diff' + ('_sc.png' if use_sc else '.png')
               )
@@ -60,6 +60,8 @@ def stable(E1, b, d, n, use_sc, delta_n, epsilon, ir_reps=np.empty(0)):
 
     print("E_diff > epsilon :",
           np.where(E_diff > epsilon)[0][:5], "\nstability epsilon: ", epsilon)
+    print("E0 = ", E1[0], "\nE", np.where(E_diff > epsilon)[0][1],
+          E1[np.where(E_diff > epsilon)[0][1]])
     if ir_reps.size:
         print("ir_diff: ", np.where(ir_diff > 0)[0][:5])
     # Cache the result

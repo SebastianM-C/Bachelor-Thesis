@@ -111,11 +111,11 @@ def levels(E, ket, use_sc, epsilon=1e-8, colors=''):
 
     # Energy difference (between two consecutive levels) histogram
     histogram(delta, label='$\\Delta E$', xscale='log',
-              bins=np.pad(np.geomspace(1e-15, 10, 17), (1, 0),
+              bins=np.pad(np.logspace(-15, 1, 17), (1, 0),
                           mode='constant'), fname='hist_delta.png')
     # Relative spacing histogram
     histogram(relsp, label='$N \\frac{\\Delta E}{E_n - E_0}$', xscale='log',
-              bins=np.pad(np.geomspace(1e-13, 10, 15), (1, 0),
+              bins=np.pad(np.logspace(-13, 1, 15), (1, 0),
                           mode='constant'), fname='hist_relsp.png', xlabel='S')
     # Energy difference bar plot
     bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
