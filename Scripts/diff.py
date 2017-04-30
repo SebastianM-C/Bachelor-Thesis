@@ -57,7 +57,8 @@ def stable(E1, b, d, n, delta_n, epsilon, ir_reps=np.empty(0)):
 
     last_stable = np.where(E_diff > epsilon)[0][1]
     # Cache the result
-    last_stable.tofile('stable.txt', sep=' ')
+    np.array([last_stable, E1[last_stable] - E1[0]]).tofile('stable.txt',
+                                                            sep='\n')
     print("E_diff > epsilon :",
           np.where(E_diff > epsilon)[0][:5], "\nstability epsilon: ", epsilon)
     print("E 0 =", E1[0], "\nE", last_stable, "=", E1[last_stable])

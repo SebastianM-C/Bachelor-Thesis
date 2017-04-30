@@ -4,11 +4,14 @@ import os
 import re
 
 
-def get_input():
-    """Return the input parameters (b, d, n) of the current path"""
+def get_input(path=''):
+    """Return the input parameters (b, d, n) of the given path
+    or the current path if no argument is provided"""
+    if not path:
+        path = os.getcwd()
     regex = r"""B(0.[0-9]+)+ D(0.[0-9]+)+ N([0-9]+)"""
     return [float(i) for i in
-            re.compile(regex).search(os.getcwd()).group(1, 2, 3)]
+            re.compile(regex).search(path).group(1, 2, 3)]
 
 
 def exists(b, d, n):
@@ -58,3 +61,12 @@ def cd(b, d, n):
 def format_float(n):
     """Converts the number to int if possible"""
     return ('{:n}' if n == int(n) else '{:.8g}').format(n)
+
+
+def find(name, path):
+    """Find all the files with the given name in the given path"""
+    result = []
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            result.append(os.path.join(root, name))
+    return result

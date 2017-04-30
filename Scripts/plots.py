@@ -23,14 +23,13 @@ def model(s, alpha):
 
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
               ylabel='', xlabel='', stacked=False, normed=False, weights=None,
-              cumulative=False, use_wigner=False, use_poisson=False,
-              fit=False):
+              cumulative=False, use_wigner=False, use_poisson=False, title='',
+              bin_size=1/4, fit=False):
     fig, ax = plt.subplots()
     n, bin_edges, _ = ax.hist(data, bins=bins, label=label, stacked=stacked,
                               normed=normed, cumulative=cumulative,
                               weights=weights)
     if use_wigner:
-        bin_size = 1 / 4
         bins = np.arange(0, 4, bin_size)
         x = np.linspace(0, 4 - bin_size, 100)
         if cumulative:
@@ -51,13 +50,12 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         ax.bar(bins[:-1], wigner_hist, width=bin_size,
                align='edge', label='Wigner bar', fill=False, linestyle='-')
     if use_poisson:
-        x = np.linspace(0, 4, 100)
+        x = np.linspace(0, 4 - bin_size, 100)
         ax.plot(x, poisson(x), 'c:', label='Poisson')
 
     if fit:
         # Fit the data with a superposition between the Poisson and Wigner
         # distributions
-        bin_size = 1 / 4
         x = np.linspace(0, 4 - bin_size, 100)
         x_data = np.arange(0, 4 - bin_size, bin_size)
         y_data = n[0] + n[1] + n[2]
@@ -74,7 +72,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         ax.set_ylabel(ylabel)
     if xlabel:
         ax.set_xlabel(xlabel)
-    ax.legend()
+    ax.legend(title=title)
     if yscale is 'log':
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':

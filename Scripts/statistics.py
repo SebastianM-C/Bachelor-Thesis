@@ -15,6 +15,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0):
         select_rep.main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
+    deltaE = np.loadtxt('stable.txt')[1]
     rel_sp = []
     w = []          # weights
     for r in reps:
@@ -33,16 +34,16 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0):
               fname='P(S)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
               '{:.0e}'.format(lvl_epsilon) +
               ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
-              use_wigner=True, use_poisson=True)
+              bin_size=1/4, use_wigner=True, use_poisson=True)
     histogram(rel_sp, bins=np.arange(0, 4, 1 / 4), weights=w, stacked=True,
-              normed=True, label=reps, ylabel='P(S)', xlabel='S',
+              normed=True, title='$\\Delta E =' + '{:.5}'.format(deltaE) + '$',
               fname='P(S)' + '_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
               '{:.0e}'.format(lvl_epsilon) +
               ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
-              fit=True)
+              bin_size=1/4, ylabel='P(S)', xlabel='S', label=reps, fit=True)
     histogram(rel_sp, cumulative=True, bins=np.arange(0, 4, 1 / 4), label=reps,
               normed=True, ylabel='P(S)', xlabel='S', use_wigner=True,
-              fname='Cumulative P(S).png')
+              bin_size=1/4, fname='Cumulative P(S).png')
 
     os.chdir("../../Scripts")
 

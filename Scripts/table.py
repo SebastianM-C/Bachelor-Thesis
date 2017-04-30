@@ -30,7 +30,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
     E, ket = eigensystem.get(return_ket=True)
     ir_reps = eigensystem.levels(E, ket, lvl_epsilon)
     if stable_only:     # choose all levels or only the stable ones
-        stable_levels = int(np.loadtxt('stable.txt'))
+        stable_levels = int(np.loadtxt('stable.txt')[0])
         E = E[:stable_levels]
 
     rebde = np.loadtxt('rebde.dat', usecols=(0,), unpack=True)
@@ -42,7 +42,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
     E_in_reuna = np.in1d(E, reuna, assume_unique=True)
     E_in_reuns = np.in1d(E, reuns, assume_unique=True)
 
-    rebde_in_E = np.in1d(rebde, E, assume_unique=False)
+    rebde_in_E = np.in1d(rebde, E, assume_unique=True)
     reuna_in_E = np.in1d(reuna, E, assume_unique=True)
     reuns_in_E = np.in1d(reuns, E, assume_unique=True)
 
@@ -77,7 +77,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
         f.write("\\usepackage[table]{xcolor}\n\n")
         f.write("\\begin{document}\n\n")
         f.write("\\begin{longtable}{" + " | ".join(["c"] * 4) + "}\n")
-        f.write("hamilt.dat & rebde.dat & reuna.dat & reuns.dat\t\\\\\n")
+        f.write("energy levels & rebde.dat & reuna.dat & reuns.dat\t\\\\\n")
         f.write("\\hline\n\\endfirsthead\n")
         for row in range(files.shape[1]):
             # Find the representation of the energy level
@@ -86,9 +86,10 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
                 if files[x + 3][row]:
                     c = x
 
-            line = color(c, True) + str(files[0][row]) + " & " + \
+            line = color(c, True) + '{:.18f}'.format(files[0][row]) + " & " + \
                 " & ".join(color(x, files[x + 6][row]) +
-                           str(files[x][row]) for x in range(1, 4))
+                           '{:.18f}'.format(files[x][row])
+                           for x in range(1, 4))
             f.write('\t' + line + " \\\\\n")
         f.write("\\end{longtable}")
         f.write("\n\n\\end{document}")
