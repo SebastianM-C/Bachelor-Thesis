@@ -8,4 +8,8 @@ From:intelpython/intelpython3_core
 
 %post
 
+	apt-get update
+	apt-get install -y ghostscript
+	apt-get install -y dvipng
+	apt-get install -y texlive texlive-latex-extra
 	/opt/conda/bin/pip install matplotlib
