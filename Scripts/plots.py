@@ -24,20 +24,27 @@ def model(s, alpha):
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
               ylabel='', xlabel='', stacked=False, normed=False, weights=None,
               cumulative=False, use_wigner=False, use_poisson=False, title='',
-              bin_size=1/4, fit=False):
+              count=16, fit=False):
     fig, ax = plt.subplots()
     n, bin_edges, _ = ax.hist(data, bins=bins, label=label, stacked=stacked,
                               normed=normed, cumulative=cumulative,
                               weights=weights)
+
+    bin_size = 4 / (count - 1)
+    bins = np.linspace(0, 4, count)
+    x = np.linspace(0, 4, 100)
+
     if use_wigner:
-        bins = np.arange(0, 4, bin_size)
-        x = np.linspace(0, 4 - bin_size, 100)
         if cumulative:
             wigner_hist = [integrate.quad(wigner, 0, bins[i])[0]
                            for i in range(1, bins.size)]
 
             def wigner_dist_int(s): return 1 - np.exp(- np.pi / 4 * s**2)
-            ax.plot(x, wigner_dist_int(x), 'r-.', label='Wigner')
+            ax.plot(x, wigner_dist_int(x), 'r-.',
+                    label=r'$\int_0^s P_{W}(x)\mathrm{d}x$')
+            ax.bar(bins[:-1], wigner_hist, width=bin_size,
+                   align='edge', fill=False, linestyle='-',
+                   label=r'$\sum_0^S P_W(x)$')
         else:
             # The area of a bar should be the integral of the Wigner
             # distribution between the edges of the bar
@@ -47,17 +54,21 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
                            for i in range(1, bins.size)]
             ax.plot(x, wigner(x), 'r-.', label='Wigner')
 
-        ax.bar(bins[:-1], wigner_hist, width=bin_size,
-               align='edge', label='Wigner bar', fill=False, linestyle='-')
+            ax.bar(bins[:-1], wigner_hist, width=bin_size,
+                   align='edge', label='Wigner bar', fill=False, linestyle='-')
     if use_poisson:
-        x = np.linspace(0, 4 - bin_size, 100)
         ax.plot(x, poisson(x), 'c:', label='Poisson')
+        poisson_hist = [1 / bin_size *
+                        integrate.quad(poisson, bins[i-1], bins[i])[0]
+                        for i in range(1, bins.size)]
+        ax.bar(bins[:-1], poisson_hist, width=bin_size, align='edge',
+               fill=False, linestyle=(':'), edgecolor='magenta',
+               label='Poisson bar')
 
     if fit:
         # Fit the data with a superposition between the Poisson and Wigner
         # distributions
-        x = np.linspace(0, 4 - bin_size, 100)
-        x_data = np.arange(0, 4 - bin_size, bin_size)
+        x_data = np.linspace(0, 4, count - 1)
         y_data = n[0] + n[1] + n[2]
         alpha, pcov = curve_fit(model, x_data, y_data, bounds=(0, 1))
         alpha.tofile('alpha.txt', sep=' ')     # save the value

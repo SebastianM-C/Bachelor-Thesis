@@ -29,7 +29,7 @@ def main(N):
     ax.scatter(np.array(values)[:, 0], np.array(values)[:, 1],
                label='$\\Delta E\\approx' + '{:.3f}'.format(avg_deltaE) + '$')
     ax.set_ylabel('$\\alpha$')
-    ax.set_xlabel('B')
+    ax.set_xlabel('$B$')
     ax.legend(markerscale=0)
     plt.show()
     fig.savefig('../Statistics/alpha_N' + str(N) + '_dE' +

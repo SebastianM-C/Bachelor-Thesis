@@ -6,3 +6,4 @@ Scripts/log
 Templates/
 Source/Fortran/Hamiltonian/*.dep
 Source/Fortran/Hamiltonian/*.mod
+Statistics/

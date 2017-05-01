@@ -120,7 +120,7 @@ def levels(E, ket, epsilon=1e-8, colors=''):
     # Relative spacing bar plot
     bar_plot(relsp, figsize=(20, 4), label='$N \\frac{\\Delta E}{E_n - E_0}$',
              yscale='log', fname='relsp.png', dpi=720, axhline_y=epsilon,
-             bbox_inches='tight', ylabel='S')
+             bbox_inches='tight', ylabel='$S$')
 
     k = 0
     for i in range(len(levels)):

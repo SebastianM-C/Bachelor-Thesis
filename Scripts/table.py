@@ -39,12 +39,12 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, stable_only=True):
 
     # Bi-directional search
     E_in_rebde = np.in1d(E, rebde, assume_unique=False)
-    E_in_reuna = np.in1d(E, reuna, assume_unique=True)
-    E_in_reuns = np.in1d(E, reuns, assume_unique=True)
+    E_in_reuna = np.in1d(E, reuna, assume_unique=False)
+    E_in_reuns = np.in1d(E, reuns, assume_unique=False)
 
-    rebde_in_E = np.in1d(rebde, E, assume_unique=True)
-    reuna_in_E = np.in1d(reuna, E, assume_unique=True)
-    reuns_in_E = np.in1d(reuns, E, assume_unique=True)
+    rebde_in_E = np.in1d(rebde, E, assume_unique=False)
+    reuna_in_E = np.in1d(reuna, E, assume_unique=False)
+    reuns_in_E = np.in1d(reuns, E, assume_unique=False)
 
     if E.size < max(rebde.size, reuna.size, reuns.size):
         rebde = rebde[:E.size]
