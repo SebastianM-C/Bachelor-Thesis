@@ -1,3 +1,2 @@
 cd ../Bin
-rm *.dat 2> /dev/null
-rm *.out 2> /dev/null
+rm *.bin 2> /dev/null

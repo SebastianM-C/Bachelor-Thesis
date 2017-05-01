@@ -1,3 +1,9 @@
 Bin/
 Output/
-
+Questions/
+Scripts/__pycache__
+Scripts/log
+Templates/
+Source/Fortran/Hamiltonian/*.dep
+Source/Fortran/Hamiltonian/*.mod
+Statistics/
