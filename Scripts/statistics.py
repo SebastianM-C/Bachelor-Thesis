@@ -10,13 +10,13 @@ from diff import relSpacing
 from plots import bar_plot, histogram
 
 
-def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0):
+def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
+         bin_size=0.25):
     if reselect:
         select_rep.main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
     deltaE = np.loadtxt('stable.txt')[1]
-    bin_size = 1 / 4
     count = int(4 / bin_size) + 1
     rel_sp = []
     w = []          # weights
@@ -52,10 +52,11 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0):
 
 
 if __name__ == '__main__':
-    B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut = \
-        parse(advanced=True, select=True)
+    B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut, bin_size = \
+        parse(advanced=True, select=True, hist_bin=True)
 
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect, cut)
+                main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect, cut,
+                     bin_size)

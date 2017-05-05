@@ -116,27 +116,42 @@ def levels(E, ket, epsilon=1e-8, colors=''):
                           mode='constant'), fname='hist_relsp.png', xlabel='S')
     # Energy difference bar plot
     bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
-             fname='bar_delta.png', dpi=600, bbox_inches='tight')
+             fname='bar_delta.png', dpi=720, bbox_inches='tight')
     # Relative spacing bar plot
     bar_plot(relsp, figsize=(20, 4), label='$N \\frac{\\Delta E}{E_n - E_0}$',
              yscale='log', fname='relsp.png', dpi=720, axhline_y=epsilon,
              bbox_inches='tight', ylabel='$S$')
 
+    levels_cp = list(levels)
+    # Check for bidimensional representation selection problems
+    for i in range(len(levels_cp)):
+        if levels_cp[i].size > 2:
+            local_relsp = np.diff(levels_cp[i]) / avgSpacing
+            print('Info: Found', levels_cp[i].size, 'levels in the '
+                  'bidimensional representation with: \nenergy:', levels_cp[i],
+                  '\ndelta:', np.diff(levels_cp[i]), '\nrelsp:', local_relsp)
+            # Try to fix the problem
+            if local_relsp[0] == local_relsp[1] or levels_cp[i].size > 3:
+                print('Warning: Cannot choose where to split!')
+                # print('ket:', ket[?])
+            else:
+                # Split at the maximum relative spacing
+                j = [np.array_equal(levels_cp[i], k)
+                     for k in levels].index(True)
+                levels[j:j] = np.split(levels_cp[i], np.where(
+                    local_relsp == local_relsp.max())[0] + 1)
+                del levels[j + 2]
+                print('result:', levels[j], levels[j + 1])
+
     k = 0
     for i in range(len(levels)):
-        # Check for bidimensional representation selection problems
-        if levels[i].size > 2:
-            print('Warning: bidimensional representation selection',
-                  'problem: size:', levels[i].size, 'at', i,
-                  '\nenergy:', levels[i], '\ndelta:', np.diff(levels[i]),
-                  '\nrelsp:', np.diff(levels[i]) / avgSpacing)
         for j in range(levels[i].size):
             if return_colors:
                 colormap[i + j + k] = colors[i % len(colors)]
             if levels[i].size > 1:  # degenerate subspace -> rebde
                 ir_reps[i + j + k] = 2
             else:
-                if ket[i][1] % 2:   # n2 odd -> reuna
+                if ket[i + j + k][1] % 2:   # n2 odd -> reuna
                     ir_reps[i + j + k] = 1
                 else:               # n2 even -> reuns
                     ir_reps[i + j + k] = 0

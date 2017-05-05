@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 
 
-def parse(advanced=False, select=False):
+def parse(advanced=False, select=False, hist_bin=False):
     """Parse arguments"""
     parser = argparse.ArgumentParser()
     parser.add_argument('-b', type=np.float64, nargs='+', default=[0.2],
@@ -31,6 +31,8 @@ def parse(advanced=False, select=False):
                         default=0,
                         help='Factor by which to reduce the number of stable' +
                         'levels when checking the convergence of the results')
+    parser.add_argument('-bin', '--bin_size', type=np.float64,
+                        default=0.25, help='P(S) histogram bin size')
 
     # args = parser.parse_args(input().split())
     args = parser.parse_args()
@@ -44,7 +46,11 @@ def parse(advanced=False, select=False):
     lvl_epsilon = args.levels_epsilon
     reselect = args.reselect
     cut = args.cut
+    bin_size = args.bin_size
 
+    if advanced and select and hist_bin:
+        return B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut, \
+            bin_size
     if advanced and select:
         return B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut
     if advanced:
