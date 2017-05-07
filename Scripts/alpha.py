@@ -30,6 +30,8 @@ def main(N):
                label='$\\Delta E\\approx' + '{:.3f}'.format(avg_deltaE) + '$')
     ax.set_ylabel('$\\alpha$')
     ax.set_xlabel('$B$')
+    ax.set_ylim([0, 1.1])
+    ax.set_xlim([0, 1])
     ax.legend(markerscale=0)
     plt.show()
     fig.savefig('../Statistics/alpha_N' + str(N) + '_dE' +

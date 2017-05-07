@@ -56,7 +56,7 @@ def get(return_eigv=False, return_ket=False, return_index=False,
         eigenvectors = eigensystem['eigenvectors']
     else:
         start = timer()
-        E, eigenvectors = linalg.eigh(H)
+        E, eigenvectors = linalg.eigh(H, turbo=True)
         end = timer()
         print('Diagonalisation for N =', n, ':', end - start, 'seconds')
         # Save the results
@@ -124,16 +124,19 @@ def levels(E, ket, epsilon=1e-8, colors=''):
 
     levels_cp = list(levels)
     # Check for bidimensional representation selection problems
+    log = open('log.txt', 'a')
+    log.write('\nlevels epsilon:', epsilon)
     for i in range(len(levels_cp)):
         if levels_cp[i].size > 2:
             local_relsp = np.diff(levels_cp[i]) / avgSpacing
-            print('Info: Found', levels_cp[i].size, 'levels in the '
-                  'bidimensional representation with: \nenergy:', levels_cp[i],
-                  '\ndelta:', np.diff(levels_cp[i]), '\nrelsp:', local_relsp)
+            log.write('Info: Found', levels_cp[i].size, 'levels in the '
+                      'bidimensional representation with: \nenergy:',
+                      levels_cp[i], '\ndelta:', np.diff(levels_cp[i]),
+                      '\nrelsp:', local_relsp)
             # Try to fix the problem
             if local_relsp[0] == local_relsp[1] or levels_cp[i].size > 3:
-                print('Warning: Cannot choose where to split!')
-                # print('ket:', ket[?])
+                log.write('Warning: Cannot choose where to split!')
+                # log.write('ket:', ket[?])
             else:
                 # Split at the maximum relative spacing
                 j = [np.array_equal(levels_cp[i], k)
@@ -141,7 +144,7 @@ def levels(E, ket, epsilon=1e-8, colors=''):
                 levels[j:j] = np.split(levels_cp[i], np.where(
                     local_relsp == local_relsp.max())[0] + 1)
                 del levels[j + 2]
-                print('result:', levels[j], levels[j + 1])
+                log.write('result:', levels[j], levels[j + 1])
 
     k = 0
     for i in range(len(levels)):
@@ -157,6 +160,7 @@ def levels(E, ket, epsilon=1e-8, colors=''):
                     ir_reps[i + j + k] = 0
         k += levels[i].size - 1
 
+    log.close()
     if return_colors:
         return ir_reps, colormap
     return ir_reps
