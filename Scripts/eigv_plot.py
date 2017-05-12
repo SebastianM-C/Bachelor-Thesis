@@ -27,6 +27,7 @@ def no_signif_el(eigvec):
 
 def index_plot(eigvec, eigv_len, label, index, sort_idx, fname, d_no):
     """Index plot"""
+    plt.figure(figsize=(20, 4))
     plt.bar(range(eigv_len), np.abs(eigvec[:eigv_len]),
             label=label)
     plt.legend()
@@ -38,11 +39,11 @@ def index_plot(eigvec, eigv_len, label, index, sort_idx, fname, d_no):
     plt.ylabel('$C_{ij}$')
     # Prevent overwriting for repeated states
     if not isfile('eigenvectors/ket_i' + fname + '.png'):
-        plt.savefig('eigenvectors/ket_i' + fname, dpi=400)
+        plt.savefig('eigenvectors/ket_i' + fname, dpi=720, bbox_inches='tight')
     else:
         d_no += 1
         plt.savefig('eigenvectors/ket_i' + fname + '_' + str(d_no),
-                    dpi=400)
+                    dpi=720, bbox_inches='tight')
         print('|' + fname, '> is not unique')
     # plt.show()
     plt.close()
@@ -62,10 +63,10 @@ def energy_plot(eigvec, eigv_len, x, w, label, index, sort_idx, fname, d_no):
     plt.ylabel('$C_{ij}$')
     # Prevent overwriting for repeated states
     if not isfile('eigenvectors/ket_e' + fname + '.png'):
-        plt.savefig('eigenvectors/ket_e' + fname, dpi=400)
+        plt.savefig('eigenvectors/ket_e' + fname, dpi=720, bbox_inches='tight')
     else:
         plt.savefig('eigenvectors/ket_e' + fname + '_' + str(d_no),
-                    dpi=400)
+                    dpi=720, bbox_inches='tight')
     # plt.show()
     plt.close()
 

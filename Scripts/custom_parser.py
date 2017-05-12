@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 
 
-def parse(advanced=False, select=False, hist_bin=False):
+def parse(advanced=False, select=False, hist_bin=False, n_only=False):
     """Parse arguments"""
     parser = argparse.ArgumentParser()
     parser.add_argument('-b', type=np.float64, nargs='+', default=[0.2],
@@ -55,4 +55,6 @@ def parse(advanced=False, select=False, hist_bin=False):
         return B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut
     if advanced:
         return B, D, N, delta_n, st_epsilon, lvl_epsilon
+    if n_only:
+        return N
     return B, D, N

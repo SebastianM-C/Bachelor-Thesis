@@ -19,17 +19,23 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
     deltaE = np.loadtxt('stable.txt')[1]
     count = int(4 / bin_size) + 1
     rel_sp = []
+    avg_sp = []
     w = []          # weights
     for r in reps:
         rep = np.loadtxt(r + '.dat', usecols=(0,))
         rel_sp.append(relSpacing(rep))
+        avg_sp.append((rep[-1] - rep[0]) / rep.size)
         w.append(np.ones(rel_sp[-1].shape) / 3)
         histogram(rel_sp[-1], bins=np.linspace(0, 4, count), label=r,
                   fname=r + '.png', xlabel='S')
         bar_plot(rel_sp[-1], label=r, ylabel='S',
-                 fname='bar_P(S)_' + r + '.png',
-                 dpi=400)
+                 fname='bar_P(S)_' + r + '.png', dpi=400,
+                 title=r'$\frac{E_n-E_0}{N}=' +
+                 '{:.3}'.format(avg_sp[-1]) + '$')
 
+    # Sace the average spacings
+    with open('avg_sp.txt', 'w') as f:
+        f.write('\n'.join([str(i) for i in avg_sp]))
     # Relative spacing histogram
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
               normed=True, label=reps, ylabel='$P(S)$', xlabel='$S$',

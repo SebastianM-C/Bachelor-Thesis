@@ -96,7 +96,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
 
 def bar_plot(data, fname, label=None, ylabel='', xlabel='', show=False,
              yscale='', xscale='', figsize=None, dpi=None,  axhline_y=0,
-             bbox_inches=None):
+             bbox_inches=None, title=''):
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(range(data.size), data, label=label)
     if ylabel:
@@ -105,7 +105,7 @@ def bar_plot(data, fname, label=None, ylabel='', xlabel='', show=False,
         ax.set_xlabel(xlabel)
     if axhline_y:
         ax.axhline(y=axhline_y)
-    ax.legend()
+    ax.legend(title=title)
     if yscale is 'log':
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
