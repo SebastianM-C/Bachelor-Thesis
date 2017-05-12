@@ -105,6 +105,7 @@ def levels(E, ket, epsilon=1e-8, colors=''):
     print('avgSpacing:', avgSpacing)
 
     levels = np.split(E, np.where(relsp > epsilon)[0] + 1)
+    states = np.split(ket, np.where(relsp > epsilon)[0] + 1)
 
     # Energy difference (between two consecutive levels) histogram
     histogram(delta, label='$\\Delta E$', xscale='log',
@@ -122,29 +123,71 @@ def levels(E, ket, epsilon=1e-8, colors=''):
              yscale='log', fname='relsp.png', dpi=720, axhline_y=epsilon,
              bbox_inches='tight', ylabel='$S$')
 
-    levels_cp = list(levels)
     # Check for bidimensional representation selection problems
+    levels_cp = list(levels)
+    states_cp = list(states)
     log = open('log.txt', 'a')
-    log.write('\nlevels epsilon:', epsilon)
+    log.write('\n\nlevels epsilon: ' + str(epsilon))
     for i in range(len(levels_cp)):
         if levels_cp[i].size > 2:
             local_relsp = np.diff(levels_cp[i]) / avgSpacing
-            log.write('Info: Found', levels_cp[i].size, 'levels in the '
-                      'bidimensional representation with: \nenergy:',
-                      levels_cp[i], '\ndelta:', np.diff(levels_cp[i]),
-                      '\nrelsp:', local_relsp)
+            log.write('\nInfo: Found ' + str(levels_cp[i].size) + ' levels ' +
+                      'in the bidimensional representation with: \nenergy: ' +
+                      str(levels_cp[i]) + '\ndelta: ' +
+                      str(np.diff(levels_cp[i])) + '\nrelsp: ' +
+                      str(local_relsp))
             # Try to fix the problem
-            if local_relsp[0] == local_relsp[1] or levels_cp[i].size > 3:
-                log.write('Warning: Cannot choose where to split!')
-                # log.write('ket:', ket[?])
-            else:
-                # Split at the maximum relative spacing
+            if levels_cp[i].size > 3:
+                log.write('\nError: Cannot choose where to split!')
+                raise RuntimeError('Cannot choose where to split!')
+            elif local_relsp[0] == local_relsp[1]:
+                log.write('\nWarning: 3 consecutive levels with identical ' +
+                          'relative spacings')
+                # log.write('\nket: ' + str(states_cp[i]))
+                n2 = np.array([states_cp[i][j][1] for j in range(3)])
+                log.write('\nn2: ' + str(n2))
+                # Find the dominant parity
+                unique, counts = np.unique(n2 % 2, return_counts=True)
+                if counts[0] == 3 or counts[1] == 3:
+                    raise RuntimeError('3 consecutive quantum numbers with' +
+                                       'the same parity!')
+                log.write('\nDominant parity: ' +
+                          ('odd' if unique[np.argmax(counts)] else 'even'))
+                # Find the current position
                 j = [np.array_equal(levels_cp[i], k)
                      for k in levels].index(True)
+                # Select the levels with different parity for the bidimensional
+                # representation
+                dominant = n2 % 2 == unique[np.argmax(counts)]
+                different = n2 % 2 != unique[np.argmax(counts)]
+                # Bidimensional representation levels
+                bd_l = [levels_cp[i][dominant][0], levels_cp[i][different][0]]
+                # Bidimensional representation states
+                bd_st = [states_cp[i][dominant][0], states_cp[i][different][0]]
+                # Unidimensional representation levels
+                u_l = [levels_cp[i][dominant][1]]
+                # Unidimensional representation states
+                u_st = [states_cp[i][dominant][1]]
+
+                levels[j:j] = [np.array(bd_l), np.array(u_l)]
+                states[j:j] = [np.array(bd_st), np.array(u_st)]
+                del levels[j + 2]
+                del states[j + 2]
+
+                log.write('\nresult: ' + str(levels[j]) + str(levels[j + 1]) +
+                          '\nwith: ' + str(states[j]) + str(states[j + 1]))
+            else:
+                # Find the current position
+                j = [np.array_equal(levels_cp[i], k)
+                     for k in levels].index(True)
+                # Split at the maximum relative spacing
                 levels[j:j] = np.split(levels_cp[i], np.where(
                     local_relsp == local_relsp.max())[0] + 1)
+                states[j:j] = np.split(states_cp[i], np.where(
+                    local_relsp == local_relsp.max())[0] + 1)
                 del levels[j + 2]
-                log.write('result:', levels[j], levels[j + 1])
+                del states[j + 2]
+                log.write('\nresult: ' + str(levels[j]) + str(levels[j + 1]))
 
     k = 0
     for i in range(len(levels)):
@@ -154,7 +197,7 @@ def levels(E, ket, epsilon=1e-8, colors=''):
             if levels[i].size > 1:  # degenerate subspace -> rebde
                 ir_reps[i + j + k] = 2
             else:
-                if ket[i + j + k][1] % 2:   # n2 odd -> reuna
+                if states[i][0][1] % 2:   # n2 odd -> reuna
                     ir_reps[i + j + k] = 1
                 else:               # n2 even -> reuns
                     ir_reps[i + j + k] = 0
