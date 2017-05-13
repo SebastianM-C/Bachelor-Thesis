@@ -7,7 +7,7 @@ from custom_parser import parse
 from tools import find, get_input
 
 
-def main(N):
+def main(B, D, N):
     files = find('avg_sp.txt', '../Output')
     fig, ax = plt.subplots()
     msize = 8
@@ -43,5 +43,5 @@ def main(N):
 
 
 if __name__ == '__main__':
-    N = parse(n_only=True)
-    main(N)
+    B, D, N = parse()
+    main(B, D, N)

@@ -11,58 +11,78 @@ from plots import bar_plot, histogram
 
 
 def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
-         bin_size=0.25):
+         bin_size=0.25, max_energy=0):
     if reselect:
         select_rep.main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut)
     reps = 'reuna', 'reuns', 'rebde'
     cd(b, d, n)
-    deltaE = np.loadtxt('stable.txt')[1]
+    if max_energy:
+        deltaE = max_energy
+    else:
+        deltaE = np.loadtxt('stable.txt')[1]
     count = int(4 / bin_size) + 1
     rel_sp = []
     avg_sp = []
     w = []          # weights
     for r in reps:
         rep = np.loadtxt(r + '.dat', usecols=(0,))
+        if max_energy:
+            rep = rep[rep <= max_energy]
         rel_sp.append(relSpacing(rep))
         avg_sp.append((rep[-1] - rep[0]) / rep.size)
         w.append(np.ones(rel_sp[-1].shape) / 3)
+        fname = r + ('_max_e_' + str(max_energy) + '.png'
+                     if max_energy else '.png')
         histogram(rel_sp[-1], bins=np.linspace(0, 4, count), label=r,
-                  fname=r + '.png', xlabel='S')
+                  fname=fname, xlabel='S')
+        fname = 'bar_P(S)_' + r + ('_max_e_' + str(max_energy) + '.png'
+                                   if max_energy else '.png')
         bar_plot(rel_sp[-1], label=r, ylabel='S',
-                 fname='bar_P(S)_' + r + '.png', dpi=400,
+                 fname=fname, dpi=400,
                  title=r'$\frac{E_n-E_0}{N}=' +
                  '{:.3}'.format(avg_sp[-1]) + '$')
 
     # Sace the average spacings
-    with open('avg_sp.txt', 'w') as f:
+    fname = 'avg_sp' + \
+        ('_max_e_' + str(max_energy) + '.txt' if max_energy else '.txt')
+    with open(fname, 'w') as f:
         f.write('\n'.join([str(i) for i in avg_sp]))
     # Relative spacing histogram
+    fname = 'P(S)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
+        '{:.0e}'.format(lvl_epsilon) + \
+        ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
+        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
               normed=True, label=reps, ylabel='$P(S)$', xlabel='$S$',
-              fname='P(S)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
-              '{:.0e}'.format(lvl_epsilon) +
-              ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
-              count=count, stacked=True, use_wigner=True, use_poisson=True)
+              fname=fname, count=count, stacked=True, use_wigner=True,
+              use_poisson=True)
+    fname = 'P(S)' + '_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
+        '{:.0e}'.format(lvl_epsilon) + \
+        ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
+        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
               normed=True, title='$\\Delta E =' + '{:.5}'.format(deltaE) + '$',
-              fname='P(S)' + '_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' +
-              '{:.0e}'.format(lvl_epsilon) +
-              ('_cut_' + '{:.2f}'.format(cut) + '.png' if cut else '.png'),
-              count=count, ylabel='$P(S)$', xlabel='$S$', stacked=True,
-              label=reps, fit=True)
+              fname=fname, count=count, ylabel='$P(S)$', xlabel='$S$',
+              stacked=True, label=reps, fit=True, max_e=max_energy)
+    fname = 'Cumulative P(S)' + \
+        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
     histogram(rel_sp, cumulative=True, bins=np.linspace(0, 4, count),
               normed=True, ylabel=r'$\sum_0^S P(x)$', xlabel='$S$', label=reps,
-              use_wigner=True, count=count, fname='Cumulative P(S).png')
-
+              use_wigner=True, count=count, fname=fname)
+    # Version
+    with open('version.txt', 'w') as f:
+        f.write('1.2')
     os.chdir("../../Scripts")
 
 
 if __name__ == '__main__':
-    B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut, bin_size = \
-        parse(advanced=True, select=True, hist_bin=True)
+    B, D, N, delta_n, st_epsilon, lvl_epsilon, reselect, cut, bin_size, \
+        max_energy = parse(advanced=True, select=True, hist_bin=True,
+                           max_e=True)
 
     for b in B:
         for d in D:
             for n in N:
-                main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect, cut,
-                     bin_size)
+                for max_e in max_energy:
+                    main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect,
+                         cut, bin_size, max_e)

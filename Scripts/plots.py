@@ -24,7 +24,7 @@ def model(s, alpha):
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
               ylabel='', xlabel='', stacked=False, normed=False, weights=None,
               cumulative=False, use_wigner=False, use_poisson=False, title='',
-              count=16, fit=False):
+              count=16, fit=False, max_e=0):
     fig, ax = plt.subplots()
     n, bin_edges, _ = ax.hist(data, bins=bins, label=label, stacked=stacked,
                               normed=normed, cumulative=cumulative,
@@ -71,7 +71,9 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         x_data = np.linspace(0, 4, count - 1)
         y_data = n[0] + n[1] + n[2]
         alpha, pcov = curve_fit(model, x_data, y_data, bounds=(0, 1))
-        alpha.tofile('alpha.txt', sep=' ')     # save the value
+        fname_a = 'alpha' + \
+            ('_max_e_' + str(max_e) + '.txt' if max_e else '.txt')
+        alpha.tofile(fname_a, sep=' ')     # save the value
         model_hist = [1 / bin_size *
                       integrate.quad(model, bins[i-1], bins[i], args=alpha)[0]
                       for i in range(1, bins.size)]

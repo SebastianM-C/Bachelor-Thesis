@@ -2,6 +2,7 @@
 
 import os
 import re
+from fnmatch import fnmatch
 
 
 def get_input(path=''):
@@ -63,10 +64,11 @@ def format_float(n):
     return ('{:n}' if n == int(n) else '{:.8g}').format(n)
 
 
-def find(name, path):
+def find(pattern, path):
     """Find all the files with the given name in the given path"""
     result = []
     for root, dirs, files in os.walk(path):
-        if name in files:
-            result.append(os.path.join(root, name))
+        for name in files:
+            if fnmatch(name, pattern):
+                result.append(os.path.join(root, name))
     return result

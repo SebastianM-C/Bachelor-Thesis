@@ -5,6 +5,7 @@ import numpy as np
 from scipy import linalg
 from timeit import default_timer as timer
 from os.path import isfile
+from os import remove
 
 from tools import get_input
 from hamiltonian import main as hamiltonian
@@ -46,6 +47,7 @@ def get(return_eigv=False, return_ket=False, return_index=False,
     # Save to npz to save sapce
     if not isfile('hamilt.npz'):
         np.savez_compressed('hamilt.npz', H=H)
+        remove('hamilt.bin')
     b, d, n = get_input()
     n = int(n)
     index = np.array([(n1, n2) for n1 in range(n) for n2 in range(n - n1)])
