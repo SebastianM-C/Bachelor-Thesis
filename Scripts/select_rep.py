@@ -58,7 +58,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut=0):
     reuns.close()
 
     os.chdir("../../Scripts")
-    print("Done")
+    print("Done\n")
 
 
 if __name__ == '__main__':

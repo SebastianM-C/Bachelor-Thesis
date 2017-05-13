@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 import numpy as np
 from scipy import linalg
 from timeit import default_timer as timer
@@ -50,7 +51,7 @@ def get(return_eigv=False, return_ket=False, return_index=False,
     index = np.array([(n1, n2) for n1 in range(n) for n2 in range(n - n1)])
     # Get eigenvalues and eigenvectors
     if isfile('eigensystem.npz'):
-        print('Used cached result for: B =', b, ' D =', d, ' N =', n)
+        print('Used cached result for: B =', b, 'D =', d, 'N =', n)
         eigensystem = np.load('eigensystem.npz')
         E = eigensystem['E']
         eigenvectors = eigensystem['eigenvectors']
@@ -73,15 +74,15 @@ def get(return_eigv=False, return_ket=False, return_index=False,
 
     results = (E, )
     if return_eigv:
-        results = results + (eigenvectors, )
+        results += (eigenvectors, )
     if return_ket:
-        results = results + (index[c_max], )
+        results += (index[c_max], )
     if return_index:
-        results = results + (index, )
+        results += (index, )
     if return_cmax:
-        results = results + (c_max, )
+        results += (c_max, )
     if return_H:
-        results = results + (H, )
+        results += (H, )
     return results
 
 
@@ -148,9 +149,6 @@ def levels(E, ket, epsilon=1e-8, colors=''):
                 log.write('\nn2: ' + str(n2))
                 # Find the dominant parity
                 unique, counts = np.unique(n2 % 2, return_counts=True)
-                if counts[0] == 3 or counts[1] == 3:
-                    raise RuntimeError('3 consecutive quantum numbers with' +
-                                       'the same parity!')
                 log.write('\nDominant parity: ' +
                           ('odd' if unique[np.argmax(counts)] else 'even'))
                 # Find the current position
@@ -161,9 +159,17 @@ def levels(E, ket, epsilon=1e-8, colors=''):
                 dominant = n2 % 2 == unique[np.argmax(counts)]
                 different = n2 % 2 != unique[np.argmax(counts)]
                 # Bidimensional representation levels
-                bd_l = [levels_cp[i][dominant][0], levels_cp[i][different][0]]
+                bd_l = [levels_cp[i][dominant][0]]
                 # Bidimensional representation states
-                bd_st = [states_cp[i][dominant][0], states_cp[i][different][0]]
+                bd_st = [states_cp[i][dominant][0]]
+                if counts[0] < 3 and counts[1] < 3:
+                    bd_l.append(levels_cp[i][different][0])
+                    bd_st.append(states_cp[i][different][0])
+                else:
+                    logging.warning('3 consecutive quantum numbers with ' +
+                                    'the same parity!')
+                    bd_l.append(levels_cp[i][dominant][2])
+                    bd_st.append(states_cp[i][dominant][2])
                 # Unidimensional representation levels
                 u_l = [levels_cp[i][dominant][1]]
                 # Unidimensional representation states
