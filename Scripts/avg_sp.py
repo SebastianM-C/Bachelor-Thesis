@@ -38,7 +38,7 @@ def main(B, D, N):
     ax.set_xlim([0, 1])
     ax.legend()
     # plt.show()
-    fig.savefig('../Statistics/avg_sp_N' + str(N) + '.png', dpi=200)
+    fig.savefig('../Statistics/avg_sp_N' + str(N) + '.pdf', dpi=200)
     plt.close()
 
 

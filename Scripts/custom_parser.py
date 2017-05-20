@@ -23,11 +23,11 @@ def parse(advanced=False, select=False, hist_bin=False, max_e=False,
     parser.add_argument('-l_eps', '--levels_epsilon', type=np.float64,
                         default=1e-8,
                         help='Minimum difference between two consecutive' +
-                        'levels from one of the irreductible' +
+                        'levels from one of the irreducible' +
                         'unidimensional representations')
     parser.add_argument('-r', '--reselect', action='store_false',
                         default=True, help='Specify whether to reselect the' +
-                        'irreductible representations or not')
+                        'irreducible representations or not')
     parser.add_argument('-c', '--cut', type=np.float64,
                         default=0,
                         help='Factor by which to reduce the number of stable' +

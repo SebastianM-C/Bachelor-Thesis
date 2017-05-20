@@ -171,7 +171,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
                     )
         f.write("\\]\n")
 
-        f.write("\tIrreductible representations: \n\t\\[")
+        f.write("\tirreducible representations: \n\t\\[")
         for i in range(nn):
             # Limit the number of displayed elements
             if i == max_display:

@@ -24,8 +24,8 @@ def model(s, alpha):
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
               ylabel='', xlabel='', stacked=False, normed=False, weights=None,
               cumulative=False, use_wigner=False, use_poisson=False, title='',
-              count=16, fit=False, max_e=0):
-    fig, ax = plt.subplots()
+              count=16, fit=False, max_e=0, figsize=None):
+    fig, ax = plt.subplots(figsize=figsize)
     n, bin_edges, _ = ax.hist(data, bins=bins, label=label, stacked=stacked,
                               normed=normed, cumulative=cumulative,
                               weights=weights)
@@ -85,11 +85,13 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         ax.set_ylabel(ylabel)
     if xlabel:
         ax.set_xlabel(xlabel)
-    ax.legend(title=title)
+    if label:
+        ax.legend(title=title)
     if yscale is 'log':
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
         ax.set_xscale('log')
+    plt.tight_layout(pad=0)
     fig.savefig(fname, dpi=200)
     if show:
         plt.show()
@@ -98,7 +100,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
 
 def bar_plot(data, fname, label=None, ylabel='', xlabel='', show=False,
              yscale='', xscale='', figsize=None, dpi=None,  axhline_y=0,
-             bbox_inches=None, title=''):
+             title=''):
     fig, ax = plt.subplots(figsize=figsize)
     ax.bar(range(data.size), data, label=label)
     if ylabel:
@@ -107,12 +109,14 @@ def bar_plot(data, fname, label=None, ylabel='', xlabel='', show=False,
         ax.set_xlabel(xlabel)
     if axhline_y:
         ax.axhline(y=axhline_y)
-    ax.legend(title=title)
+    if label:
+        ax.legend(title=title)
     if yscale is 'log':
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
         ax.set_xscale('log')
-    fig.savefig(fname, dpi=dpi, bbox_inches=bbox_inches)
+    plt.tight_layout()
+    fig.savefig(fname, dpi=dpi)
     if show:
         plt.show()
     plt.close()

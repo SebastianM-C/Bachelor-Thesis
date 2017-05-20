@@ -7,7 +7,7 @@ from timeit import default_timer as timer
 from os.path import isfile
 from os import remove
 
-from tools import get_input
+from tools import get_input, latex_float
 from hamiltonian import main as hamiltonian
 from plots import bar_plot, histogram
 
@@ -90,7 +90,7 @@ def get(return_eigv=False, return_ket=False, return_index=False,
 
 def levels(E, ket, epsilon=1e-8, colors=''):
     """Return the degenerate subspace index and optionally the colormap"""
-    # Irreductible representations
+    # irreducible representations
     # 0 - unidimensional symmetric representation (reuns)
     # 1 - unidimensional anti-symmetric representation (reuna)
     # 2 - bidimensional representation (rebde)
@@ -111,20 +111,22 @@ def levels(E, ket, epsilon=1e-8, colors=''):
     states = np.split(ket, np.where(relsp > epsilon)[0] + 1)
 
     # Energy difference (between two consecutive levels) histogram
-    histogram(delta, label='$\\Delta E$', xscale='log',
+    histogram(delta, xlabel=r'$\Delta E$', xscale='log',
               bins=np.pad(np.logspace(-15, 1, 17), (1, 0),
-                          mode='constant'), fname='hist_delta.png')
+                          mode='constant'), ylabel='No. of levels',
+              fname='hist_delta.pdf', figsize=(6, 3))
     # Relative spacing histogram
-    histogram(relsp, label='$N \\frac{\\Delta E}{E_n - E_0}$', xscale='log',
+    histogram(relsp, xscale='log', ylabel='No. of levels',
               bins=np.pad(np.logspace(-13, 1, 15), (1, 0),
-                          mode='constant'), fname='hist_relsp.png', xlabel='S')
+                          mode='constant'), fname='hist_relsp.pdf',
+              xlabel='$S$', figsize=(2.5, 3))
     # Energy difference bar plot
-    bar_plot(delta, figsize=(20, 4), label='$\\Delta E$', yscale='log',
-             fname='bar_delta.png', dpi=720, bbox_inches='tight')
+    bar_plot(delta, figsize=(6, 3), ylabel=r'$\Delta E$', yscale='log',
+             xlabel='index', fname='bar_delta.pdf', dpi=720)
     # Relative spacing bar plot
-    bar_plot(relsp, figsize=(20, 4), label='$N \\frac{\\Delta E}{E_n - E_0}$',
-             yscale='log', fname='relsp.png', dpi=720, axhline_y=epsilon,
-             bbox_inches='tight', ylabel='$S$')
+    bar_plot(relsp, figsize=(6, 3), yscale='log', fname='relsp.pdf', dpi=720,
+             label=r'$\varepsilon=' + latex_float(epsilon) + '$',
+             axhline_y=epsilon, ylabel='$S$', xlabel='index')
 
     # Check for bidimensional representation selection problems
     levels_cp = list(levels)

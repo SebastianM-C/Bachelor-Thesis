@@ -31,14 +31,15 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
         rel_sp.append(relSpacing(rep))
         avg_sp.append((rep[-1] - rep[0]) / rep.size)
         w.append(np.ones(rel_sp[-1].shape) / 3)
-        fname = r + ('_max_e_' + str(max_energy) + '.png'
-                     if max_energy else '.png')
+        fname = r + ('_max_e_' + str(max_energy) + '.pdf'
+                     if max_energy else '.pdf')
         histogram(rel_sp[-1], bins=np.linspace(0, 4, count), label=r,
-                  fname=fname, xlabel='S')
-        fname = 'bar_P(S)_' + r + ('_max_e_' + str(max_energy) + '.png'
-                                   if max_energy else '.png')
-        bar_plot(rel_sp[-1], label=r, ylabel='S',
-                 fname=fname, dpi=400,
+                  fname=fname, xlabel='$S$', figsize=(2.5, 3),
+                  ylabel='No. of levels')
+        fname = 'bar_P(S)_' + r + ('_max_e_' + str(max_energy) + '.pdf'
+                                   if max_energy else '.pdf')
+        bar_plot(rel_sp[-1], label=r, ylabel='S', xlabel='index',
+                 fname=fname, dpi=400, figsize=(2.5, 3),
                  title=r'$\frac{E_n-E_0}{N}=' +
                  '{:.3}'.format(avg_sp[-1]) + '$')
 
@@ -51,7 +52,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
     fname = 'P(S)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
         '{:.0e}'.format(lvl_epsilon) + \
         ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
-        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
+        ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
               normed=True, label=reps, ylabel='$P(S)$', xlabel='$S$',
               fname=fname, count=count, stacked=True, use_wigner=True,
@@ -59,19 +60,19 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
     fname = 'P(S)' + '_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
         '{:.0e}'.format(lvl_epsilon) + \
         ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
-        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
+        ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
               normed=True, title='$\\Delta E =' + '{:.5}'.format(deltaE) + '$',
               fname=fname, count=count, ylabel='$P(S)$', xlabel='$S$',
               stacked=True, label=reps, fit=True, max_e=max_energy)
     fname = 'Cumulative P(S)' + \
-        ('_max_e_' + str(max_energy) + '.png' if max_energy else '.png')
+        ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
     histogram(rel_sp, cumulative=True, bins=np.linspace(0, 4, count),
               normed=True, ylabel=r'$\sum_0^S P(x)$', xlabel='$S$', label=reps,
               use_wigner=True, count=count, fname=fname)
     # Version
     with open('version.txt', 'w') as f:
-        f.write('1.2')
+        f.write('1.3beta6')
     os.chdir("../../Scripts")
 
 

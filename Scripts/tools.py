@@ -64,6 +64,18 @@ def format_float(n):
     return ('{:n}' if n == int(n) else '{:.8g}').format(n)
 
 
+def latex_float(f):
+    float_str = "{0:.2g}".format(f)
+    if "e" in float_str:
+        base, exponent = float_str.split("e")
+        if base != 1:
+            return r"10^{{{0}}}".format(int(exponent))
+        else:
+            return r"{0} \times 10^{{{1}}}".format(base, int(exponent))
+    else:
+        return float_str
+
+
 def find(pattern, path):
     """Find all the files with the given name in the given path"""
     result = []

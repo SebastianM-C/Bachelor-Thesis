@@ -102,11 +102,11 @@ def main(B, D, N, max_energy=[0], energy_plot=False):
     if energy_plot:
         fig.savefig('../Statistics/alpha_e_B[' +
                     ', '.join('{:.2}' for i in B).format(*B) +
-                    ']_N' + str(N) + '.png', dpi=400)
+                    ']_N' + str(N) + '.pdf', dpi=400)
     else:
         fig.savefig('../Statistics/alpha_N' + str(N) +
-                    ('_max_e_' + str(max_energy) + '.png'
-                     if len(max_energy) > 1 or max_energy[0] else '.png'),
+                    ('_max_e_' + str(max_energy) + '.pdf'
+                     if len(max_energy) > 1 or max_energy[0] else '.pdf'),
                     dpi=400)
     plt.close()
 

@@ -15,7 +15,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut=0):
     cd(b, d, n)
     start = timer()
     E, ket = eigensystem.get(return_ket=True)
-    # Select irreductible representations
+    # Select irreducible representations
     # ir_reps = eigensystem.levels(E, ket)
 
     # Select only the stable levels
@@ -24,7 +24,7 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, cut=0):
     # Reduce the number of stable levels to check the convergence
     stable_levels = int((1 - cut) * stable_levels)
     E = E[:stable_levels]
-    # Select irreductible representations
+    # Select irreducible representations
     ir_reps = eigensystem.levels(E, ket, lvl_epsilon)
 
     stop = timer()
