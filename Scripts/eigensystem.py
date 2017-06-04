@@ -114,19 +114,19 @@ def levels(E, ket, epsilon=1e-8, colors=''):
     histogram(delta, xlabel=r'$\Delta E$', xscale='log',
               bins=np.pad(np.logspace(-15, 1, 17), (1, 0),
                           mode='constant'), ylabel='No. of levels',
-              fname='hist_delta.pdf', figsize=(6, 3))
+              fname='hist_delta.pdf', figsize=(5.8, 3))
     # Relative spacing histogram
     histogram(relsp, xscale='log', ylabel='No. of levels',
               bins=np.pad(np.logspace(-13, 1, 15), (1, 0),
                           mode='constant'), fname='hist_relsp.pdf',
-              xlabel='$S$', figsize=(2.5, 3))
+              xlabel='$s$', figsize=(2.8, 3))
     # Energy difference bar plot
-    bar_plot(delta, figsize=(6, 3), ylabel=r'$\Delta E$', yscale='log',
+    bar_plot(delta, figsize=(5.8, 3), ylabel=r'$\Delta E$', yscale='log',
              xlabel='index', fname='bar_delta.pdf', dpi=720)
     # Relative spacing bar plot
-    bar_plot(relsp, figsize=(6, 3), yscale='log', fname='relsp.pdf', dpi=720,
+    bar_plot(relsp, figsize=(5.8, 3), yscale='log', fname='relsp.pdf', dpi=720,
              label=r'$\varepsilon=' + latex_float(epsilon) + '$',
-             axhline_y=epsilon, ylabel='$S$', xlabel='index')
+             axhline_y=epsilon, ylabel='$s$', xlabel='index')
 
     # Check for bidimensional representation selection problems
     levels_cp = list(levels)

@@ -9,7 +9,7 @@ from tools import find, get_input
 
 def main(B, D, N):
     files = find('avg_sp.txt', '../Output')
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(5.8, 4))
     msize = 8
     for n_i in N:
         values = []
@@ -33,11 +33,11 @@ def main(B, D, N):
         ax.plot(results['b'], results['avg_sp'][:, 2], 'o',
                 label='rebde, $N=' + str(n_i) + '$', markersize=msize)
         msize -= 2
-    ax.set_ylabel('$\\frac{E_n^r - E_0^r}{N^r}$')
+    ax.set_ylabel(r'$\overline{\Delta E_r}$')
     ax.set_xlabel('$B$')
     ax.set_xlim([0, 1])
     ax.legend()
-    # plt.show()
+    plt.tight_layout(pad=0.3)
     fig.savefig('../Statistics/avg_sp_N' + str(N) + '.pdf', dpi=200)
     plt.close()
 

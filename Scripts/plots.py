@@ -21,6 +21,12 @@ def model(s, alpha):
     return alpha * poisson(s) + (1 - alpha) * wigner(s)
 
 
+def model_int(s, alpha):
+    """Integral of the spuerposition of distributions"""
+    return alpha * (1 - np.exp(-s)) + \
+        (1 - alpha) * (1 - np.exp(- np.pi / 4 * s**2))
+
+
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
               ylabel='', xlabel='', stacked=False, normed=False, weights=None,
               cumulative=False, use_wigner=False, use_poisson=False, title='',
@@ -50,37 +56,61 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
             # distribution between the edges of the bar
             # The are of a bar: A = h * bin_size => h = A / bin_size
             wigner_hist = [1 / bin_size *
-                           integrate.quad(wigner, bins[i-1], bins[i])[0]
+                           integrate.quad(wigner, bins[i - 1], bins[i])[0]
                            for i in range(1, bins.size)]
             ax.plot(x, wigner(x), 'r-.', label='Wigner')
 
             ax.bar(bins[:-1], wigner_hist, width=bin_size,
                    align='edge', label='Wigner bar', fill=False, linestyle='-')
     if use_poisson:
-        ax.plot(x, poisson(x), 'c:', label='Poisson')
-        poisson_hist = [1 / bin_size *
-                        integrate.quad(poisson, bins[i-1], bins[i])[0]
-                        for i in range(1, bins.size)]
-        ax.bar(bins[:-1], poisson_hist, width=bin_size, align='edge',
-               fill=False, linestyle=(':'), edgecolor='magenta',
-               label='Poisson bar')
+        if cumulative:
+            poisson_hist = [integrate.quad(poisson, 0, bins[i])[0]
+                            for i in range(1, bins.size)]
+
+            def poisson_dist_int(s): return 1 - np.exp(-s)
+            ax.plot(x, poisson_dist_int(x), 'c:',
+                    label=r'$\int_0^s P_{P}(x)\mathrm{d}x$')
+            ax.bar(bins[:-1], poisson_hist, width=bin_size, align='edge',
+                   fill=False, linestyle=':', edgecolor='magenta',
+                   label=r'$\sum_0^S P_P(x)$')
+        else:
+            poisson_hist = [1 / bin_size *
+                            integrate.quad(poisson, bins[i - 1], bins[i])[0]
+                            for i in range(1, bins.size)]
+            ax.plot(x, poisson(x), 'c:', label='Poisson')
+            ax.bar(bins[:-1], poisson_hist, width=bin_size, align='edge',
+                   fill=False, linestyle=(':'), edgecolor='magenta',
+                   label='Poisson bar')
 
     if fit:
         # Fit the data with a superposition between the Poisson and Wigner
         # distributions
         x_data = np.linspace(0, 4, count - 1)
         y_data = n[0] + n[1] + n[2]
-        alpha, pcov = curve_fit(model, x_data, y_data, bounds=(0, 1))
-        fname_a = 'alpha' + \
-            ('_max_e_' + str(max_e) + '.txt' if max_e else '.txt')
-        alpha.tofile(fname_a, sep=' ')     # save the value
-        model_hist = [1 / bin_size *
-                      integrate.quad(model, bins[i-1], bins[i], args=alpha)[0]
-                      for i in range(1, bins.size)]
-        ax.bar(bins[:-1], model_hist, width=bin_size, align='edge', fill=False,
-               linestyle='-')
-        ax.plot(x, model(x, alpha), 'r',
-                label='$\\alpha = ' + '{:.3}'.format(alpha[0]) + '$')
+        if not cumulative:
+            alpha, pcov = curve_fit(model, x_data, y_data, bounds=(0, 1))
+            fname_a = 'alpha' + \
+                ('_max_e_' + str(max_e) + '.txt' if max_e else '.txt')
+            alpha.tofile(fname_a, sep=' ')     # save the value
+        else:
+            alpha = np.asscalar(np.loadtxt('alpha.txt'))
+        if cumulative:
+            model_hist = [integrate.quad(model, 0, bins[i], args=alpha)[0]
+                          for i in range(1, bins.size)]
+            ax.plot(x, model_int(x, alpha), 'r',
+                    label='$\\alpha = ' + '{:.3}'.format(alpha) + '$')
+            ax.bar(bins[:-1], model_hist, width=bin_size, align='edge',
+                   fill=False, linestyle='-')
+        else:
+            model_hist = [1 / bin_size *
+                          integrate.quad(model, bins[i - 1], bins[i],
+                                         args=alpha)[0]
+                          for i in range(1, bins.size)]
+            ax.plot(x, model(x, alpha), 'r',
+                    label='$\\alpha = ' + '{:.3}'.format(alpha[0]) + '$')
+            ax.bar(bins[:-1], model_hist, width=bin_size, align='edge',
+                   fill=False, linestyle='-')
+
     if ylabel:
         ax.set_ylabel(ylabel)
     if xlabel:
@@ -91,7 +121,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
         ax.set_xscale('log')
-    plt.tight_layout(pad=0)
+    plt.tight_layout(pad=0.3)
     fig.savefig(fname, dpi=200)
     if show:
         plt.show()
@@ -115,7 +145,7 @@ def bar_plot(data, fname, label=None, ylabel='', xlabel='', show=False,
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
         ax.set_xscale('log')
-    plt.tight_layout()
+    plt.tight_layout(pad=0.3)
     fig.savefig(fname, dpi=dpi)
     if show:
         plt.show()

@@ -27,7 +27,7 @@ def no_signif_el(eigvec):
 
 def index_plot(eigvec, eigv_len, label, index, sort_idx, fname, d_no):
     """Index plot"""
-    plt.figure(figsize=(20, 4))
+    plt.figure(figsize=(5.8, 4))
     plt.bar(range(eigv_len), np.abs(eigvec[:eigv_len]),
             label=label)
     plt.legend()
