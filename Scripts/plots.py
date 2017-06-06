@@ -28,13 +28,12 @@ def model_int(s, alpha):
 
 
 def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
-              ylabel='', xlabel='', stacked=False, normed=False, weights=None,
+              ylabel='', xlabel='', stacked=False, weights=None, ylim=None,
               cumulative=False, use_wigner=False, use_poisson=False, title='',
               count=16, fit=False, max_e=0, figsize=None):
     fig, ax = plt.subplots(figsize=figsize)
     n, bin_edges, _ = ax.hist(data, bins=bins, label=label, stacked=stacked,
-                              normed=normed, cumulative=cumulative,
-                              weights=weights)
+                              cumulative=cumulative, weights=weights)
 
     bin_size = 4 / (count - 1)
     bins = np.linspace(0, 4, count)
@@ -50,7 +49,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
                     label=r'$\int_0^s P_{W}(x)\mathrm{d}x$')
             ax.bar(bins[:-1], wigner_hist, width=bin_size,
                    align='edge', fill=False, linestyle='-',
-                   label=r'$\sum_0^S P_W(x)$')
+                   label=r'$\sum_0^s P_W(x) \Delta x$')
         else:
             # The area of a bar should be the integral of the Wigner
             # distribution between the edges of the bar
@@ -72,7 +71,7 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
                     label=r'$\int_0^s P_{P}(x)\mathrm{d}x$')
             ax.bar(bins[:-1], poisson_hist, width=bin_size, align='edge',
                    fill=False, linestyle=':', edgecolor='magenta',
-                   label=r'$\sum_0^S P_P(x)$')
+                   label=r'$\sum_0^s P_P(x)\Delta x$')
         else:
             poisson_hist = [1 / bin_size *
                             integrate.quad(poisson, bins[i - 1], bins[i])[0]
@@ -121,6 +120,8 @@ def histogram(data, bins, fname, label=None, show=False, yscale='', xscale='',
         ax.set_yscale('log', nonposy='clip')
     if xscale is 'log':
         ax.set_xscale('log')
+    if ylim:
+        ax.set_ylim(ylim)
     plt.tight_layout(pad=0.3)
     fig.savefig(fname, dpi=200)
     if show:

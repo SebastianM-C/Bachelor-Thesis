@@ -21,8 +21,8 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
     else:
         deltaE = np.loadtxt('stable.txt')[1]
     count = int(4 / bin_size) + 1
-    rel_sp = []
-    avg_sp = []
+    rel_sp = []     # relative spacings
+    avg_sp = []     # average spacings
     w = []          # weights
     for r in reps:
         rep = np.loadtxt(r + '.dat', usecols=(0,))
@@ -30,7 +30,9 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
             rep = rep[rep <= max_energy]
         rel_sp.append(relSpacing(rep))
         avg_sp.append((rep[-1] - rep[0]) / rep.size)
-        w.append(np.ones(rel_sp[-1].shape) / 3)
+        # P(s)Δs is the probability, P(s) is the probability density
+        # P(s)Δs = Σ 1/3 * N_rep/N_tot
+        w.append(np.ones(rel_sp[-1].shape) / (3 * rep.size * bin_size))
         fname = r + ('_max_e_' + str(max_energy) + '.pdf'
                      if max_energy else '.pdf')
         histogram(rel_sp[-1], bins=np.linspace(0, 4, count), label=r,
@@ -48,41 +50,46 @@ def main(b, d, n, delta_n, st_epsilon, lvl_epsilon, reselect=True, cut=0,
         ('_max_e_' + str(max_energy) + '.txt' if max_energy else '.txt')
     with open(fname, 'w') as f:
         f.write('\n'.join([str(i) for i in avg_sp]))
-    # Relative spacing histogram P(s)
+    # Relative spacing histogram, P(s)
     fname = 'P(s)' + '_st_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
         '{:.0e}'.format(lvl_epsilon) + \
         ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
         ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
     histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
-              normed=True, label=reps, ylabel='$P(s)$', xlabel='$s$',
-              fname=fname, count=count, stacked=True, use_wigner=True,
+              label=reps, ylabel='$P(s)$', xlabel='$s$', count=count,
+              fname=fname, stacked=True, use_wigner=True,
               use_poisson=True, figsize=(5.8, 4.5))
     # Fitted P(s)
     fname = 'P(s)_fit_' + '{:.0e}'.format(st_epsilon) + '_eps_' + \
         '{:.0e}'.format(lvl_epsilon) + \
         ('_cut_' + '{:.2f}'.format(cut) if cut else '') + \
         ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
-    histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w,
-              normed=True, title='$\\Delta E =' + '{:.5}'.format(deltaE) + '$',
+    histogram(rel_sp, bins=np.linspace(0, 4, count), weights=w, ylim=(0, 1.05),
+              title='$\\Delta E =' + '{:.5}'.format(deltaE) + '$',
               fname=fname, count=count, ylabel='$P(s)$', xlabel='$s$',
               stacked=True, label=reps, fit=True, max_e=max_energy,
               figsize=(5.8, 4.5))
-    # cumulative relative spacing histogram I(s)
+    # For the cumulative distribution plots, each irreducible representation
+    # is plotted individually (*3)
+    # I(s) = Σ P(s) Δs = Σ Σ N_rep/N_tot * 1/Δs * Δs = Σ Σ N_rep/N_tot
+    # (*bin_size)
+    w = [wi * bin_size * 3 for wi in w]
+    # cumulative relative spacing histogram, I(s)
     fname = 'I(s)' + \
         ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
     histogram(rel_sp, cumulative=True, bins=np.linspace(0, 4, count),
-              normed=True, ylabel=r'$I(s)$', xlabel='$s$', label=reps,
-              use_wigner=True, use_poisson=True, count=count, fname=fname,
+              ylabel=r'$I(s)$', xlabel='$s$', label=reps, count=count,
+              use_wigner=True, use_poisson=True, fname=fname, weights=w,
               figsize=(5.8, 4.5))
     # Fitted I(s)
     fname = 'I(s)_fit' + \
         ('_max_e_' + str(max_energy) + '.pdf' if max_energy else '.pdf')
-    histogram(rel_sp, cumulative=True, bins=np.linspace(0, 4, count),
-              normed=True, ylabel=r'$I(s)$', xlabel='$s$', label=reps,
-              fit=True, count=count, fname=fname,  figsize=(5.8, 4.5))
+    histogram(rel_sp, cumulative=True, bins=np.linspace(0, 4, count), fit=True,
+              ylabel=r'$I(s)$', xlabel='$s$', label=reps, count=count,
+              weights=w, fname=fname, ylim=(0, 1.05), figsize=(5.8, 4.5))
     # Version
     with open('version.txt', 'w') as f:
-        f.write('1.3')
+        f.write('1.4')
     os.chdir("../../Scripts")
 
 
