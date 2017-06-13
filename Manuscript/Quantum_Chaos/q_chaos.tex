@@ -1,0 +1,54 @@
+\documentclass[../thesis.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Quantum Chaos}
+
+\section{Random matrix theory}
+
+  \subsection{Nearest neighbour spacing distributions}
+
+  Nearest neighbour spacing distributions show how the differences
+  between consecutive energy levels fluctuate around the average.
+
+  We consider a sequence of uniformly distributed, ordered, real, random numbers.
+  Let $E$ represent a number in the sequence.
+  The probability \( P(s)\dd{s} \) to have the next number between \( E+s \) and
+  \( E+s+\dd{s} \) is given by:
+  \[
+    P(s)\dd{s} = P(1 \in \dd{s} |\, 0 \in s) P(0 \in s),
+  \]
+  where \( P(n \in s) \) represents the probability for $s$ to contain $n$ numbers and
+  \( P(n \in \dd{s} |\, m \in s) \) is the \emph{conditioned} probability for
+  the interval of length \( \dd{s} \) to contain $n$ numbers when the interval of
+  length $s$ contains $m$ numbers.
+
+  Since random numbers are not correlated, the probability of a random number to be found
+  in the interval \( \dd{s} \) does not depend on the number of random numbers in $s$, so
+  \[
+    P(1 \in \dd{s} |\, 0 \in s) = P(1 \in \dd{s}).
+  \]
+
+  Since the random numbers are uniformly distributed, the probability {\color{red} (density?)} of finding a number
+  in the interval \( \dd{s} \) is constant. We denote this constant with $a$. Thus
+  \[
+    P(s)\dd{s} = a \,{\color{red}\dd{s}} P(0 \in s).
+  \]
+  \( P(0 \in s) \) can be expressed using the complementary probability as
+  \( {1 - \int_s^\infty P(s') \dd{s'}} \). Now we can express \( P(s)\dd{s} \) as follows:
+  \[
+    P(s)\dd{s} = a \,{\color{red}\dd{s}} \left( 1 - \int_s^\infty P(s') \dd{s'} \right).
+  \]
+
+  Using the Leibniz rule for differentiating integrals,
+  \[
+    \dv{x} \int\limits_{G(x)}^{H(x)} F(x, t) \dd{t} = \int\limits_{G(x)}^{H(x)} \pdv{F}{x} \dd{t}
+    + F(x, H(x))\, \dv{H}{x} - F(x, G(x))\, \dv{G}{x}
+  \]
+  we obtain
+  \[
+    {\color{red}\dv{s}}P(s) = -aP(s)
+  \]
+  when differentiating with respect to $s$.
+
+\end{document}

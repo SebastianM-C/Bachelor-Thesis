@@ -1,0 +1,453 @@
+\documentclass[../thesis.tex]{subfiles}
+
+%!TeX spellcheck = en-GB
+
+\begin{document}
+
+\chapter{Procedure}
+
+
+\section{The Hamiltonian}
+
+In this chapter we will describe how we obtained the numerical results.
+We begin by computing the matrix elements of the Hamiltonian in a basis
+given by the eigenstates of an isotropic double harmonic oscillator.
+In analogy with the classical case, we consider two independent
+quantum numbers \(n_1, n_2\) corresponding to the two orthogonal
+oscillating directions. We can define two number operators \(N_1, N_2\) such that
+\(N_1 \ket{n_1, n_2} = n_1 \ket{n_1, n_2}\) and \(N_2 \ket{n_1, n_2} = n_2 \ket{n_1, n_2}\).
+We consider the creation and annihilation operators \(\ad{1}, a_1\) and
+\(\ad{2}, a_2\)
+such that \(  N_1 = \ad{1} a_1 \) and \( N_2 = \ad{2} a_2 \).
+In terms of the previously defined operators, the Hamiltonian of the isotropic
+double harmonic oscillator is given by
+\[
+  H_0 = \hbar \omega_0 \left(\ad{1} a_1 + \frac{1}{2} I + \ad{2} a_2 + \frac{1}{2} I\right)
+      = \hbar \omega_0 \left(N_1 + N_2 + I\right)
+\]
+and its eigenstates are given by
+\[
+  H_0 \ket{n_1, n_2} = \hbar \omega_0 \left( n_1 + n_2 + 1 \right) \ket{n_1, n_2}
+\]
+
+Since \(n_1 + n_2 = n\) can be obtained in \(\sum_{i=0}^n i = \frac{1}{2}\,n(n+1)\) ways,
+the energy levels of the isotropic double harmonic oscillator are \(\frac{1}{2}\,n(n+1)\) fold
+degenerated.
+
+In the fundamental state \(\ket{0, 0}\), with \(n_1=n_2=0\), the oscillator has the
+energy equal to \(\hbar \omega_0\),
+having a \emph{zero point motion} {\color{red} (details / definition?)}.
+Since we are interested {\color{red} (why?)} in variations from the equilibrium state,
+we can rescale the potential energy such that the energy of the fundamental state becomes \(0\).
+Thus the new Hamiltonian will be given by
+\[
+  H_0 = A \left(N_1 + N_2\right),
+\]
+where \(A = \hbar \omega_0\).
+
+We can construct the basis starting from the vacuum state \(\ket{0, 0}\) by acting
+with the creation operators
+\begin{align*}
+  {\ad{1}}^{n_1} \ket{0, 0} &= \sqrt{n_1!} \ket{n_1, 0} \\
+  {\ad{2}}^{n_2} \ket{0, 0} &= \sqrt{n_2!} \ket{0, n_2}
+\end{align*}
+
+Thus, by applying the operator \({\ad{1}}^{n_1} {\ad{2}}^{n_2}\)
+such that \(n_1 + n_2 = n\) (in order to obtain for each \(n\) all the states with the
+energy \(n\, \hbar \omega_0\) {\color{red} wrt vacuum}) we obtain the basis elements ordered as follows:
+\[
+  \ket{0, 0} \ket{0, 1} \ket{0, 2} \cdots \ket{0, n} \ket{1, 0} \ket{1, 1}
+  \cdots \ket{1, n - 1} \cdots \ket{i, 0} \ket{i, 1} \cdots \ket{i, n - i} \cdots
+  \ket{n, 0}.
+\]
+
+For our investigations, the Hamiltonian is expressed as a function of the creation and annihilation
+operators up to fourth order terms as follows
+
+\begin{equation}
+\label{eq:hamilt}
+\begin{split}
+  H &= A \left( \ad{1} a_1 + \ad{2} a_2 \right)
+    + \frac{B}{4} \bigg[ \left( 3 \ad{1} {\ad{2}}^2 + 3 a_1 a_2^2
+                               - {\ad{1}}^3 - a_1^3 \right)   \\
+  &\quad + 3 \left( a_1 {\ad{2}}^2 + \ad{1} a_2^2 - \ad{1} a_1^2 - {\ad{1}}^2 a_1
+             + 2 a_1 \ad{2} a_2 + 2 \ad{1} \ad{2} a_2
+          \right) \bigg]  \\
+  &\quad + \frac{D}{16} \bigg[ 6 \left( {\ad{1}}^2 a_1^2 + {\ad{2}}^2 a_2^2 \right)
+                        + 2 \left( a_1^2 {\ad{2}}^2 + {\ad{1}}^2 a_2^2 \right)
+                        + 8 \ad{1} a_1 \ad{2} a_2  \\
+  &\quad + 4 \left(\ad{1} a_1^3 + {\ad{1}}^3 a_1 + \ad{2} a_2^3 + {\ad{2}}^3 a_2
+     + a_1^2 \ad{2} a_2 + {\ad{1}}^2 \ad{2} a_2 + \ad{1} a_1 a_2^2 + \ad{1} a_1 {\ad{2}}^2
+        \right)  \\
+  &\quad + \left( {\ad{1}}^4 + a_1^4 + {\ad{2}}^4 + a_2^4
+     + 2 {\ad{1}}^2 {\ad{2}}^2 + 2 a_1^2 a_2^2
+      \right)
+                        \bigg].
+\end{split}
+\end{equation}
+
+The physical origin of this Hamiltonian is related to quadrupole vibrations of
+nuclear surfaces. {\color{red} (details for B, D?) (add citations)}
+The energy levels will be expressed in units of harmonic oscillator energy and therefore
+from here on we will consider \(A = 1\).
+We can obtain the eigenvalues and eigenvectors of the Hamiltonian by a
+diagonalization routine based on Relatively Robust Representations from
+Intel\textsuperscript{\textregistered} Math Kernel Library used via a \texttt{Python}
+program{\color{red} (+ citations)}.
+Any such diagonalization method requires a truncation of the Hilbert space
+which induces errors concerning the eigenvalues. This errors increase as one moves to
+the upper limit of the energy for a fixed dimension of the Hilbert space. Indeed we
+expect this energies to have more important contributions from the states that were
+eliminated by truncation.
+We tested the stability of the energy levels by comparing the results obtained for
+different sizes of the diagonalization basis as is detailed in the next section.
+
+\section{Stability}
+
+We consider the \emph{stable levels} to be the eigenvalues which, at a change of
+basis from one with a dimension of $N$ to one with dimension \(N+ \Delta N\),
+do not change with more than a chosen threshold \(\delta_s\).
+In the following figure we show the variation of the energy levels when
+the dimension increases from \(N = 120\) to \(N = 140\).
+
+\begin{center}
+  \includegraphics{"B0.2 D0.4 N120/bar_E_diff"}
+  \captionof{figure}{\(B = 0.2, D = 0.4, N = 120\)}
+\end{center}
+
+We can observe that the first 400--600 eigenvalues have a very good stability.
+Thus we can choose the stability threshold for example at \(\delta_s = 10^{-9}\).
+Qualitatively the shape of this distribution does not depend on the parameters of
+the Hamiltonian or the dimension of the Hilbert space because it reflects the nature
+of the approximation as discussed previously.
+For example, for \(B = 0.55, D = 0.4, N = 260\) compared
+with \(N = 280\)
+
+\begin{center}
+  \includegraphics{"B0.55 D0.4 N260/bar_E_diff"}
+  \captionof{figure}{\(B = 0.55, D = 0.4, N = 260\)}
+\end{center}
+
+As expected, the number of stable levels increases with the size of the basis.
+Roughly, for a given basis size $N$, the first 7--8\% levels differ with less
+than \(\delta_s = 10^{-9}\) when we compare with a basis of dimension
+\(N + \Delta N\), with \(\Delta N = 20\).
+
+\section{Statistics}
+
+As we mentioned in the Introduction, a spectrum can be characterised through the
+probability distribution of the nearest neighbour spacing.
+The \emph{spacing} is defined as the difference between two consecutive
+energy levels. Similarly the \emph{relative spacing} is defined as
+\[
+  s = \frac{E_{i+1} - E_i}{\mean{\Delta E}},
+\]
+where \(\mean{\Delta E}\) is the average spacing \(\frac{E_n - E_0}{N}\).
+
+The \emph{nearest neighbour spacing distributions} tell us the probability \(P(s)\dd{s}\) to
+find a relative spacing $s$ when we move in the spectrum obtained by diagonalization.
+This probability is defined as follows
+\[
+  P(s)\dd{s} = \frac{N_{s,s+\Delta s}}{N},
+\]
+where \(N_{s,s+\Delta s}\) is the number of levels with the relative spacing
+between \(s\) and \(s+ \Delta s\).
+We can also define a \emph{cumulative probability distribution},
+\[
+  I(s) = \sum_{s_i=0}^s P(s_i) \Delta s
+\]
+
+\subsection{Irreducible representations}
+
+In order to analyse the fluctuations of the previously obtained eigenvalues
+we must first take into account the symmetry of the system. The symmetries of
+a system can make influence the fluctuations making the given sequence of levels
+appear more regular than it actually is {\color{red} (better explanation \& citation)}.
+In order to remove this influence we analyse separately each symmetry reduced subspace
+or equivalently each \emph{irreducible representation} of the Hamiltonian.
+
+If an operator $A$ corresponds to a symmetry of the Hamiltonian, then it
+commutes with the Hamiltonian, \(\comm{A}{H} = 0\). {\color{red} (Proof?)}
+For the Hamiltonian in eq.~\eqref{eq:hamilt} we have the following symmetries {\color{red} (?)},
+which correspond to the symmetry group \(\mathcal{C}_{3v}\).
+This group has 3 irreducible representations: one bi-dimensional and
+two unidimensional, namely {\color{red} (notation?)}.
+
+\subsubsection{Separating the bi-dimensional representation}
+
+The presence of the bi-dimensional representation corresponds a two-fold
+degeneracy which allows us to identify it by computing the
+differences between consecutive levels \(\Delta E = E_{i+1} - E_i\).
+An other option is to use directly the relative spacing, which differs only by a
+constant from \(\Delta E\), namely the average spacing.
+The separation of the symmetric and anti-symmetric irreducible representations
+will be detailed later.
+
+In figure~\ref{fig:bar_delta} we can see how \(\Delta E\) varies with the index of the
+levels.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics{"B0.2 D0.4 N120/bar_delta"}   % TODO: change with the correct one
+  \caption{\(B=0.2, D=0.4, N=120\)}%
+\label{fig:bar_delta}
+\end{figure}
+
+Because of the finite precision of the numerical implementation, the
+difference between two consecutive degenerate levels might not be exactly 0,
+its value depending on the machine precision (as it can be seen in the above figure).
+To take this fact into account we will consider that the levels which
+have $s$ (or \(\Delta E\)) greater than a chosen \( \varepsilon \) belong
+to one of the unidimensional representations.
+In order to choose a suitable value for \( \varepsilon \), we use a histogram
+to visualise the number of levels at different spacings
+(see figure~\ref{fig:relsp-b0.2n120}).
+
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N120/hist_relsp"}
+    \caption{\(B=0.2, D=0.4, N=120\)}%
+    \label{fig:relsp-b0.2n120}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.4 D0.4 N260/hist_relsp"} % TODO: change with the correct one
+    \caption{\(B=0.4, D=0.4, N=260\)}%
+    \label{fig:relsp-b0.4n260}
+  \end{subfigure}
+  \caption{The relative spacing histograms for different parameters}
+\end{figure}
+
+This bimodal shape of the histogram suggests clearly the presence of the degenerate
+levels well separated from the rest.
+For some particular values for $B$ (such as \(B = 0.4\)) and high values for
+$N$ (\( N > 200 \)), we observed a splitting of the block corresponding to
+the degenerated levels in two blocks, namely one at exactly 0 and the other at low values.
+(see fig.~\ref{fig:relsp-b0.4n260})
+
+If we plot the spacing as a function of the level index, we can see how
+each level is situated with respect to the chosen \( \varepsilon \).
+Once again we can observe how the spacings corresponding to the bi-dimensional
+representation are separated from the rest.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{"B0.2 D0.4 N120/relsp"}
+  \caption{\(B=0.2, D=0.4, N=120\)}
+\end{figure}
+
+\subsubsection{Separating the unidimensional representations}
+
+In order to identify the unidimensional representations we rely on the symmetry
+of the potential energy operator,
+\[
+  \color{red}\dots ?
+\]
+We can observe that this operator is invariant to a reflection along the
+{\color{red}\(Ox\)?} axis.
+{\color{red} axis \(\rightarrow n_2\)?}
+For the harmonic oscillator the states with even quantum numbers have even wave functions.
+{\color{red} (proof / cite?)}
+Thus, we can establish a correspondence {\color{red} (how?)} between the symmetry of the
+representation and the parity of the quantum number \(n_2\) such that the
+unidimensional symmetric representation corresponds to an even \(n_2\) and the
+unidimensional anti-symmetric representation corresponds to an odd \(n_2\).
+
+The values of the quantum numbers \(n_1\) and \(n_2\) depend on the ordering of the basis.
+Because the diagonalisation algorithm returns the eigenvalues
+(and the corresponding eigenvectors) in ascending order,
+the initial ordering of the basis is lost.
+One method to approximate \(n_1\) and \(n_2\) for a given eigenvector would be
+to consider that their values are given by the index of the dominant coefficient.
+Thus, if we have the following eigenvector
+\[
+\begin{pmatrix}
+    C_{0,0} \\ C_{0,1} \\ \vdots \\ C_{0,n} \\ C_{1,0} \\ \vdots \\ C_{1,n-1} \\
+    \vdots \\ C_{i,0} \\ \vdots \\ C_{i,n-i} \\ \vdots \\ C_{n,0}
+  \end{pmatrix}
+\]
+and \(C_{i,j}\) is the greatest coefficient, than we assign to this eigenvector
+the quantum numbers of the \(k\)-th element in the basis, where \(k\) is the
+index of the coefficient.
+
+For example, for the simplified case of the isotropic double harmonic oscillator \
+(\(B=D=0\)) with \(N=3\), the Hamiltonian is given by
+\[
+H=
+\begin{pmatrix}
+  0 & 0 & 0 & 0 & 0 & 0\\
+  0 & 1 & 0 & 0 & 0 & 0\\
+  0 & 0 & 2 & 0 & 0 & 0\\
+  0 & 0 & 0 & 1 & 0 & 0\\
+  0 & 0 & 0 & 0 & 2 & 0\\
+  0 & 0 & 0 & 0 & 0 & 2\\
+\end{pmatrix}
+\]
+The eigenvalues will be \(E_i = 0, 1, 1, 2, 2, 2\) with the corresponding
+eigenvectors
+\[
+  v_1 =
+  \begin{pmatrix}
+    1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+  \end{pmatrix},\
+  v_{2} =
+  \begin{pmatrix}
+    0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0
+  \end{pmatrix},\
+  v_{3} =
+  \begin{pmatrix}
+    0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0
+  \end{pmatrix},\
+  v_{4} =
+  \begin{pmatrix}
+    0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0
+  \end{pmatrix},\
+  v_{5} =
+  \begin{pmatrix}
+    0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1
+  \end{pmatrix},\
+  v_{6} =
+  \begin{pmatrix}
+    0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0
+  \end{pmatrix}
+\]
+
+Since the basis is given by
+\[
+  \ket{0, 0} \ket{0, 1} \ket{0, 2} \ket{1, 0} \ket{1, 1} \ket{2, 0},
+\]
+the quantum numbers for the eigenvectors will be assigned as follows
+\begin{align*}
+  v_1 &\equiv \ket{0, 0} \text{since}\ k = 1 \\
+  v_2 &\equiv \ket{0, 1} \text{since}\ k = 2 \\
+  v_3 &\equiv \ket{1, 0} \text{since}\ k = 4 \\
+  v_4 &\equiv \ket{0, 2} \text{since}\ k = 3 \\
+  v_5 &\equiv \ket{2, 0} \text{since}\ k = 6 \\
+  v_6 &\equiv \ket{1, 1} \text{since}\ k = 5
+\end{align*}
+
+{\color{red} Maximum is not unique? \\ \centerline{\dots}}
+
+In figures~\ref{fig:bar-rep-b0.2n120} and~\ref{fig:hist-rep-b0.2n120}
+we can see the relative spacing for each irreducible representation as a function
+of index and as a histogram.
+
+% B=0.2 N=120
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/bar_rebde"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/bar_reuna"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/bar_reuns"}
+  \end{subfigure}
+  \caption{The relative spacing for each irreducible representation as a function
+  of index for \(B=0.2, D=0.4, N=260\)}
+  \label{fig:bar-rep-b0.2n120}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/rebde"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/reuna"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.2 D0.4 N260/reuns"}
+  \end{subfigure}
+  \caption{The relative spacing histogram for each irreducible representation for
+  \(B=0.2, D=0.4, N=260\)}
+\label{fig:hist-rep-b0.2n120}
+\end{figure}
+
+% B=0.63 N=260
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/bar_rebde"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/bar_reuna"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/bar_reuns"}
+  \end{subfigure}
+  \caption{The relative spacing for each irreducible representation as a function
+  of index for \(B=0.63, D=0.4, N=260\)}
+  \label{fig:bar-rep-b0.63n260}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/rebde"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/reuna"}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \centering
+    \includegraphics{"B0.63 D0.4 N260/reuns"}
+  \end{subfigure}
+  \caption{The relative spacing histogram for each irreducible representation for
+  \(B=0.63, D=0.4, N=260\)}
+\label{fig:hist-rep-b0.63n260}
+\end{figure}
+
+We can plot the average spacing as a function of $B$ (see fig.~\ref{fig:avgsp})
+{\color{red} (details?)}
+
+\begin{figure}
+  \centering
+  \includegraphics{"avg_sp_N[220, 240, 260]"}
+  \caption{\(\mean{\Delta E}\) as a function of $B$ for each representation}
+\label{fig:avgsp}
+\end{figure}
+
+{\color{red} Selection problems?}
+
+
+
+\begin{figure}
+  \includegraphics{"B0.2 D0.4 N120/P(s)_st_1e-09_eps_1e-08"}
+  \caption{\(B=0.2, D=0.4, N=120\)}
+\label{fig:P(s)-b0.2n120}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{"B0.63 D0.4 N260/P(s)_st_1e-09_eps_1e-08"}
+  \caption{\(B=0.63, D=0.4, N=260\)}
+\label{fig:P(s)-b0.63n260}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{"B0.2 D0.4 N120/I(s)"}
+  \caption{\(B=0.2, D=0.4, N=120\)}
+\label{fig:I(s)-b0.2n120}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{"B0.63 D0.4 N260/I(s)"}
+  \caption{\(B=0.63, D=0.4, N=260\)}
+\label{fig:I(s)-b0.63n260}
+\end{figure}
+
+\end{document}
