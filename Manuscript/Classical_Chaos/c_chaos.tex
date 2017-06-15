@@ -2,6 +2,9 @@
 
 %!TeX spellcheck = en-GB
 
+\theoremstyle{plain}
+\newtheorem*{theorem*}{Theorem}
+
 \begin{document}
 
 \chapter{Classical chaos}
@@ -381,10 +384,10 @@ Since \(I\) is a constant of the motion,
 \]
 or
 \begin{equation}
-  \label{action-variable}
+  \label{eq:action-variable}
   I = \frac{1}{2\pi} \oint p \dd{q}.
 \end{equation}
-Equation~\eqref{action-variable} can be considered the definition for the
+Equation~\eqref{eq:action-variable} can be considered the definition for the
 action variable, where the integral is taken around a single period of the motion
 (which is always a closed curve in phase space).
 
@@ -392,11 +395,16 @@ action variable, where the integral is taken around a single period of the motio
 
 A system called \emph{integrable} if the number of degrees of freedom is equal to the number
 of constants of the motion in involution which each other. Two constants of the motion
-are in \emph{involution} with each other if their mutual Poisson brackets are equal to \(1\).
+are in \emph{involution} with each other if their mutual Poisson brackets are equal to \(0\).
 
 The previously mentioned constants of the motion are not required to be known in analytic form,
 they are only required to exist. Thus, for example \(n=1\) systems are always integrable if
 the Hamiltonian is time independent.
+
+An important consequence of integrability is that we can always find a canonical
+transformation to action-angle variables and express the new Hamiltonian as a function
+of the \(n\) constants of the motion given by the action variables:
+\(\mathcal{H'}=\mathcal{H'}(I_1,\dotsc,I_n)\).
 
 For integrable systems, the \(n\) constants of the motion restrict the motion in the
 \(2n\) dimensional phase space to a \(2n-n=n\) dimensional subspace. If the motion is
@@ -430,17 +438,207 @@ tangent vector field on even-dimensional $n$-spheres. (what happens for odd $n$?
 }
 
 {\color{red}+ explanation for the fact that the constants of motion must be
-in involution with each other}
+in involution with each other
+
+Observation:
+If we make a canonical transformation such that \(\mathcal{H'} = 0\), the new
+coordinates and momenta will be constants, so we have \(2n\) constants of the motion.
+If we make a canonical transformation to action-angle variables, we get
+\(n\) constants of the motion (the action variables).
+There is no contradiction since the \(2n\) constants obtained in the first case
+are not all in involution with each other (\( \{q_i,p_j\}=\delta_{i,j} \)), but
+we can choose \(n\) of them in involution with each other.
+}
 
 
 \section{Chaos notions}
 
+Deterministic chaos is a feature of non-integrable systems and is characterised
+by high sensitivity to initial conditions: for two dynamical systems with
+nearly identical initial conditions, the long time evolution is uncorrelated,
+the motion in the two systems being very different.
+Poincaré was the first to bring attention to this type of behaviour when he
+proved that there are no analytic solutions to the 3-body problem. ({\color{red}cite?})
+Even if the equations of motion are deterministic, long time predictions are
+rendered useless since an arbitrary small variation in the initial conditions
+can produce very different results.
+
+In chaotic systems, the motion is no longer constrained on tori as for the case
+of integrable systems. The trajectories escape from the \(n\) dimensional subspace
+in the \(2n\) phase space space, or in a \(2n-1\) subspace if the energy is
+conserved.
 
 
-\section{Kolmogorov-Arnol'd-Moser theorem}
+\subsection{The Liapunov exponent}
+
+Chaotic systems exhibit a varying degree of randomness. In order to describe
+chaos quantitatively we introduce the \emph{Liapunov exponent}, which is a local measure
+of the dispersion in phase space.
+The sensitivity to the initial conditions of chaotic systems can be expressed
+as an exponential divergence of neighbouring trajectories.
+
+If two orbits are separated at \(t=0\) by the infinitesimal distance \(\dd{x_0}\),
+then at a later time \(t\), the distance will be
+\[
+  \dd{x}(t) \sim \dd{x}(0) \ee^{\lambda t},
+\]
+where \(\lambda \) is the Liapunov exponent.
+If \(\lambda > 1\), the motion is chaotic and \(\lambda \) gives the exponential
+growth of the initial infinitesimal separation. If the motion is bounded, as in
+the case of constant energy {\color{red} (constant energy implies bounded motion?)},
+\(\dd{x}(t)\) will grow until is comparable with the dimension of the
+allowed part of the phase space, from that point on varying only randomly in time.
+Thus the Liapunov exponent can be defined as follows
+\begin{equation}
+  \label{eq:liapunov}
+  \lambda = \lim_{t \to \infty} \frac{1}{t} \ln{\frac{\dd{x}(t)}{\dd{x}(0)}}
+\end{equation}
+
+For systems with discrete time evolution instead of the time we can use the number
+of iterations.
+
+\subsection{Poincaré sections}
+
+Since the phase space is \(2n\) dimensional, visualising the motion can be
+difficult even for systems with \(n=2\) degrees of freedom. If the energy is
+constant, the motion will be constrained in the \(2n-1\) subspace, but even for
+the case of \(n=2\) the trajectory is not easy to follow in a 3D space considering
+that in most cases is represented on a 2D surface.
+
+For \(n=2\) systems this difficulty can be addressed by using a slice of the phase
+space which reduces the dimensionality by $1$. This slices are called
+\emph{Poincaré sections}.
+If the energy is conserved, the section will be a plane.
+
+If \(\Sigma \) is a surface section{\color{red}(Poincaré section)} intersecting the
+trajectories of the system in phase space in the points \(\vb{x}_i\), then we can
+define the \emph{Poincaré map} as a mapping \({P:\Sigma \to \Sigma}\) such that
+\[
+  \vb{x}_{i+1} = P(\vb{x}_i).
+\]
+
+A point \(\vb{x}^*\) is called a \emph{fixed point} of the  if
+\[
+  \vb{x}^* = P(\vb{x}^*).
+\]
+Thus a fixed point belongs to a closed trajectory. In order to study the stability
+of the orbit, we can analyse the stability of the fixed point.
+If \(\vb{x}^*\) is a fixed point, we consider a small perturbation in the initial
+conditions and we look at what happens to a point \(\vb{x}^* + \vb{v}_i\) near the fixed point
+\[
+  P(\vb{x}^* + \vb{v}_i) = P(\vb{x}^*) + \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{v}_i + \order{\norm{\vb{v}_i}^2},
+\]
+where \(\pdv{P}{\vb{x}}\) is the Jacobian of the map.
+Assuming we can neglect \(\order{\norm{\vb{v}_i}^2}\), we get
+\[
+  \vb{x}^* + \vb{v}_{i+1} = \vb{x}^* + \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{v}_i,
+\]
+where \(\vb{x}^* + \vb{v}_{i+1} = P(\vb{x}^* + \vb{v}_i)\).{\color{red} (\(P(\vb{x}^* + \vb{v}_i) = P(\vb{x}^*) + P(\vb{v}_i)\)?)} Thus
+\begin{equation}
+  \label{eq:lin-map}
+  \vb{v}_{i+1} = \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{v}_i,
+\end{equation}
+{\color{red}also called the \emph{linearised Poincaré map}}.
+
+In a basis given by the eigenvectors \( \{\vb{e}_j\} \) of the Jacobian,
+\(\vb{v}_{i} = \sum_{j=1}^{{\color{red}2n-1}} a_j \vb{e}_j\), then
+\[
+  \vb{v}_{i+1} = \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \sum_{j=1}^{{\color{red}2n-1}} a_j \vb{e}_j
+               = \sum_{j=1}^{{\color{red}2n-1}} \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{e}_j a_j
+               = \sum_{j=1}^{{\color{red}2n-1}} \lambda_j a_j \vb{e}_j,
+\]
+where \(\lambda_j\) are the eigenvalues of the Jacobian matrix.
+
+If we consider \(k\) iterations of eq.~\eqref{eq:lin-map}
+\[
+  \vb{v}_{i+k} = \sum_{j=1}^{{\color{red}2n-1}} {(\lambda_j)}^k a_j \vb{e}_j
+\]
+If all \(\abs{\lambda_j} < 1\), then \(\norm{\vb{v}_{i+k}} \to 0\) as \(k\to\infty \)
+and the fixed point is \emph{linearly stable}. If \(\abs{\lambda_j} > 1\) for
+some \(j\), then the fixed point is \emph{linearly unstable}. In the case when
+\(\abs{\lambda_m}=1\), where \(\lambda_m\) is the largest eigenvalue, we cannot
+decide and a nonlinear stability analysis is required.
 
 
+\section{Kolmogorov-Arnold-Moser theorem}
 
+Since most systems are non-integrable we need approximate methods. One such
+method is canonical perturbation theory which can provide approximate solutions
+when the non-integrable Hamiltonian can be broken in an integrable part and
+a relatively small perturbation.
+\[
+  \mathcal{H} = \mathcal{H}_0 + \Delta \mathcal{H},
+\]
+where \(\mathcal{H}_0\) is the integrable part of the Hamiltonian for
+which the solutions of the Hamilton equations are known and
+\(\Delta \mathcal{H}\) is the perturbation.
+
+If we make a canonical transformation with a generating function of type
+\(F_2\) such that \(\mathcal{H'}_0 = 0\) we can obtain the constants of the
+motion for the integrable part of the Hamiltonian, \(Q_0\) and \(P_0\).
+If we use the generating function \(S(q,P,t)\) to make ca canonical transformation
+for \(\mathcal{H}\), we obtain
+\[
+  \mathcal{H'}(Q_0,P_0,t) = \Delta \mathcal{H}^0(Q_0,P_0,t).
+\]
+Hamilton's equations read
+\begin{align*}
+  \dot{Q} = \pdv{\mathcal{H'}}{P} = \pdv{\Delta \mathcal{H}^0}{P} &&
+  \dot{P} = -\pdv{\mathcal{H'}}{Q} = -\pdv{\Delta \mathcal{H}^0}{Q}
+\end{align*}
+
+In order to obtain the first order correction, we replace \(Q\) and \(P\)
+after derivation with \(Q_0\) and \(P_0\).
+\begin{align*}
+  \dot{Q_1} = \eval{\pdv{\Delta \mathcal{H}^0}{P}}_{\substack{Q=Q_0,\\P=P_0}} &&
+  \dot{P_1} = \eval{-\pdv{\Delta \mathcal{H}^0}{Q}}_{\substack{Q=Q_0,\\P=P_0}}
+\end{align*}
+We can integrate the above differential equations to obtain \(Q_1\) and \(P_1\).
+
+{\color{red}With these corrections we can construct a new generating function
+\(S(Q_1,P_1,t)\) (why not \(S(q,P_1,t)\)?
+will this generating function be of type \(F_2\)?) which we can use to obtain
+a new perturbed Hamiltonian \(\Delta \mathcal{H}^1\) (is \(\mathcal{H''}_0 = 0\)?)}.
+
+In order to obtain higher order corrections we replace in \(\Delta \mathcal{H}^0\)
+the conjugate variables \(Q_0\) and \(P_0\) with \(Q_1\) and \(P_1\),
+obtaining \(\Delta \mathcal{H}^1\) and the procedure repeats.
+\begin{align*}
+  \dot{Q}_{i+1} = \eval{\pdv{\Delta \mathcal{H}^i}{P}}_{\substack{Q=Q_i,\\P=P_i}} &&
+  \dot{P}_{i+1} = \eval{-\pdv{\Delta \mathcal{H}^i}{Q}}_{\substack{Q=Q_i,\\P=P_i}}
+\end{align*}
+
+It is clear that if the perturbation is small enough, we can no longer apply
+this method and the perturbation will significantly alter the motion.
+Hence, an important question that arises is the stability of the perturbed solutions
+and the domain of applicability for the perturbation theory.
+
+The Kolmogorov-Arnold-Moser theorem or KAM theorem gives the limits of regular (or
+non-chaotic) motion for systems with bounded motion.
+
+
+\begin{theorem*}[Kolmogorov-Arnold-Moser theorem]
+  If the bounded motion of an integrable system given by the Hamiltonian \(\mathcal{H}_0\)
+  is disturbed by a small perturbation \(\Delta \mathcal{H}\) rendering the system
+  non-integrable and if the unperturbed motion has {\color{red}incommensurate}
+  frequencies \(\omega_i=\dot{\theta}_i\), where \(\theta_i\) are the angle
+  variables, then the motion will remain confined to an \(n\)-torus, except for
+  a small set of initial conditions for which the trajectories escape on the
+  energy hypersurface.
+\end{theorem*}
+
+The theorem tells us that the majority of the tori will survive the perturbation
+and the set of destroyed tori has finite volume in the phase space.
+A torus of the unperturbed system survives if it can be continuously deformed
+in a torus of the perturbed system.
+Furthermore, the destroyed tori have rationally related frequencies, that is
+there exist \(m_1,\dotsc,m_n \equiv \vb{m} \in \mathbb{Z}^n\) such that
+\(\vb{m} \vdot \vb*{\omega} = 0\), where \(\vb*{\omega} \equiv \omega_1,\dotsc,\omega_n\).
+
+Since the set of rational numbers is {\color{red}dense} in the set of real numbers,
+the set of distroyed tori will be {\color{red}dense in the phase space}. In the
+place of the destroyed tori chaotic motion will appear as the trajectories escape
+in the \(2n-1\) subspace of constant energy.
 
 
 \end{document}
