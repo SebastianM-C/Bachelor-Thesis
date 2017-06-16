@@ -1,60 +1,178 @@
 \documentclass[../thesis.tex]{subfiles}
 
+%!TeX spellcheck = en-GB
+
+\theoremstyle{definition}
+\newtheorem*{def*}{Definition}
+
 \begin{document}
 
 \chapter{Quantum Chaos}
 
+In the terms of classical mechanics, such as the sensitivity to initial conditions
+quantum chaos does not exist because of the Heisenberg's uncertainty principle,
+the absence of trajectories and many other reasons. In turn, there are some
+ways in which we can link classically chaotic systems to their
+quantum counterparts. These bridges between classical mechanics and quantum
+mechanics allows us to give a meaning to quantum chaos.
+{\color{red} (Berry $\to$ quantum chaology)}
+
 \section{Level repulsion}
+
+
+
+\section{Probability notions}
+
+\begin{def*}[Joint probability]
+  Given two events $A$ and $B$, their joint probability, \(P(A \cap B)\), is
+  the probability of the two events to occur simultaneously.
+\end{def*}
+
+\begin{def*}[Conditional probability]
+  The conditional probability of an event $A$ given an event $B$ with \(P(B)>0\),
+  denoted \(P(A\,|\,B)\) is given by
+  \[
+    P(A\,|\,B) = \frac{P(A \cap B)}{P(B)}
+  \]
+\end{def*}
+
+The joint probability of $A$ and $B$ can be expressed as
+\(P(A \cap B) = P(A\,|\,B) P(B)\).
+
+\begin{def*}[Continuous random variable]
+  A continuous random variable is a function from the set of all outcomes to the
+  set of real numbers \(X:\Omega \to \mathbb(R)\) such that
+  \[
+    P(a \leq X(\omega) \leq b) = \int_a^b f(x) \dd{x},
+  \]
+  where \(f(x) \geq 0\) and \(\int_{-\infty}^{+\infty}f(x)\dd{x}=1\).
+\end{def*}
+The above function \(f\) is called the \emph{probability density function}.
+The probability for a continuous random variable $X$ to take a value in the
+infinitesimal interval of length \(\dd{x}\) is given by
+\begin{equation}
+  \label{eq:prob-rv-in-int}
+  P(x \in [x, x + \dd{x}]) = \int_x^{x+\dd{x}} f(z) \dd{z} \approx f(x)\dd{x}
+\end{equation}
+
 
 \section{Random matrix theory}
 
-{\color{red}define random matrices}
+\emph{Random matrices} are matrices which have random variables as elements,
+with their randomness is restricted by the symmetries of the whole matrix.
 
 Nearest neighbour spacing distributions show how the differences
 between consecutive energy levels fluctuate around the average.
-In order to understand better this concept we shall begin with the simpler
+In order to better understand this concept we shall begin with the simpler
 case of real random numbers.
 
-\subsection{The nearest neighbour spacing distribution for real random numbers}
+\subsection{The nearest neighbour spacing distribution of random numbers}
 
 We consider a sequence of uniformly distributed, ordered, real, random numbers.
-Let $E$ represent a number in the sequence.
-The probability \( P(s)\dd{s} \) to have the next number between \( E+s \) and
-\( E+s+\dd{s} \) is given by:
-\[
-  P(s)\dd{s} = P(1 \in \dd{s} |\, 0 \in s) P(0 \in s),
-\]
-where \( P(n \in s) \) represents the probability for $s$ to contain $n$ numbers and
-\( P(n \in \dd{s} |\, m \in s) \) is the \emph{conditioned} probability for
-the interval of length \( \dd{s} \) to contain $n$ numbers when the interval of
-length $s$ contains $m$ numbers.
+
+{\color{red}
+We define the \emph{spacing} of an ordered sequence as the sequence of
+differences between consecutive elements.
+The \emph{average spacing} of the sequence is given by \(\frac{E_n-E_0}{n}\).
+
+discrete vs continuous random variables?
+}
+
+For an interval of length \(s, s>0\), we will denote with \( P(n \in s) \) the probability
+for the interval to contain $n$ numbers and with \( P(n \in \dd{s} |\; m \in s) \)
+the conditional probability for the interval of length \( \dd{s} \) to contain
+$n$ numbers given that the interval of length $s$ contains $m$ numbers.
+
+If $E$ is a given number in the sequence, we are interested in the probability
+\( P(s)\dd{s} \) to have the next number between \( E+s \) and \( E+s+\dd{s} \).
+Since we are interested in the next number after $E$, we know that in the
+interval of length $s$ there is no other number and the next number is somewhere
+in the infinitesimal interval \(\dd{s}\). Thus the joint probability of
+the events \(1 \in \dd{s}\) and \(0 \in s\) is given by:
+\begin{equation}
+  \label{eq:jpr-next}
+  P(s)\dd{s} = P(1 \in \dd{s} |\; 0 \in s) P(0 \in s).
+\end{equation}
 
 Since random numbers are not correlated, the probability of a random number to be found
 in the interval \( \dd{s} \) does not depend on the number of random numbers in $s$, so
 \[
-  P(1 \in \dd{s} |\, 0 \in s) = P(1 \in \dd{s}).
+  P(1 \in \dd{s} |\; 0 \in s) = P(1 \in \dd{s}).
 \]
 
-Since the random numbers are uniformly distributed, the probability {\color{red} (density?)} of finding a number
-in the interval \( \dd{s} \) is constant. We denote this constant with $a$. Thus
+The random numbers are uniformly distributed, so their probability density function
+\(f\) is a constant. Hence, according to eq.~\eqref{eq:prob-rv-in-int}, the probability
+of finding a number in the interval of length \( \dd{s} \) is given by
 \[
-  P(s)\dd{s} = a \,{\color{red}\dd{s}} P(0 \in s).
+  P(1 \in \dd{s}) \equiv P(1 \in [0, 0+\dd{s}]) \approx f(s) \dd{s} \sim \dd{s}.
+\]
+If we denote the constant probability density function with $a$
+\[
+  P(s)\dd{s} = a \dd{s} P(0 \in s).
 \]
 \( P(0 \in s) \) can be expressed using the complementary probability as
-\( {1 - \int_s^\infty P(s') \dd{s'}} \). Now we can express \( P(s)\dd{s} \) as follows:
+\( {1 - \int_0^s P(s') \dd{s'}} \). Now we can express \( P(s)\dd{s} \) as follows:
 \[
-  P(s)\dd{s} = a \,{\color{red}\dd{s}} \left( 1 - \int_s^\infty P(s') \dd{s'} \right).
+  P(s)\dd{s} = a \dd{s} \left( 1 - \int_0^s P(s') \dd{s'} \right).
 \]
 
-Using the Leibniz rule for differentiating integrals,
-\[
+In order to differentiate with respect to $s$, we will use the Leibniz rule
+for differentiating integrals, namely
+\begin{equation}
+  \label{eq:leibnitz}
   \dv{x} \int\limits_{G(x)}^{H(x)} F(x, t) \dd{t} = \int\limits_{G(x)}^{H(x)} \pdv{F}{x} \dd{t}
   + F(x, H(x))\, \dv{H}{x} - F(x, G(x))\, \dv{G}{x}
-\]
-we obtain
+\end{equation}
+
+Using this rule, we obtain
 \[
-  {\color{red}\dv{s}}P(s) = -aP(s)
+  \dv{s}P(s) = -aP(s).
 \]
-when differentiating with respect to $s$.
+This differential equation can be solved by separation of variables, yielding
+\[
+  P(s) = \mathcal{C} \ee^{-as}
+\]
+In order to determine the constant \(\mathcal{C}\), we use the normalisation condition
+for the probability density function
+\[
+  \int_{-\infty}^{\infty} P(s) \dd{s} = 1
+\]
+Since \(s>0\), this reduces to
+\[
+  \int_{0}^{\infty} P(s) \dd{s} = \int_{0}^{\infty} \mathcal{C} \ee^{-as} \dd{s}
+  = -\frac{\mathcal{C}}{a} \eval{\ee^{-as}}_0^{\infty} = \frac{\mathcal{C}}{a}
+\]
+Thus \(\mathcal{C} = a\) and \(P(s) = a \ee^{-as}\).
+We can further simplify the formula if we set that the average spacing to unity.
+The average spacing is given by
+\[
+  \mean{s} = \int_{0}^{\infty} s P(s) \dd{s}
+  = -\int_{0}^{\infty} s \dv{s} \left( \ee^{-as} \right) \dd{s}
+  = \int_{0}^{\infty} \ee^{-as} \dd{s} = \frac{1}{a},
+\]
+so setting it to unity results in \(a=1\).
+Thus the probability density function becomes
+\begin{equation}
+  \label{eq:poisson-dist}
+  P(s) = \ee^{-s}.
+\end{equation}
+This function is known as the \emph{Poisson distribution}.
+
+\subsection{The Wigner distribution}
+
+We will now consider a more complicated situation, by considering the
+probability density function for the sequence of random numbers to be arbitrary.
+
+We can start from eq.~\eqref{eq:jpr-next} since the discussion up to that point
+did not include any details related to the distribution of the random numbers.
+
+In this case \(P(1 \in \dd{s} |\; 0 \in s) = f_{1,0}(s) \dd{s}\), where
+\(f_{n,m}(s)\) is function which describes how the probability of having $n$
+numbers in \(\dd{s}\) is influenced by the $m$ numbers in $s$.
+Thus
+\[
+  P(s)\dd{s}=f_{1,0}(s)\dd{s} \left( 1 - \int_0^s P(s') \dd{s'} \right)
+\]
+{\color{red}????}
 
 \end{document}

@@ -14,15 +14,16 @@
 Classical mechanics can be reformulated in a more elegant way which does not
 require the computation of individual forces and instead uses a single function to
 describe the entire system, namely the \emph{Lagrangian}.
-The Lagrangian is a function of the generalised coordinates \(q_1, \dotsc, q_n\),
-their derivatives with respect to time \(\dot{q_1}, \dotsc, \dot{q_n}\)
-and optionally the time \(t\), where \(n\) is the number of degrees of freedom.
+The Lagrangian, denoted with \(\mathcal{L}\), is a function of the generalised
+coordinates \(q_1, \dotsc, q_n\), their derivatives with respect to time
+\(\dot{q_1}, \dotsc, \dot{q_n}\) and optionally the time \(t\), where \(n\)
+is the number of degrees of freedom.
 
 The principles of Newtonian mechanics are replaced by the a variational principle
 \(\var{S} = 0\), where
 \begin{equation}
   \label{eq:action}
-  S = \int_{t_1}^{t_2} \mathcal{L} \dd{t}
+  S = \int_{t_1}^{t_2} \mathcal{L}(q_1, \dotsc, q_n, \dot{q_1}, \dotsc, \dot{q_n},t) \dd{t}
 \end{equation}
 is called the \emph{action}.
 This principle, also called \emph{Hamilton's principle} or \emph{the principle of least action}
@@ -31,13 +32,15 @@ is equivalent with the Euler-Lagrange equations
   \pdv{\mathcal{L}}{q_k} - \dv{t}\pdv{\mathcal{L}}{\dot{q_k}} = 0,
 \]
 where \(k=1,\dotsc, n\).
-Thus we have \(n\) second order differential equations.
+Thus we can obtain the equations of motion provided that we know the initial
+conditions \(q_1(t_0), \dotsc, q_n(t_0)\) and \(\dot{q_1}(t_0), \dotsc, \dot{q_n}(t_0)\)
+at \(t=t_0\) by solving the set of \(n\) second order differential equations.
 
 An other formalism for classical mechanics which is very useful in theoretical physics is
 the Hamiltonian formalism. In this formalism instead of the \mbox{Lagrangian} we use the
-\emph{Hamiltonian}, which is a function of the generalised coordinates \(q_1, \dotsc, q_n\),
-the generalised momenta \(p_1, \dotsc, p_n\) and optionally the time \(t\).
-The generalised momenta is given by
+\emph{Hamiltonian}, \(\mathcal{H}\), which is a function of the generalised coordinates
+\(q_1, \dotsc, q_n\), the generalised momenta \(p_1, \dotsc, p_n\) and optionally
+the time \(t\). The generalised momenta are given by
 \[
   p_k = \pdv{\mathcal{L}}{\dot{q_k}}.
 \]
@@ -52,8 +55,8 @@ The Hamiltonian can be obtained from the Lagrangian through a \emph{Legendre tra
 
 The Euler-Lagrange equations are replaced by Hamilton's equations
 \begin{align*}
-  \dot{q_k} &= \pdv{\mathcal{H}}{p_k} \\
-  \dot{p_k} &= -\pdv{\mathcal{H}}{q_k}
+  \dot{q_k} = \pdv{\mathcal{H}}{p_k}, &&
+  \dot{p_k} = -\pdv{\mathcal{H}}{q_k}
 \end{align*}
 We now have \(2n\) first order ordinary differential equations. {\color{red}comments?}
 
@@ -136,21 +139,30 @@ they represent the same canonical transformation. We denote the above mentioned
 \(F(q, Q, t) \equiv F_1(q, Q, t)\). The other types of generating functions will be denoted
 \(F_2(q, P, t), F_3(p, Q, t), F_4(p, P, t)\). Thus we define
 \begin{align*}
-  F_2(q, P, t) &= F_1(q, Q, t) + PQ \\
-  p &= \pdv{F_2}{q},\quad Q = \pdv{F_2}{P} \\
-  F_3(p, Q, t) &= F_1(q, Q, t) - pq \\
-  q &= - \pdv{F_3}{p},\quad P = \pdv{F_3}{Q} \\
-  F_4(p, P, t) &= F_1(q, Q, t) - pq + PQ \\
-  q &= - \pdv{F_4}{p},\quad Q = \pdv{F_4}{P}
+  F_2(q, P, t) &= F_1(q, Q, t) + PQ &&
+  p = \pdv{F_2}{q}, & Q = \pdv{F_2}{P} \\
+  F_3(p, Q, t) &= F_1(q, Q, t) - pq &&
+  q = - \pdv{F_3}{p}, & P = \pdv{F_3}{Q} \\
+  F_4(p, P, t) &= F_1(q, Q, t) - pq + PQ &&
+  q = - \pdv{F_4}{p}, & Q = \pdv{F_4}{P}
 \end{align*}
-
 
 The \emph{Poisson bracket} of two arbitrary functions with respect to the canonical coordinates
 $q$ and $p$ is defined as
 \[
   {\left[F, G\right]}_{q,p} = \sum_{k=1}^n \left( \pdv{F}{q_k} \pdv{G}{p_k} -
-                                                  \pdv{F}{p_k} \pdv{G}{q_k} \right)
+                                                  \pdv{F}{p_k} \pdv{G}{q_k} \right).
 \]
+We can use the Poisson bracket to express Hamilton's equations more elegantly
+\begin{align*}
+  \dot{q}_k = [q_k,H], && \dot{p}_k = [p_k,H].
+\end{align*}
+
+Expressed in this form, the Hamilton equations have a close resemblance to
+Heisenberg's form for the equations of motion in the Heisenberg picture of
+quantum mechanics. The Poisson bracket structure of classical mechanics is
+one of the fundamental links to quantum mechanics. {\color{red}(cite Dirac)}.
+
 As with the above discussion we will limit to the case of one degree of freedom,
 but the results are easily generalisable to $n$ degrees of freedom.
 
@@ -160,17 +172,18 @@ from $q$ and $p$, then
   {\left[F', G'\right]}_{Q,P} = {\left[F, G\right]}_{q,p},
 \]
 where $F'$ and $G'$ are the transformed functions.
-{\color{red}Proof?}
 As a consequence, if we choose \(F=Q\) and \(G=P\)
 \[
   {\left[Q, P\right]}_{Q,P} = {\left[Q(q,p), P(q,p)\right]}_{q,p} = 1
 \]
 This relation represents a necessary and sufficient condition for the transformation from
-$q,p$ to $Q,P$ to be canonical and is equivalent with the definition given for the
-canonical transformations.
+$q,p$ to $Q,P$ to be canonical.
+Preserving the structure of Hamilton's equations is equivalent with the invariance of the
+Poisson bracket and thus we can use this invariance as the definition for canonical
+transformations.
 
 An other equivalent condition would require the Jacobian matrix
-\(\frac{\partial(Q,P)}{\partial(q,p)}\) to be that symplectic.
+\(\frac{\partial(Q,P)}{\partial(q,p)}\) to be {\color{red}symplectic}.
 
 \section{The Hamilton-Jacobi equation}
 
@@ -335,10 +348,10 @@ so
 \]
 {\color{red}why \(E = \sum_{k=1}^n \alpha_k\)?}
 
-The Hamilton-Jacobi equation can be solved only in some situations
-({\color{red}only when the variables can be separated.\ why?}), depending both on the problem
-and the chosen coordinate system. For orthogonal coordinates the \emph{Staeckel conditions}
-(see Goldstein pp. 453) establish which kind of potentials can be separated.
+The Hamilton-Jacobi equation can be solved only if the variables can be separated.
+The separability depends both on the problem and the chosen coordinate system.
+% For orthogonal coordinates the \emph{Staeckel conditions}
+% (see Goldstein pp. 453) establish which kind of potentials can be separated.
 This does not decrease the theoretical value of the Hamilton-Jacobi equation which provides
 powerful methods for finding the constants of the motion.
 
@@ -426,17 +439,17 @@ To extend the discussion to systems with \(n\) degrees of freedom,
 we replace the 2D plane with an \(n\) dimensional cube. If we join the sides of
 this cube we obtain a \(n\) dimensional torus.
 
-{\color{red}Connection with the ``hairy ball'' theorem
-
-we consider a vector field associated with the tangent in each point of the trajectory
-in phase space. This vector field is generated by Hamilton's equations with time
-as parameter{\color{red} (why?/how?)}.
-In the \(n=2\) case we can see that if the the shape of the closed bi-dimensional
-surface were a sphere, we could not ``comb'' the vectors without creating a singularity.
-Instead, if the surface is a torus, the problem disappears. This result is a consequence of
-the ``hairy ball'' theorem. This theorem states that there is no non-vanishing continuous
-tangent vector field on even-dimensional $n$-spheres. (what happens for odd $n$?)
-}
+% {\color{red}Connection with the ``hairy ball'' theorem
+%
+% we consider a vector field associated with the tangent in each point of the trajectory
+% in phase space. This vector field is generated by Hamilton's equations with time
+% as parameter{\color{red} (why?/how?)}.
+% In the \(n=2\) case we can see that if the the shape of the closed bi-dimensional
+% surface were a sphere, we could not ``comb'' the vectors without creating a singularity.
+% Instead, if the surface is a torus, the problem disappears. This result is a consequence of
+% the ``hairy ball'' theorem. This theorem states that there is no non-vanishing continuous
+% tangent vector field on even-dimensional $n$-spheres. (what happens for odd $n$?)
+% }
 
 {\color{red}+ explanation for the fact that the constants of motion must be
 in involution with each other
@@ -485,8 +498,7 @@ then at a later time \(t\), the distance will be
 \]
 where \(\lambda \) is the Liapunov exponent.
 If \(\lambda > 1\), the motion is chaotic and \(\lambda \) gives the exponential
-growth of the initial infinitesimal separation. If the motion is bounded, as in
-the case of constant energy {\color{red} (constant energy implies bounded motion?)},
+growth of the initial infinitesimal separation. If the motion is bounded,
 \(\dd{x}(t)\) will grow until is comparable with the dimension of the
 allowed part of the phase space, from that point on varying only randomly in time.
 Thus the Liapunov exponent can be defined as follows
@@ -637,7 +649,7 @@ there exist \(m_1,\dotsc,m_n \equiv \vb{m} \in \mathbb{Z}^n\) such that
 \(\vb{m} \vdot \vb*{\omega} = 0\), where \(\vb*{\omega} \equiv \omega_1,\dotsc,\omega_n\).
 
 Since the set of rational numbers is {\color{red}dense} in the set of real numbers,
-the set of distroyed tori will be {\color{red}dense in the phase space}. In the
+the set of destroyed tori will be {\color{red}dense in the phase space}. In the
 place of the destroyed tori chaotic motion will appear as the trajectories escape
 in the \(2n-1\) subspace of constant energy.
 
