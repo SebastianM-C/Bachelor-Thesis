@@ -56,6 +56,9 @@ def stable(E1, b, d, n, delta_n, epsilon, ir_reps=np.empty(0)):
              fname='bar_E_diff.pdf')
 
     last_stable = np.where(E_diff > epsilon)[0][1]
+    # Workaround for the initial instability in some particular cases
+    if last_stable < 10:
+        last_stable = np.where(E_diff > epsilon)[0][3]
     # Cache the result
     np.array([last_stable, E1[last_stable] - E1[0]]).tofile('stable.txt',
                                                             sep='\n')
