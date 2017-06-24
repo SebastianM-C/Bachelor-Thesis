@@ -69,8 +69,9 @@ def e_plot(files, ax, n_i, b_i, msize, marker):
             label=r'$B=' + str(b_i) + '$', markersize=msize, marker=marker)
 
 
-def main(B, D, N, max_energy=[0], energy_plot=False):
-    fig, ax = plt.subplots()
+def main(B, D, N, max_energy=[0], energy_plot=False, small_plot=False):
+    figsize = (5.8, 4) if not small_plot else (5.8, 3.5)
+    fig, ax = plt.subplots(figsize=figsize)
     symblols = ['o', '^', 'v', 's', 'p', '*']
     if energy_plot:
         marks = itertools.cycle(symblols[:len(B)])
@@ -99,6 +100,7 @@ def main(B, D, N, max_energy=[0], energy_plot=False):
         ax.set_xlim([0, 1])
     ax.legend()
     # plt.show()
+    plt.tight_layout(pad=0.3)
     if energy_plot:
         fig.savefig('../Statistics/alpha_e_B[' +
                     ', '.join('{:.2}' for i in B).format(*B) +
@@ -112,5 +114,6 @@ def main(B, D, N, max_energy=[0], energy_plot=False):
 
 
 if __name__ == '__main__':
-    B, D, N, max_energy, energy_plot = parse(max_e=True, e_plot=True)
-    main(B, D, N, max_energy, energy_plot)
+    B, D, N, max_energy, energy_plot, small_plot = \
+        parse(max_e=True, e_plot=True, s_plot=True)
+    main(B, D, N, max_energy, energy_plot, small_plot)
