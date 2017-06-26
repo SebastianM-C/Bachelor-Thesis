@@ -1,0 +1,25 @@
+\documentclass[12pt]{report}
+\usepackage{graphicx}
+\graphicspath{ {../Output/} {../../Output/} {../Statistics/} {../../Statistics/}
+  {Title/img/} {../External_plots/} {../../External_plots/}
+}
+\usepackage{subfiles}
+\usepackage{ba_thesis}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+
+\begin{document}
+
+\input{Title/title.tex}
+
+\subfile{Introduction/intro.tex}
+\subfile{Classical_Chaos/c_chaos.tex}
+\subfile{Quantum_Chaos/q_chaos.tex}
+\subfile{Procedure/procedure.tex}
+\subfile{Results/results.tex}
+\subfile{Conclusions/conclusions.tex}
+
+\printbibliography
+
+
+\end{document}

@@ -171,7 +171,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
                     )
         f.write("\\]\n")
 
-        f.write("\tIrreductible representations: \n\t\\[")
+        f.write("\tirreducible representations: \n\t\\[")
         for i in range(nn):
             # Limit the number of displayed elements
             if i == max_display:
@@ -196,8 +196,7 @@ def write_file(filename, nn, H, E, eigenvalues, eigenvectors, index, c_max,
 
 
 def get(b, d, n):
-    """Get the results for the given parameters and optionally
-    use SciPy to compute the eigenvalues and eigenvectors"""
+    """Get the results for the given parameters"""
     print("Running with: B = " + str(b) + " D = " + str(d) + " N = " + str(n))
     nn = int(n * (n + 1) / 2)
 

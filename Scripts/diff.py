@@ -16,7 +16,7 @@ def relSpacing(E):
 
 def difference(E1, b, d, n, delta_n, ir_reps1=np.empty(0)):
     """Return the differences between the energy levels and of the
-    structure of the irreductible representations (optional) for the given
+    structure of the irreducible representations (optional) for the given
     diagonalization basis and n + delta_n"""
     # Load the energy levels in the second basis
     os.chdir("../B" + str(b) + " D" + str(d) + " N" + str(n + delta_n))
@@ -48,14 +48,17 @@ def stable(E1, b, d, n, delta_n, epsilon, ir_reps=np.empty(0)):
     # Energy difference (between two diagonalization bases) histogram
     histogram(E_diff, label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
               bins=np.pad(np.logspace(-14, -2, 13), (1, 0), mode='constant'),
-              xscale='log', fname='hist_E_diff.png')
+              xscale='log', fname='hist_E_diff.pdf')
     # Energy difference bar plot
     bar_plot(E_diff[E_diff < 0.01],
-             label='B' + str(b) + ' D' + str(d) + ' N' + str(n),
-             figsize=(20, 4), axhline_y=epsilon, yscale='log', dpi=600,
-             fname='bar_E_diff.png', bbox_inches='tight')
+             label=r'$\delta_s = 10^{-9}$', ylabel=r'$E_{N+ \Delta N} - E_N$',
+             figsize=(5.8, 4), axhline_y=epsilon, yscale='log', dpi=600,
+             fname='bar_E_diff.pdf')
 
     last_stable = np.where(E_diff > epsilon)[0][1]
+    # Workaround for the initial instability in some particular cases
+    if last_stable < 10:
+        last_stable = np.where(E_diff > epsilon)[0][3]
     # Cache the result
     np.array([last_stable, E1[last_stable] - E1[0]]).tofile('stable.txt',
                                                             sep='\n')

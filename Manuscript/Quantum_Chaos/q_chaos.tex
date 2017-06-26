@@ -1,0 +1,550 @@
+\documentclass[../thesis.tex]{subfiles}
+
+%!TeX spellcheck = en-GB
+
+\theoremstyle{definition}
+\newtheorem*{def*}{Definition}
+
+\begin{document}
+
+\chapter{Quantum Chaos}
+
+\section{Fundamental notions}
+
+In this section will briefly present the general formalism
+developed by P.A.M. Dirac.
+
+The description of phenomena in quantum mechanics requires a {\color{red}careful} definition
+of the basic concepts. Thus we begin with the concept of the physical state.
+A \emph{physical state} contains all the information that can be learned
+about the system.
+We associate to our physical system a \emph{Hilbert space}, denoted with
+\(\mathbb{H}\), which will contain all the possible states of the system.
+Thus a vector in the Hilbert space will describe the state of the system
+(more rigorously only the direction of the vector will describe the state
+since by convention any two vectors that differ only by a constant describe
+the same physical state). In the Dirac formalism the vectors in the Hilbert
+space corresponding to physical states are represented by \emph{ket vectors},
+denoted with \(\ket{\Psi}\). The elements of the dual of the Hilbert space
+are called \emph{bra vectors} and are denoted with \(\bra{\Psi}\). Due to the
+isomorphism between the Hilbert space and its dual, the bra vectors equally
+describe the physical state and the correspondence between the ket vectors and
+the bra vectors is given by dual conjugation.
+
+\subsubsection{The observables postulate}
+
+In quantum mechanics the properties of the physical system, called \emph{observables}
+are described by linear hermitian operators.
+As a result of a measurement, the measured values of the observable are among
+the eigenvalues of the associated hermitian operator.
+
+\subsubsection{The measurement postulate}
+
+Let us consider a physical system in a state described by the state vector
+\(\ket{\Psi} \in \mathbb{H}\) and an observable described by the linear hermitian
+operator \(A\). If a measurement of the observable is performed, then following
+the measurement the system will jump in an uncontrollable manner in one of the
+eigenstates of the operator associated with the measured observable and the result
+of the measurement will be given by the corresponding eigenvalue. The probability
+of obtaining a given eigenvalue is given by the square of the absolute value of
+the scalar product between the final state associated with the given eigenvalue
+and the initial state.
+
+{\color{red}discrete / continuous discussion?}
+
+{\color{red}\subsubsection{Fundamental commutation relations?}}
+
+\subsubsection{Time evolution postulate}
+
+In quantum mechanics time is just a parameter and not an observable.
+The time evolution can be postulated in different ways.
+If we consider the states as time dependent entities and observables as time
+independent ones, we can view the time
+evolution as a temporal displacement, similar to a spatial displacement.
+Then we can use the time evolution operator identity
+\[
+  \ii \hbar \pdv{t} U(t,t_0) = H U(t,t_0)
+\]
+to derive the Schrödinger equation:
+\[
+  \ii \hbar \pdv{t} \ket{\Psi} = H \ket{\Psi}.
+\]
+If we consider the states as time independent and the observables as time dependent,
+then the time evolution of the observables will be given by
+\[
+  \ii \hbar \dv{t} A(t) = [A(t), H].
+\]
+
+We can observe the link between this equation and Hamilton's equations is given
+by the correspondence between the commutator in quantum mechanics and the Poisson
+bracket in classical mechanics, as mentioned in the previous chapter.
+
+The first approach is called the Schrödinger picture of quantum mechanics, while
+the second is called the Heisenberg picture. There is also another formulation,
+namely the interaction picture also named the Dirac picture.
+In the following we will only consider the Schrödinger picture.
+
+In the particular case when the Hamiltonian is time-independent, Schrödinger's equation
+reduces to
+\[
+  H \ket{\Psi} = E \ket{\Psi},
+\]
+also called the time-independent Schrödinger equation and the time evolution of
+the state is given by
+\[
+  \ket{E(t)} = \ee^{-\frac{\ii}{\hbar} (t-t_0) H} \ket{E(t_0)}
+             = \ee^{-\frac{\ii}{\hbar} (t-t_0) E} \ket{E}.
+\]
+
+Thus if the system is initially in an energy eigenstate, it will remain in the
+same state, having at most a phase modulation. Such states are called
+\emph{stationary states}.
+
+\section{From symmetry to degeneracy}
+
+Let us consider the above mentioned time-independent case. If we suppose that
+the energy spectrum is discrete,
+\[
+  H \ket{\Psi_i} = E_i \ket{\Psi_i}.
+\]
+If for an eigenvalue \(E_i\) repeats itself for different eigenstates
+\(\ket{\Psi_i}\) we have what is called a \emph{degeneracy}. In order to emphasise
+this, we can use a second index for the eigenvectors, \(j=1,\dotsc,m\), where
+\(m\) is the number of times the eigenvalue repeats.
+
+Thus for the \(i\)-th eigenvalue,
+\[
+  H \ket{\Psi_{i,j}} = E_i \ket{\Psi_{i,j}}.
+\]
+
+If the Hamiltonian is invariant to a set of unitary transformations,
+\(T^\dagger H T = H\), then this set forms a group since the transformation
+given by \(T T'\), with \(T'\) an arbitrary transformation from the set,
+will also leave the Hamiltonian invariant.
+Since symmetry operations form a group, the unitary operators which correspond to the
+symmetries of the Hamiltonian will form a group to which the Hamiltonian is invariant.
+Thus,
+\[
+  T H = T T^\dagger H T = T T^{-1} H T = H T,
+\]
+or \(\comm{T}{H} = 0\). We can once again observe how classical mechanics and
+quantum mechanics are linked through the Poisson bracket-commutator structure.
+In classical mechanics Noether's theorem provides constants of the motion from
+the symmetries of the system and those have a vanishing Poisson bracket with the
+Hamiltonian.
+
+Since the operators commute, they share a common set of eigenvectors
+\[
+  H (T \ket{\Psi_i}) = H T \ket{\Psi_i} = T H \ket{\Psi_i} = T E_i \ket{\Psi_i}
+  = E_i (T \ket{\Psi_i}).
+\]
+Thus if the Hamiltonian is invariant to the set of unitary transformations
+\( \{T_j\} \), with \(j=1,\dotsc,m\)
+\[
+  T_j H \ket{\Psi_i} = T E_i \ket{\Psi_i} = E_i (T \ket{\Psi_i}) = E_i \ket{\Psi_{i,j}}
+\]
+and we will not change the value of the eigenvalue \(E_i\) by applying \(T_j\),
+we only transform the eigenstates \(\ket{\Psi_i}\) to a linear combination
+\(\ket{\Psi_{i,j}}\).
+
+
+\section{Level repulsion}
+
+As is the case with classical mechanics there are few situations in which the
+analytic solution is known. In order to find approximate solutions we can use
+perturbation theory if we can assume that the Hamiltonian can be viewed as to
+have a part for which the solutions are known and another part that can
+be considered a small perturbation.
+
+In the framework of time-independent perturbation theory, we want to obtain
+an approximate solution to the problem
+\begin{equation}
+  H \ket{\Psi^{[j]}} = E_j \ket{\Psi^{[j]}}
+\label{eq:q-pert-th-ex-pr}
+\end{equation}
+and we consider that the Hamiltonian can be written as \(H = H_0 + \lambda V\),
+where the solution to the unperturbed problem
+\[
+  H_0 \ket{\Psi^0_{n\alpha}} = E_n^0 \ket{\Psi^0_{n\alpha}}
+\]
+is known and \( \alpha \) gives the degeneracy of the \(n\)-th level.
+
+Since the unperturbed eigenvectors form a basis in the Hilbert space, we can
+expand the perturbed eigenvectors in that basis.
+\[
+  \ket{\Psi^{[j]}} = \sum_{m,\beta} c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}
+\]
+Inserting into eq.~\eqref{eq:q-pert-th-ex-pr} we obtain
+\[
+  (H_0 + \lambda V) \sum_{m,\beta} c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}
+  = \sum_{m,\beta} E_j\, c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}.
+\]
+Using the solution to the unperturbed problem the above equation becomes
+\[
+\sum_{m,\beta} (E_m^0 + \lambda V)  c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}
+= \sum_{m,\beta} E_j\, c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}.
+\]
+
+To simplify the discussion we will now consider what happens with two unperturbed
+states \(\ket{\Psi_1^0}\) with the energy \(E_1^0\) and \(\ket{\Psi_2^0}\) with
+the energy \(E_2^0\) when \(\lambda=1\).
+
+\[
+\sum_{m,\beta} (E_m^0 + V)  c_{m}^{[j]} \ket{\Psi_{m}^0}
+= \sum_{m=1,2} E_j\, c_{m}^{[j]} \ket{\Psi_{m}^0}
+\]
+
+By taking the scalar product with the state \(\bra{\Psi_{k}^0}\) and using the
+orthogonality relation
+\(\braket{\Psi_{k}^0}{\Psi_{m}^0} = \delta_{k,m}\)
+we obtain
+\[
+E_k^0\, c_{k}^{[j]} + \sum_{m=1,2} \bra{\Psi_{k}^0} V \ket{\Psi_{m}^0} c_{m}^{[j]}
+= E_j\, c_{k}^{[j]}
+\]
+or
+\[
+  c_{k}^{[j]} \left( E_k^0 - E_j + V_{k,k} \right) + \sum_{m \neq k} V_{k,m}\, c_{m}^{[j]} = 0,
+\]
+where \(\bra{\Psi_{k}^0} V \ket{\Psi_{m}^0} \equiv V_{k,m}\).
+
+The above equation becomes
+\begin{align*}
+  (E_1^0 - E_j + V_{1,1})\, c_1^{[j]} + V_{1,2}\, c_2^{[j]} = 0, \text{ for } k=1 \\
+  V_{2,1}\, c_1^{[j]} + (E_2 - E_j + V_{2,2})\, c_2^{[j]} = 0, \text{ for } k=2
+\end{align*}
+We use the following notations:
+\[
+  H_{1,1} \equiv E_1^0 + V_{1,1}, H_{2,2} \equiv E_2^0 + V_{2,2}, H_{1,2} \equiv V_{1,2},
+  H_{2,1} \equiv V_{2,1}, \delta \equiv H_{1,1} - H_{2,2}, \tan{\beta} \equiv \frac{2\abs{H_{1,2}}}{\delta}
+\]
+
+The above system of equations has non-trivial solutions if the determinant vanishes.
+\[
+  (H_{1,1} - E_j)(H_{2,2} - E_j) - H_{1,2} H_{2,1} = 0
+\]
+or
+\[
+  E_j^2 - (H_{1,1} + H_{2,2}) E_j + H_{1,1} H_{2,2} - H_{1,2} H_{2,1} = 0.
+\]
+This equation has the solutions
+\begin{align}
+  E_j &= \frac{(H_{1,1} + H_{2,2}) \pm
+         \sqrt{ {(H_{1,1} + H_{2,2})}^2 - 4(H_{1,1} H_{2,2} - H_{1,2} H_{2,1})}}{2} \\
+      &= \frac{H_{1,1} + H_{2,2}}{2} \pm \frac{1}{2} \sqrt{\delta^2 + 4 \abs{H_{1,2}}^2}.
+\label{eq:lvl-repulsion-e}
+\end{align}
+
+Since \((H_{1,1} - E_j)\, c_1^{[j]} + H_{1,2}\, c_2^{[j]} = 0\)
+\[
+  \frac{c_1^{[j]}}{c_2^{[j]}} = \frac{H_{1,2}}{E_j - H_{1,1}}
+\]
+if we rewrite eq.~\eqref{eq:lvl-repulsion-e} as
+\[
+  E_j = \frac{1}{2} \left[ H_{1,1} + H_{2,2} \mp (H_{2,2} - H_{1,1})
+        \sqrt{1 + \frac{4\abs{H_{1,2}}^2}{\delta^2}}\right]
+\]
+we obtain
+\[
+  \frac{c_1^{[j]}}{c_2^{[j]}} = \frac{2 H_{1,2}}{H_{2,2} - H_{1,1}}
+  \left[ 1 \mp \sqrt{1 + \frac{4\abs{H_{1,2}}^2}{\delta^2}} \right]^{-1}
+  = -\tan{\beta}\left(1 \mp \sqrt{1+\tan^2\beta}\right)
+\]
+This ratio can be also expressed as
+\begin{align*}
+  \frac{c_1^{[j]}}{c_2^{[j]}} &= \frac{-\tan{\beta}}{1 \mp \frac{1}{\cos{\beta}}}
+  = \frac{-\sin{\beta}}{\cos{\beta} \mp 1} \\
+  &= \frac{-2\sin{\frac{\beta}{2}} \cos{\frac{\beta}{2}}}
+      {\cos^2{\frac{\beta}{2}} - \sin^2{\frac{\beta}{2}} \mp
+        \left(\cos^2{\frac{\beta}{2}} + \sin^2{\frac{\beta}{2}}\right)}
+  =
+  \begin{cases}
+    \cot{\frac{\beta}{2}} \\
+    -\tan{\frac{\beta}{2}}
+  \end{cases}
+\end{align*}
+Thus,
+\begin{align*}
+  \ket{\Psi^{[1]}} &= \cos{\frac{\beta}{2}} \ket{\Psi_1^0} + \sin{\frac{\beta}{2}} \ket{\Psi_2^0} \\
+  \ket{\Psi^{[2]}} &= -\sin{\frac{\beta}{2}} \ket{\Psi_1^0} + \cos{\frac{\beta}{2}} \ket{\Psi_2^0}
+\end{align*}
+
+If the {\color{red}interaction} between the energy levels is relatively small,
+that is \(\abs{H_{1,2}} \ll \delta \), \(\beta \simeq 0\)
+\[
+  E_{1,2} = \frac{H_{1,1} + H_{2,2}}{2} \pm
+            \frac{\delta}{2} \sqrt{1 + \frac{4 \abs{H_{1,2}}^2}{\delta^2}}
+\]
+Thus
+\[
+  E_1 \simeq H_{1,1} + \frac{\abs{H_{1,2}}^2}{\delta}
+\]
+and
+\[
+  E_2 \simeq H_{2,2} - \frac{\abs{H_{1,2}}^2}{\delta}
+\]
+and the perturbed energy levels are close to the unperturbed ones.
+The states will also be approximatively the unperturbed ones
+\begin{align*}
+  \ket{\Psi^{[1]}} &\simeq \ket{\Psi_1^0} \\
+  \ket{\Psi^{[2]}} &\simeq \ket{\Psi_2^0}.
+\end{align*}
+
+If the {\color{red}interaction} between the energy levels relatively strong,
+that is \(\abs{H_{1,2}} \gg \delta \), \(\beta \simeq \frac{\pi}{2}\)
+\[
+  E_{1,2} = \frac{H_{1,1} + H_{2,2}}{2} \pm
+            \sqrt{\frac{\delta^2}{4} + \abs{H_{1,2}}^2}
+          \simeq \frac{H_{1,1} + H_{2,2}}{2} \pm
+          \left(\abs{H_{1,2}} + \frac{\delta^2}{8\abs{H_{1,2}}}\right)
+\]
+and
+\begin{align*}
+  \ket{\Psi^{[1]}} &\simeq \frac{\sqrt{2}}{2} \ket{\Psi_1^0} + \frac{\sqrt{2}}{2} \ket{\Psi_2^0} \\
+  \ket{\Psi^{[2]}} &\simeq -\frac{\sqrt{2}}{2} \ket{\Psi_1^0} + \frac{\sqrt{2}}{2} \ket{\Psi_2^0}.
+\end{align*}
+In this case we observe that if \(\delta \simeq 0\),
+then \(E_1 - E_2 \simeq 2\abs{H_{1,2}}\). If the unperturbed energy levels were
+degenerated, then the perturbed energy levels will no longer be. This phenomena
+is called \emph{level repulsion}.
+
+We can also emphasise this phenomena by considering an arbitrary \(2 \cross 2\)
+hermitian matrix and computing its eigenvalues.
+\[
+  H = \begin{pmatrix}
+  H_{1,1}   & H_{1,2} \\
+  H_{1,2}^* & H_{2,2}
+  \end{pmatrix}
+\]
+The eigenvalues will be given by eq.~\eqref{eq:lvl-repulsion-e}.
+
+The first case, \(\abs{H_{1,2}} \ll \delta \), can be viewed as the case when
+the off-diagonal elements are small and the matrix can be approximated with
+a diagonal matrix. In this case we expect that the energy levels will be close
+to the diagonal levels or the unperturbed levels. The perturbed eigenstates
+will also be approximatively equal with the unperturbed eigenstates.
+
+When we say that the levels are weakly coupled we refer to the fact that when we
+expand the perturbed states in the basis given by the unperturbed states we will
+obtain states that can be approximated to be orthogonal, since they are approximated
+by the unperturbed eigenstates. Thus we can say that the energy levels are
+independent of each other.
+
+The level repulsion emphasised by the second case, \(\abs{H_{1,2}} \gg \delta \),
+corresponds to the case when the off-diagonal elements are significant. When we
+expand the perturbed eigenstates in the basis given by the unperturbed eigenstates
+we will have significant components from each element in the basis and the new
+states will be a mixture of the unperturbed states. We can say that the energy levels
+are no longer independent and this is what is meant by saying that the interaction
+between the energy levels is strong. In the case when the unperturbed energy
+levels are degenerated, the difference between the perturbed energy levels
+is given by \(2 \abs{H_{1,2}}\), which is a measure of the mixing of the
+unperturbed states.
+
+
+\section{Probability notions}
+
+\begin{def*}[Joint probability]
+  Given two events $A$ and $B$, their joint probability, \(P(A \cap B)\), is
+  the probability of the two events to occur simultaneously.
+\end{def*}
+
+\begin{def*}[Conditional probability]
+  The conditional probability of an event $A$ given an event $B$ with \(P(B)>0\),
+  denoted \(P(A\,|\,B)\) is given by
+  \[
+    P(A\,|\,B) = \frac{P(A \cap B)}{P(B)}
+  \]
+\end{def*}
+
+The joint probability of $A$ and $B$ can be expressed as
+\(P(A \cap B) = P(A\,|\,B) P(B)\).
+
+\begin{def*}[Continuous random variable]
+  A continuous random variable is a function from the set of all outcomes to the
+  set of real numbers \(X:\Omega \to \mathbb(R)\) such that
+  \[
+    P(a \leq X(\omega) \leq b) = \int_a^b f(x) \dd{x},
+  \]
+  where \(f(x) \geq 0\) and \(\int_{-\infty}^{+\infty}f(x)\dd{x}=1\).
+\end{def*}
+The above function \(f\) is called the \emph{probability density function}.
+The probability for a continuous random variable $X$ to take a value in the
+infinitesimal interval of length \(\dd{x}\) is given by
+\begin{equation}
+  \label{eq:prob-rv-in-int}
+  P(x \in [x, x + \dd{x}]) = \int_x^{x+\dd{x}} f(z) \dd{z} \approx f(x)\dd{x}
+\end{equation}
+
+
+\section{Nearest neighbour distributions}
+
+% \emph{Random matrices} are matrices which have random variables as elements,
+% with their randomness is restricted by the symmetries of the whole matrix.
+
+Nearest neighbour spacing distributions show how the differences
+between consecutive energy levels fluctuate around the average.
+In order to better understand this concept we shall begin with the simpler
+case of real random numbers.
+
+\subsection{The nearest neighbour spacing distribution of random numbers}
+
+We consider a sequence of uniformly distributed, ordered, real, random numbers.
+
+{\color{red}
+We define the \emph{spacing} of an ordered sequence as the sequence of
+differences between consecutive elements.
+The \emph{average spacing} of the sequence is given by \(\frac{E_n-E_0}{n}\).
+
+discrete vs continuous random variables?
+}
+
+For an interval of length \(s, s>0\), we will denote with \( P(n \in s) \) the probability
+for the interval to contain $n$ numbers and with \( P(n \in \dd{s} |\; m \in s) \)
+the conditional probability for the interval of length \( \dd{s} \) to contain
+$n$ numbers given that the interval of length $s$ contains $m$ numbers.
+
+If $E$ is a given number in the sequence, we are interested in the probability
+\( P(s)\dd{s} \) to have the next number between \( E+s \) and \( E+s+\dd{s} \).
+Since we are interested in the next number after $E$, we know that in the
+interval of length $s$ there is no other number and the next number is somewhere
+in the infinitesimal interval \(\dd{s}\). Thus the joint probability of
+the events \(1 \in \dd{s}\) and \(0 \in s\) is given by:
+\begin{equation}
+  \label{eq:jpr-next}
+  P(s)\dd{s} = P(1 \in \dd{s} |\; 0 \in s) P(0 \in s).
+\end{equation}
+
+Since random numbers are not correlated, the probability of a random number to be found
+in the interval \( \dd{s} \) does not depend on the number of random numbers in $s$, so
+\[
+  P(1 \in \dd{s} |\; 0 \in s) = P(1 \in \dd{s}).
+\]
+
+The random numbers are uniformly distributed, so their probability density function
+\(f\) is a constant. Hence, according to eq.~\eqref{eq:prob-rv-in-int}, the probability
+of finding a number in the interval of length \( \dd{s} \) is given by
+\[
+  P(1 \in \dd{s}) \equiv P(1 \in [0, 0+\dd{s}]) \approx f(s) \dd{s} \sim \dd{s}.
+\]
+If we denote the constant probability density function with $a$
+\[
+  P(s)\dd{s} = a \dd{s} P(0 \in s).
+\]
+\( P(0 \in s) \) can be expressed using the complementary probability as
+\( {1 - \int_0^s P(s') \dd{s'}} \). Now we can express \( P(s)\dd{s} \) as follows:
+\[
+  P(s)\dd{s} = a \dd{s} \left( 1 - \int_0^s P(s') \dd{s'} \right).
+\]
+
+In order to differentiate with respect to $s$, we will use the Leibniz rule
+for differentiating integrals, namely
+\begin{equation}
+  \label{eq:leibnitz}
+  \dv{x} \int\limits_{G(x)}^{H(x)} F(x, t) \dd{t} = \int\limits_{G(x)}^{H(x)} \pdv{F}{x} \dd{t}
+  + F(x, H(x))\, \dv{H}{x} - F(x, G(x))\, \dv{G}{x}
+\end{equation}
+
+Using this rule, we obtain
+\[
+  \dv{s}P(s) = -aP(s).
+\]
+This differential equation can be solved by separation of variables, yielding
+\[
+  P(s) = \mathcal{C} \ee^{-as}
+\]
+In order to determine the constant \(\mathcal{C}\), we use the normalisation condition
+for the probability density function
+\[
+  \int_{-\infty}^{\infty} P(s) \dd{s} = 1
+\]
+Since \(s>0\), this reduces to
+\[
+  \int_{0}^{\infty} P(s) \dd{s} = \int_{0}^{\infty} \mathcal{C} \ee^{-as} \dd{s}
+  = -\frac{\mathcal{C}}{a} \eval{\ee^{-as}}_0^{\infty} = \frac{\mathcal{C}}{a}
+\]
+Thus \(\mathcal{C} = a\) and \(P(s) = a \ee^{-as}\).
+We can further simplify the formula if we set that the average spacing to unity.
+The average spacing is given by
+\[
+  \mean{s} = \int_{0}^{\infty} s P(s) \dd{s}
+  = -\int_{0}^{\infty} s \dv{s} \left( \ee^{-as} \right) \dd{s}
+  = \int_{0}^{\infty} \ee^{-as} \dd{s} = \frac{1}{a},
+\]
+so setting it to unity results in \(a=1\).
+Thus the probability density function becomes
+\begin{equation}
+  \label{eq:poisson-dist}
+  P(s) = \ee^{-s}.
+\end{equation}
+This function is known as the \emph{Poisson distribution}.
+
+\subsection{The Wigner distribution}
+
+We will now consider a more complicated situation, by considering the
+probability density function for the sequence of random numbers to be arbitrary.
+
+We can start from eq.~\eqref{eq:jpr-next} since the discussion up to that point
+did not include any details related to the distribution of the random numbers.
+
+In this case \(P(1 \in \dd{s} |\; 0 \in s) = f_{1,0}(s) \dd{s}\), where
+\(f_{n,m}(s)\) is function which describes how the probability of having $n$
+numbers in \(\dd{s}\) is influenced by the $m$ numbers in $s$.
+Thus
+\[
+  P(s)\dd{s}=f_{1,0}(s)\dd{s} \left( 1 - \int_0^s P(s') \dd{s'} \right)
+\]
+By solving {\color{red}\large????} this integral equation, we obtain the solution
+\[
+  P(s) = \mathcal{C} f_{1,0}(s) \exp(-\int_0^s f_{1,0}(x) \dd{x})
+\]
+We observe that if we take the probability density function constant,
+\(f_{1,0}(s) = \frac{1}{a}\), we obtain the above case of the Poisson distribution.
+In we consider the probability density function to be {\color{red}linear (why?)},
+\(f_{1,0}(s) = \alpha s\) we obtain
+\[
+  P(s) = \mathcal{C} \alpha s \exp(-\alpha \frac{s^2}{2})
+\]
+From the normalisation condition we obtain
+\[
+  \int_{0}^{\infty} P(s) \dd{s} = \mathcal{C} = 1
+\]
+The average spacing is given by
+\[
+  \mean{s} = \int_{0}^{\infty} s P(s) \dd{s}
+  = \alpha \int_{0}^{\infty} s^2 \exp(-\alpha \frac{s^2}{2}) \dd{s}
+  = \frac{1}{\sqrt{\alpha}} \sqrt{\frac{\pi}{2}}.
+\]
+If we set the average spacing to unity, we obtain \(\alpha = \frac{\pi}{2}\)
+and
+\[
+  P(s) = \frac{\pi}{2} s \exp(-\frac{\pi}{4} s^2)
+\]
+This function is known as the \emph{Wigner distribution}.
+
+\section{From Classical Chaos to Quantum Chaos}
+
+In the terms of classical mechanics, such as the sensitivity to initial conditions
+quantum chaos does not exist because of the Heisenberg's uncertainty principle,
+the absence of trajectories and many other reasons. In turn, there are some other
+ways in which we can link classically chaotic systems to their
+quantum counterparts. These bridges between classical mechanics and quantum
+mechanics allows us to give a meaning to quantum chaos.
+{\color{red} (Berry $\to$ quantum chaology)}
+
+There are two important conjectures that allow us to link classical systems
+and quantum systems as mentioned above.
+
+\subsubsection{The Berry-Tabor {\color{red}conjecture (or theorem?)}}
+
+This conjecture states that the quantum counterpart of a classically integrable
+system has a Poissonian nearest neighbour distribution.
+
+\subsubsection{The Bohigas-Gianoni-Schmit conjecture}
+
+This conjecture states that the nearest neighbour distribution of a quantum system
+with a classically chaotic counterpart is given by the Wigner distribution.
+
+
+
+\end{document}

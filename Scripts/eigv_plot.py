@@ -27,6 +27,7 @@ def no_signif_el(eigvec):
 
 def index_plot(eigvec, eigv_len, label, index, sort_idx, fname, d_no):
     """Index plot"""
+    plt.figure(figsize=(5.8, 4))
     plt.bar(range(eigv_len), np.abs(eigvec[:eigv_len]),
             label=label)
     plt.legend()
@@ -37,12 +38,13 @@ def index_plot(eigvec, eigv_len, label, index, sort_idx, fname, d_no):
                )
     plt.ylabel('$C_{ij}$')
     # Prevent overwriting for repeated states
-    if not isfile('eigenvectors/ket_i' + fname + '.png'):
-        plt.savefig('eigenvectors/ket_i' + fname, dpi=400)
+    plt.tight_layout(pad=0)
+    if not isfile('eigenvectors/ket_i' + fname + '.pdf'):
+        plt.savefig('eigenvectors/ket_i' + fname, dpi=720)
     else:
         d_no += 1
         plt.savefig('eigenvectors/ket_i' + fname + '_' + str(d_no),
-                    dpi=400)
+                    dpi=720)
         print('|' + fname, '> is not unique')
     # plt.show()
     plt.close()
@@ -61,12 +63,11 @@ def energy_plot(eigvec, eigv_len, x, w, label, index, sort_idx, fname, d_no):
     plt.axes().set_xticks(minor_ticks, minor=True)
     plt.ylabel('$C_{ij}$')
     # Prevent overwriting for repeated states
-    if not isfile('eigenvectors/ket_e' + fname + '.png'):
-        plt.savefig('eigenvectors/ket_e' + fname, dpi=400)
+    plt.tight_layout(pad=0)
+    if not isfile('eigenvectors/ket_e' + fname + '.pdf'):
+        plt.savefig('eigenvectors/ket_e' + fname, dpi=720)
     else:
-        plt.savefig('eigenvectors/ket_e' + fname + '_' + str(d_no),
-                    dpi=400)
-    # plt.show()
+        plt.savefig('eigenvectors/ket_e' + fname + '_' + str(d_no), dpi=720)
     plt.close()
 
 
@@ -88,9 +89,9 @@ def main(b, d, n):
     E = E[:no_eigv]
     eigenvectors = eigenvectors[:no_eigv]
     ket = ket[:no_eigv]
-    # Get irreductible representation index
+    # Get irreducible representation index
     ir_reps = eigensystem.levels(E, ket)
-    # Build irreductible representation string
+    # Build irreducible representation string
     reps = 'reuns', 'reuna', 'rebde'
     ir_str = [reps[i] for i in ir_reps]
 
