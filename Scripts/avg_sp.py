@@ -27,11 +27,11 @@ def main(B, D, N):
             results[i] = tuple(values[i])
         # Plot the results
         ax.plot(results['b'], results['avg_sp'][:, 0], '^',
-                label='reuna, $N=' + str(n_i) + '$', markersize=msize)
+                label=r'$\Gamma_a,\;N=' + str(n_i) + '$', markersize=msize)
         ax.plot(results['b'], results['avg_sp'][:, 1], 'v',
-                label='reuns, $N=' + str(n_i) + '$', markersize=msize)
+                label=r'$\Gamma_s,\;N=' + str(n_i) + '$', markersize=msize)
         ax.plot(results['b'], results['avg_sp'][:, 2], 'o',
-                label='rebde, $N=' + str(n_i) + '$', markersize=msize)
+                label=r'$\Gamma_b,\;N=' + str(n_i) + '$', markersize=msize)
         msize -= 2
     ax.set_ylabel(r'$\overline{\Delta E_r}$')
     ax.set_xlabel('$B$')
