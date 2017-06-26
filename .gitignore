@@ -22,6 +22,8 @@ Scripts/copy
 *.bbl
 *.bcf
 *.blg
+*.nav
+*.snm
 *.run.xml
 *.fdb_latexmk
 *.synctex
