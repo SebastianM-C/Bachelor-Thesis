@@ -1,34 +1,167 @@
 \documentclass[../thesis.tex]{subfiles}
 
-  % chktex-file 18
+%!TeX spellcheck = en-GB
+
+% chktex-file 18
 
 \begin{document}
 
 \chapter{Results}
 
+% \pagevalues
+
 \begin{figure}
-  \includegraphics{"B0.2 D0.4 N260/P(s)_fit_1e-09_eps_1e-08"}  % chktex 36
-  \caption{\(B=0.2, D=0.4, N=260\)}
-\label{fig:P(s)-fit-b0.2n260}
+\centering
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.55 D0.4 N260"/{P(s)_fit_1e-09_eps_1e-08_max_e_100.0}.pdf}  % chktex 36
+\label{fig:P(s)-fit-b0.55n260-me100}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.55 D0.4 N260"/{P(s)_fit_1e-09_eps_1e-08_max_e_120.0}.pdf}  % chktex 36
+\label{fig:P(s)-fit-b0.55n260-me120}
+\end{subfigure}
+\caption{\(P(s)\) for \(B=0.55, D=0.4, N=260\) and \(\Delta E_{max}=100, 120\)}
+\label{fig:fit-b0.55n260-me100-120}  % chktex 24
 \end{figure}
 
 \begin{figure}
-  \includegraphics{"B0.63 D0.4 N260/P(s)_fit_1e-09_eps_1e-08"}  % chktex 36
-  \caption{\(B=0.63, D=0.4, N=260\)}
-\label{fig:P(s)-fit-b0.63n260}
+\centering
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.55 D0.4 N260"/{P(s)_fit_1e-09_eps_1e-08_max_e_150.0}.pdf}  % chktex 36
+\label{fig:P(s)-fit-b0.55n260-me150}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.55 D0.4 N260"/P(s)_fit_1e-09_eps_1e-08}  % chktex 36
+  \label{fig:P(s)-fit-b0.55n260}  % chktex 24
+\end{subfigure}
+\caption{\(P(s)\) for \(B=0.55, D=0.4, N=260\) and \(\Delta E_{max}=150, 180.3\)}
+\label{fig:fit-b0.55n260-me150-180.3}  % chktex 24
 \end{figure}
 
 \begin{figure}
-  \includegraphics{"B0.2 D0.4 N260/I(s)_fit"}  % chktex 36
-  \caption{\(B=0.2, D=0.4, N=260\)}
-\label{fig:I(s)-fit-b0.2n260}
+\centering
+  \begin{subfigure}{\textwidth}
+    \includegraphics{"B0.2 D0.4 N260"/P(s)_fit_1e-09_eps_1e-08}  % chktex 36
+    \label{fig:P(s)-fit-b0.63n260}  % chktex 24
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \includegraphics{"B0.2 D0.4 N260"/I(s)_fit}  % chktex 36
+  \label{fig:I(s)-fit-b0.63n260}  % chktex 24
+  \end{subfigure}
+  \caption{\(P(s), I(s)\) for \(B=0.2, D=0.4, N=260\)}
+  \label{fig:fit-b0.2n260}  % chktex 24
 \end{figure}
 
 \begin{figure}
-  \includegraphics{"B0.63 D0.4 N260/I(s)_fit"}  % chktex 36
-  \caption{\(B=0.63, D=0.4, N=260\)}
-\label{fig:I(s)-fit-b0.63n260}
+\centering
+  \begin{subfigure}{\textwidth}
+    \includegraphics{"B0.63 D0.4 N260"/P(s)_fit_1e-09_eps_1e-08}  % chktex 36
+    \label{fig:P(s)-fit-b0.63n260}  % chktex 24
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \includegraphics{"B0.63 D0.4 N260"/I(s)_fit}  % chktex 36
+  \label{fig:I(s)-fit-b0.63n260}  % chktex 24
+  \end{subfigure}
+  \caption{\(P(s), I(s)\) for \(B=0.63, D=0.4, N=260\)}
+  \label{fig:fit-b0.63n260}  % chktex 24
 \end{figure}
 
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.2 D0.4 N260"/{P(s)_fit_1e-09_eps_1e-08_max_e_100.0}.pdf}  % chktex 36
+\label{fig:P(s)-fit-b0.2n260-me100}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.2 D0.4 N260"/{I(s)_fit_max_e_100.0}.pdf}  % chktex 36
+  \label{fig:I(s)-fit-b0.2n260-me100}  % chktex 24
+\end{subfigure}
+\caption{\(B=0.2, D=0.4, N=260, \Delta E_{max}=100\)}
+\label{fig:fit-b0.2n260-me100}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.63 D0.4 N260"/{P(s)_fit_1e-09_eps_1e-08_max_e_100.0}.pdf}  % chktex 36
+\label{fig:P(s)-fit-b0.63n260-me100}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+  \includegraphics{"B0.63 D0.4 N260"/{I(s)_fit_max_e_100.0}.pdf}  % chktex 36
+  \label{fig:I(s)-fit-b0.63n260-me100}  % chktex 24
+\end{subfigure}
+\caption{\(B=0.63, D=0.4, N=260, \Delta E_{max}=100\)}
+\label{fig:fit-b0.63n260-me100}
+\end{figure}
+
+% alpha(B)
+
+\begin{figure}
+  \includegraphics{"alpha_N[220, 240, 260]".pdf}  % chktex 36
+  \caption{\(N=220, 240, 260\)}
+\label{fig:alpha-n220-240-260}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{alpha_N[260]_max_e_"[100.0, 120.0, 140.0]"}.pdf}  % chktex 36
+  \caption{\(N=260,\; \Delta E_{max} \approx 100, 120, 140\)}
+\label{fig:alpha-n260-me100-120-155}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{alpha_N[260]_max_e_"[140.0, 160.0, 0.0]"}.pdf}  % chktex 36
+  \caption{\(N=260,\; \Delta E_{max} \approx 140, 160, 190.305\)}
+\label{fig:alpha-n260-me140-160-0}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_N[220, 240, 260]"_max_e_[100.0]}.pdf}  % chktex 36
+  \caption{\(N=220, 240, 260,\; \Delta E_{max} \approx 100\)}
+\label{fig:alpha-n220-240-260-me100}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_N[220, 240, 260]"_max_e_[120.0]}.pdf}  % chktex 36
+  \caption{\(N=220, 240, 260,\; \Delta E_{max} \approx 120\)}
+\label{fig:alpha-n220-240-260-me120}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_N[220, 240, 260]"_max_e_[140.0]}.pdf}  % chktex 36
+  \caption{\(N=220, 240, 260,\; \Delta E_{max} \approx 140\)}
+\label{fig:alpha-n220-240-260-me140}
+\end{figure}
+
+% alpha(deltaE)
+
+\begin{figure}
+  \includegraphics{{"alpha_e_B[0.1, 0.15, 0.2]"_N[260]}.pdf}  % chktex 36
+  \caption{\(B=0.1, 0.15, 0.2,\; N=260\)}
+\label{fig:alpha-e-b0.1-0.15-0.2}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_e_B[0.25, 0.3, 0.35]"_N[260]}.pdf}  % chktex 36
+  \caption{\(B=0.25, 0.3, 0.35,\; N=260\)}  % replace
+\label{fig:alpha-e-b0.25-0.3-0.35}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_e_B[0.4, 0.45, 0.5]"_N[260]}.pdf}  % chktex 36
+  \caption{\(B=0.4, 0.45, 0.5,\; N=260\)}  % replace
+\label{fig:alpha-e-b0.4-0.45-0.5}
+\end{figure}
+
+\begin{figure}
+  \includegraphics{{"alpha_e_B[0.55, 0.6, 0.63]"_N[260]}.pdf}  % chktex 36
+  \caption{\(B=0.55, 0.6, 0.63,\; N=260\)}   % replace
+\label{fig:alpha-e-b0.55-0.6-0.63}
+\end{figure}
 
 \end{document}

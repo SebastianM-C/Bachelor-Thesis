@@ -19,9 +19,15 @@ Scripts/copy
 *.fot
 *.cb
 *.cb2
+*.bbl
+*.bcf
+*.blg
+*.run.xml
 *.fdb_latexmk
 *.synctex
 *.synctex(busy)
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+*.bib.bak
+*.bib.sav
