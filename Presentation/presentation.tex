@@ -70,9 +70,7 @@
 
 %%%%%%%%%%%%%%%%%%%% slide 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
- % \setbeamercolor{title}{fg=darkdarkblue,bg=lightblue}
-% \setbeamercolor{date}{fg=darkdarkblue,bg=lightblue}
+\begin{frame}[plain]
  \titlepage
 \end{frame}
 
@@ -89,12 +87,13 @@
 
 \begin{frame}
   \begin{itemize}
-    \item The aim of this thesis is to study the chaotic behaviour
-    of nuclei considering a liquid-drop-like model.
+    \item The aim of this thesis is to study the correspondence
+    between the classical chaotic behaviour of nuclear surface vibrations
+    and the quantum features of energy spectra of same system.
   \end{itemize}
 \end{frame}
 
-\section{Chaos}
+\section[Chaos]{Chaotic dynamics}
 
 \subsection{Classical Chaos}
 
@@ -117,8 +116,8 @@
     \item Integrability: A system is \emph{integrable} if the number of degrees
     of freedom is equal to the number of constants of the motion
     (in involution which each other).
-    \item For integrable systems the trajectory in phase space is constrained
-    to a $n$-torus.
+    \item For integrable systems with $n$ degrees of freedom, the trajectory
+    in phase space is constrained to a $n$-torus.
   \end{itemize}
 \end{frame}
 
@@ -129,8 +128,8 @@
     \item If the motion of a system described by an integrable
     Hamiltonian is perturbed with a small non-integrable term and
     the frequencies (\(\omega_k = \dot{\theta}_k\)) of the unperturbed motion
-    are such that for \(k=1,\dotsc,n\) we have
-    \(m_k\, \omega_k \neq 0, \forall m_k \in \mathbb{Z}\),
+    are such that for \(k=1,\dotsc,n\), we have
+    \(m_k\, \omega_k \neq 0, \forall\ m_k \in \mathbb{Z}\),
     then the motion will remain on the $n$-torus, except for a small
     set of initial conditions, for which the trajectories escape on the
     energy hyper-surface.
@@ -140,17 +139,18 @@
 
 %%%%%%%%%%%%%%%%%%%% slide 6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+\begin{frame}{Indicators of chaos}
   \begin{columns}[c]
   \begin{column}{0.6\textwidth}
     \begin{itemize}
       \item Poincaré sections: Slices of the phase space which reduce the
       dimensionality by one.
       \item Liapunov exponent
-      \(
+      \[
         \lambda = \lim\limits_{t \to \infty} \frac{1}{t} \ln{\frac{\dd{x}(t)}{\dd{x}(0)}}
-      \)
-      \item Chaos is characterised by sensitivity to the initial conditions.
+      \]
+      \item Chaos is characterised by sensitivity to the initial conditions
+      (\(\lambda > 0\)).
     \end{itemize}
   \end{column}
   \begin{column}{0.4\textwidth}
@@ -171,7 +171,7 @@
     \item We need a way to compare spectra from different systems
     in order to search for common patterns or features.
     \item We can use the level spacings (\(E_{n+1} - E_n\)) to build
-    histograms (nearest neighbour level spacing distributions)
+    the nearest neighbour level spacing distributions.
   \end{itemize}
 \end{frame}
 
@@ -338,9 +338,9 @@
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_240}
   \end{column}
   \begin{column}{0.15\textwidth}
-    \small \centering \(E = 30\) \\
+    \small \centering \(E = 30A\) \\
     \vspace{3cm}
-    \(E = 240\)
+    \(E = 240A\)
   \end{column}
   \begin{column}{0.35\textwidth}
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_120}
@@ -348,9 +348,9 @@
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_400}
   \end{column}
   \begin{column}{0.15\textwidth}
-    \small \(E = 120\) \\
+    \small \(E = 120A\) \\
     \vspace{3cm}
-    \(E = 400\)
+    \(E = 400A\)
   \end{column}
   \end{columns}
 \end{frame}
@@ -365,19 +365,19 @@
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_600}
   \end{column}
   \begin{column}{0.15\textwidth}
-    \small \centering \(E = 240\) \\
+    \small \centering \(E = 240A\) \\
     \vspace{3cm}
-    \(E = 600\)
+    \(E = 600A\)
   \end{column}
-  \begin{column}{0.35\textwidth}
+  \begin{column}{0.33\textwidth}
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_400}
 
     \includegraphics[height=0.45\textheight]{ponicare-sections-e_1000}
   \end{column}
-  \begin{column}{0.15\textwidth}
-    \small \centering \(E = 400\) \\
+  \begin{column}{0.17\textwidth}
+    \small \centering \(E = 400A\) \\
     \vspace{3cm}
-    \(E = 1000\)
+    \(E = 1000A\)
   \end{column}
   \end{columns}
 \end{frame}
@@ -452,7 +452,7 @@
     \item We emphasised a correlation between the global phase space
     structure of the classical system and its quantum corespondent.
     \item We proposed a description of the nearest neighbour distribution of
-    our spectra through a superposition of Poisson and Wigner distributions.
+    our spectra through a \emph{superposition of Poisson and Wigner distributions}.
     \item A non-trivial dependence of the superposition coefficient on the
     non-integrability parameter was revealed.
     \item Through our analysis we showed a correlation between the tori volume
