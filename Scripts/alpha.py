@@ -46,8 +46,8 @@ def b_plot(files, ax, n_i, max_energy, msize, marker):
           'and avg deltaE', avg_deltaE)
     # Plot the results
     ax.plot(np.array(values)[:, 0], np.array(values)[:, 1], linestyle='',
-            label=r'$\Delta E\approx' + '{:.3f}'.format(avg_deltaE) +
-            '$', markersize=msize, marker=marker)
+            label=r'$\Delta E\approx' + '{:.2f}'.format(avg_deltaE) +
+            ', N=' + str(n_i) + '$', markersize=msize, marker=marker)
 
 
 def e_plot(files, ax, n_i, b_i, msize, marker):

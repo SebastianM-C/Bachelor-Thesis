@@ -32,6 +32,21 @@
   \setbeamercovered{transparent}
 }
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
 \addtobeamertemplate{title page}{\includegraphics[width=1.3cm]{unibuc} \hfill \includegraphics[width=1.6cm]{fizica}}{}
 
 \title[Fingerprints of classical structures in quantum chaos]{Fingerprints of classical phase space structure in quantum chaos}
@@ -133,7 +148,7 @@
       dimensionality by one.
       \item Liapunov exponent
       \(
-        \lambda = \lim_{t \to \infty} \frac{1}{t} \ln{\frac{\dd{x}(t)}{\dd{x}(0)}}
+        \lambda = \lim\limits_{t \to \infty} \frac{1}{t} \ln{\frac{\dd{x}(t)}{\dd{x}(0)}}
       \)
       \item Chaos is characterised by sensitivity to the initial conditions.
     \end{itemize}
@@ -173,7 +188,7 @@
     of a quantum system with a classically chaotic counterpart is given by
     the Wigner distribution.
     \[
-      P_W(s) = \frac{\pi}{2} \exp(-\frac{\pi}{4} s^2)
+      P_W(s) = \frac{\pi}{2} s \exp(-\frac{\pi}{4} s^2)
     \]
   \end{itemize}
 \end{frame}
@@ -372,7 +387,7 @@
 \begin{frame}
   \begin{itemize}
     \item The global phase space structure is reflected in the plot of
-    \(\alpha\) as a function of \(\Delta E\)
+    \(\alpha \) as a function of \(\Delta E\)
   \end{itemize}
   \begin{columns}[c]
   \begin{column}{0.5\textwidth}
@@ -434,7 +449,15 @@
 
 \begin{frame}{Conclusions}
   \begin{itemize}
-    \item {\color{red}?}
+    \item We emphasised a correlation between the global phase space
+    structure of the classical system and its quantum corespondent.
+    \item We proposed a description of the nearest neighbour distribution of
+    our spectra through a superposition of Poisson and Wigner distributions.
+    \item A non-trivial dependence of the superposition coefficient on the
+    non-integrability parameter was revealed.
+    \item Through our analysis we showed a correlation between the tori volume
+    in classical phase space and the deviation from the Wigner distribution
+    in the quantum system.
   \end{itemize}
 \end{frame}
 

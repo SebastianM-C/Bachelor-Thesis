@@ -53,7 +53,7 @@ def stable(E1, b, d, n, delta_n, epsilon, ir_reps=np.empty(0)):
     bar_plot(E_diff[E_diff < 0.01],
              label=r'$\delta_s = 10^{-9}$', ylabel=r'$E_{N+ \Delta N} - E_N$',
              figsize=(5.8, 4), axhline_y=epsilon, yscale='log', dpi=600,
-             fname='bar_E_diff.pdf')
+             fname='bar_E_diff.pdf', xlabel='index')
 
     last_stable = np.where(E_diff > epsilon)[0][1]
     # Workaround for the initial instability in some particular cases
