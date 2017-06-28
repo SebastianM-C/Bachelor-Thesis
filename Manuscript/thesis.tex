@@ -1,16 +1,32 @@
-\documentclass[12pt]{report}
+\documentclass[12pt, twoside]{report}
 \usepackage{graphicx}
 \graphicspath{ {../Output/} {../../Output/} {../Statistics/} {../../Statistics/}
   {Title/img/} {../External_plots/} {../../External_plots/}
 }
 \usepackage{subfiles}
 \usepackage{ba_thesis}
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
 
 \begin{document}
 
 \input{Title/title.tex}
+
+\clearpage
+\begingroup
+  \pagestyle{empty}
+  \null
+  \newpage
+\endgroup
+
+\tableofcontents
+\clearpage
+
+\chapter*{Acknowledgements}
+\thispagestyle{empty}
+
+I would like to thank my advisers, Prof.~dr.~Virgil Băran and Lect.~dr.~Roxana Zus,
+for their help and for delivering one of the most interesting lectures.
+
+\clearpage
 
 \subfile{Introduction/intro.tex}
 \subfile{Classical_Chaos/c_chaos.tex}

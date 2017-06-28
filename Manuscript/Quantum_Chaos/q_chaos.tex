@@ -8,22 +8,22 @@
 \begin{document}
 
 \chapter{Quantum Chaos}
+\label{chap:quantum-chaos}
 
 \section{Fundamental notions}
 
-In this section will briefly present the general formalism
-developed by P.A.M. Dirac.
-
-The description of phenomena in quantum mechanics requires a {\color{red}careful} definition
-of the basic concepts. Thus we begin with the concept of the physical state.
+In this section will briefly present the basic principles of quantum mechanics
+and introduce the concepts which are required for the characterisation of
+energy spectra.
+We begin with the concept of the physical state.
 A \emph{physical state} contains all the information that can be learned
 about the system.
 We associate to our physical system a \emph{Hilbert space}, denoted with
 \(\mathbb{H}\), which will contain all the possible states of the system.
-Thus a vector in the Hilbert space will describe the state of the system
+A vector in the Hilbert space will describe the state of the system
 (more rigorously only the direction of the vector will describe the state
 since by convention any two vectors that differ only by a constant describe
-the same physical state). In the Dirac formalism the vectors in the Hilbert
+the same physical state). In the Dirac formalism~\cite{Dirac1967} the vectors in the Hilbert
 space corresponding to physical states are represented by \emph{ket vectors},
 denoted with \(\ket{\Psi}\). The elements of the dual of the Hilbert space
 are called \emph{bra vectors} and are denoted with \(\bra{\Psi}\). Due to the
@@ -35,7 +35,7 @@ the bra vectors is given by dual conjugation.
 
 In quantum mechanics the properties of the physical system, called \emph{observables}
 are described by linear hermitian operators.
-As a result of a measurement, the measured values of the observable are among
+As a result of a measurement, the obtained values of the observable are among
 the eigenvalues of the associated hermitian operator.
 
 \subsubsection{The measurement postulate}
@@ -50,9 +50,25 @@ of obtaining a given eigenvalue is given by the square of the absolute value of
 the scalar product between the final state associated with the given eigenvalue
 and the initial state.
 
-{\color{red}discrete / continuous discussion?}
+% {\color{red}discrete / continuous discussion?}
 
-{\color{red}\subsubsection{Fundamental commutation relations?}}
+\subsubsection{Fundamental commutation relations}
+
+In analogy with classical mechanics, a quantum version of the Poisson
+brackets can be defined, postulating that they have the same properties
+as the classical Poisson brackets, namely anti-symmetry, linearity, the product
+rule and the Jacobi identity. These properties uniquely define the form
+of the quantum Poisson brackets the commutator of two observables,
+\(\comm{A}{B} = AB - BA\), as being proportional to the quantum Poisson brackets
+\[
+  \comm{A}{B} = \ii \hbar {\{A,B\}}_{QM}.
+\]
+Thus we obtain the fundamental commutation relations in quantum mechanics
+\begin{align*}
+  \comm{Q_i}{Q_j} &= 0 \\
+  \comm{P_i}{P_j} &= 0 \\
+  \comm{Q_i}{P_j} &= \ii \hbar \,\delta_{i,j}.
+\end{align*}
 
 \subsubsection{Time evolution postulate}
 
@@ -129,9 +145,10 @@ Thus,
 \]
 or \(\comm{T}{H} = 0\). We can once again observe how classical mechanics and
 quantum mechanics are linked through the Poisson bracket-commutator structure.
-In classical mechanics Noether's theorem provides constants of the motion from
-the symmetries of the system and those have a vanishing Poisson bracket with the
-Hamiltonian.
+In classical mechanics Noether's theorem asserts that to any symmetry of the action
+will correspond a constant of the motion. This will have a vanishing Poisson bracket
+with the Hamiltonian. For example, the invariance to rotations around a given
+axis will lead to angular momentum conservation.
 
 Since the operators commute, they share a common set of eigenvectors
 \[
@@ -154,7 +171,8 @@ As is the case with classical mechanics there are few situations in which the
 analytic solution is known. In order to find approximate solutions we can use
 perturbation theory if we can assume that the Hamiltonian can be viewed as to
 have a part for which the solutions are known and another part that can
-be considered a small perturbation.
+be considered a small perturbation. The following concepts are mainly following
+the notations from~\cite{Sakurai2011} and the lecture notes~\cite{Baran,Zus}.
 
 In the framework of time-independent perturbation theory, we want to obtain
 an approximate solution to the problem
@@ -172,7 +190,7 @@ is known and \( \alpha \) gives the degeneracy of the \(n\)-th level.
 Since the unperturbed eigenvectors form a basis in the Hilbert space, we can
 expand the perturbed eigenvectors in that basis.
 \[
-  \ket{\Psi^{[j]}} = \sum_{m,\beta} c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}
+  \ket{\Psi^{[j]}} = \sum_{m,\beta} c_{m,\beta}^{[j]} \ket{\Psi_{m,\beta}^0}.
 \]
 Inserting into eq.~\eqref{eq:q-pert-th-ex-pr} we obtain
 \[
@@ -192,7 +210,7 @@ the energy \(E_2^0\) when \(\lambda=1\).
 \[
 \sum_{m,\beta} (E_m^0 + V)  c_{m}^{[j]} \ket{\Psi_{m}^0}
 = \sum_{m=1,2} E_j\, c_{m}^{[j]} \ket{\Psi_{m}^0}
-\]
+.\]
 
 By taking the scalar product with the state \(\bra{\Psi_{k}^0}\) and using the
 orthogonality relation
@@ -200,7 +218,7 @@ orthogonality relation
 we obtain
 \[
 E_k^0\, c_{k}^{[j]} + \sum_{m=1,2} \bra{\Psi_{k}^0} V \ket{\Psi_{m}^0} c_{m}^{[j]}
-= E_j\, c_{k}^{[j]}
+= E_j\, c_{k}^{[j]},
 \]
 or
 \[
@@ -211,12 +229,12 @@ where \(\bra{\Psi_{k}^0} V \ket{\Psi_{m}^0} \equiv V_{k,m}\).
 The above equation becomes
 \begin{align*}
   (E_1^0 - E_j + V_{1,1})\, c_1^{[j]} + V_{1,2}\, c_2^{[j]} = 0, \text{ for } k=1 \\
-  V_{2,1}\, c_1^{[j]} + (E_2 - E_j + V_{2,2})\, c_2^{[j]} = 0, \text{ for } k=2
+  V_{2,1}\, c_1^{[j]} + (E_2 - E_j + V_{2,2})\, c_2^{[j]} = 0, \text{ for } k=2.
 \end{align*}
 We use the following notations:
 \[
   H_{1,1} \equiv E_1^0 + V_{1,1}, H_{2,2} \equiv E_2^0 + V_{2,2}, H_{1,2} \equiv V_{1,2},
-  H_{2,1} \equiv V_{2,1}, \delta \equiv H_{1,1} - H_{2,2}, \tan{\beta} \equiv \frac{2\abs{H_{1,2}}}{\delta}
+  H_{2,1} \equiv V_{2,1}, \delta \equiv H_{1,1} - H_{2,2}, \tan{\beta} \equiv \frac{2\abs{H_{1,2}}}{\delta}.
 \]
 
 The above system of equations has non-trivial solutions if the determinant vanishes.
@@ -235,11 +253,11 @@ This equation has the solutions
 \label{eq:lvl-repulsion-e}
 \end{align}
 
-Since \((H_{1,1} - E_j)\, c_1^{[j]} + H_{1,2}\, c_2^{[j]} = 0\)
+Since \((H_{1,1} - E_j)\, c_1^{[j]} + H_{1,2}\, c_2^{[j]} = 0\),
 \[
-  \frac{c_1^{[j]}}{c_2^{[j]}} = \frac{H_{1,2}}{E_j - H_{1,1}}
+  \frac{c_1^{[j]}}{c_2^{[j]}} = \frac{H_{1,2}}{E_j - H_{1,1}}.
 \]
-if we rewrite eq.~\eqref{eq:lvl-repulsion-e} as
+If we rewrite eq.~\eqref{eq:lvl-repulsion-e} as
 \[
   E_j = \frac{1}{2} \left[ H_{1,1} + H_{2,2} \mp (H_{2,2} - H_{1,1})
         \sqrt{1 + \frac{4\abs{H_{1,2}}^2}{\delta^2}}\right]
@@ -248,7 +266,7 @@ we obtain
 \[
   \frac{c_1^{[j]}}{c_2^{[j]}} = \frac{2 H_{1,2}}{H_{2,2} - H_{1,1}}
   \left[ 1 \mp \sqrt{1 + \frac{4\abs{H_{1,2}}^2}{\delta^2}} \right]^{-1}
-  = -\tan{\beta}\left(1 \mp \sqrt{1+\tan^2\beta}\right)
+  = -\tan{\beta}\left(1 \mp \sqrt{1+\tan^2\beta}\right).
 \]
 This ratio can be also expressed as
 \begin{align*}
@@ -261,15 +279,15 @@ This ratio can be also expressed as
   \begin{cases}
     \cot{\frac{\beta}{2}} \\
     -\tan{\frac{\beta}{2}}
-  \end{cases}
+  \end{cases}.
 \end{align*}
 Thus,
 \begin{align*}
   \ket{\Psi^{[1]}} &= \cos{\frac{\beta}{2}} \ket{\Psi_1^0} + \sin{\frac{\beta}{2}} \ket{\Psi_2^0} \\
-  \ket{\Psi^{[2]}} &= -\sin{\frac{\beta}{2}} \ket{\Psi_1^0} + \cos{\frac{\beta}{2}} \ket{\Psi_2^0}
+  \ket{\Psi^{[2]}} &= -\sin{\frac{\beta}{2}} \ket{\Psi_1^0} + \cos{\frac{\beta}{2}} \ket{\Psi_2^0}.
 \end{align*}
 
-If the {\color{red}interaction} between the energy levels is relatively small,
+If the matrix elements of the interaction which mix distinct states are relatively small,
 that is \(\abs{H_{1,2}} \ll \delta \), \(\beta \simeq 0\)
 \[
   E_{1,2} = \frac{H_{1,1} + H_{2,2}}{2} \pm
@@ -281,7 +299,7 @@ Thus
 \]
 and
 \[
-  E_2 \simeq H_{2,2} - \frac{\abs{H_{1,2}}^2}{\delta}
+  E_2 \simeq H_{2,2} - \frac{\abs{H_{1,2}}^2}{\delta}.
 \]
 and the perturbed energy levels are close to the unperturbed ones.
 The states will also be approximatively the unperturbed ones
@@ -290,8 +308,8 @@ The states will also be approximatively the unperturbed ones
   \ket{\Psi^{[2]}} &\simeq \ket{\Psi_2^0}.
 \end{align*}
 
-If the {\color{red}interaction} between the energy levels relatively strong,
-that is \(\abs{H_{1,2}} \gg \delta \), \(\beta \simeq \frac{\pi}{2}\)
+If on the other hand, the matrix elements levels which mix distinct states are
+relatively strong, that is \(\abs{H_{1,2}} \gg \delta \), \(\beta \simeq \frac{\pi}{2}\)
 \[
   E_{1,2} = \frac{H_{1,1} + H_{2,2}}{2} \pm
             \sqrt{\frac{\delta^2}{4} + \abs{H_{1,2}}^2}
@@ -305,10 +323,10 @@ and
 \end{align*}
 In this case we observe that if \(\delta \simeq 0\),
 then \(E_1 - E_2 \simeq 2\abs{H_{1,2}}\). If the unperturbed energy levels were
-degenerated, then the perturbed energy levels will no longer be. This phenomena
-is called \emph{level repulsion}.
+degenerated, then the perturbed energy levels will not remain so. The removal
+of the degeneracy is called \emph{level repulsion}.
 
-We can also emphasise this phenomena by considering an arbitrary \(2 \cross 2\)
+We can illustrate this phenomena by considering an arbitrary \(2 \cross 2\)
 hermitian matrix and computing its eigenvalues.
 \[
   H = \begin{pmatrix}
@@ -324,19 +342,12 @@ a diagonal matrix. In this case we expect that the energy levels will be close
 to the diagonal levels or the unperturbed levels. The perturbed eigenstates
 will also be approximatively equal with the unperturbed eigenstates.
 
-When we say that the levels are weakly coupled we refer to the fact that when we
-expand the perturbed states in the basis given by the unperturbed states we will
-obtain states that can be approximated to be orthogonal, since they are approximated
-by the unperturbed eigenstates. Thus we can say that the energy levels are
-independent of each other.
-
 The level repulsion emphasised by the second case, \(\abs{H_{1,2}} \gg \delta \),
 corresponds to the case when the off-diagonal elements are significant. When we
 expand the perturbed eigenstates in the basis given by the unperturbed eigenstates
 we will have significant components from each element in the basis and the new
 states will be a mixture of the unperturbed states. We can say that the energy levels
-are no longer independent and this is what is meant by saying that the interaction
-between the energy levels is strong. In the case when the unperturbed energy
+are no longer independent. In the case when the unperturbed energy
 levels are degenerated, the difference between the perturbed energy levels
 is given by \(2 \abs{H_{1,2}}\), which is a measure of the mixing of the
 unperturbed states.
@@ -353,7 +364,7 @@ unperturbed states.
   The conditional probability of an event $A$ given an event $B$ with \(P(B)>0\),
   denoted \(P(A\,|\,B)\) is given by
   \[
-    P(A\,|\,B) = \frac{P(A \cap B)}{P(B)}
+    P(A\,|\,B) = \frac{P(A \cap B)}{P(B)}.
   \]
 \end{def*}
 
@@ -385,20 +396,14 @@ infinitesimal interval of length \(\dd{x}\) is given by
 Nearest neighbour spacing distributions show how the differences
 between consecutive energy levels fluctuate around the average.
 In order to better understand this concept we shall begin with the simpler
-case of real random numbers.
+case of real random numbers as presented in~\cite{Timberlake2006} and then
+continue with a general case as in~\cite{Brody1981}.
 
 \subsection{The nearest neighbour spacing distribution of random numbers}
 
 We consider a sequence of uniformly distributed, ordered, real, random numbers.
-
-{\color{red}
 We define the \emph{spacing} of an ordered sequence as the sequence of
 differences between consecutive elements.
-The \emph{average spacing} of the sequence is given by \(\frac{E_n-E_0}{n}\).
-
-discrete vs continuous random variables?
-}
-
 For an interval of length \(s, s>0\), we will denote with \( P(n \in s) \) the probability
 for the interval to contain $n$ numbers and with \( P(n \in \dd{s} |\; m \in s) \)
 the conditional probability for the interval of length \( \dd{s} \) to contain
@@ -494,13 +499,17 @@ Thus
 \[
   P(s)\dd{s}=f_{1,0}(s)\dd{s} \left( 1 - \int_0^s P(s') \dd{s'} \right)
 \]
-By solving {\color{red}\large????} this integral equation, we obtain the solution
+By solving
+% {\color{red}\large????}
+this integral equation, we obtain the solution
 \[
   P(s) = \mathcal{C} f_{1,0}(s) \exp(-\int_0^s f_{1,0}(x) \dd{x})
 \]
 We observe that if we take the probability density function constant,
 \(f_{1,0}(s) = \frac{1}{a}\), we obtain the above case of the Poisson distribution.
-In we consider the probability density function to be {\color{red}linear (why?)},
+For a
+% {\color{red}linear (why?)}
+probability density function,
 \(f_{1,0}(s) = \alpha s\) we obtain
 \[
   P(s) = \mathcal{C} \alpha s \exp(-\alpha \frac{s^2}{2})
@@ -524,18 +533,25 @@ This function is known as the \emph{Wigner distribution}.
 
 \section{From Classical Chaos to Quantum Chaos}
 
-In the terms of classical mechanics, such as the sensitivity to initial conditions
-quantum chaos does not exist because of the Heisenberg's uncertainty principle,
-the absence of trajectories and many other reasons. In turn, there are some other
-ways in which we can link classically chaotic systems to their
-quantum counterparts. These bridges between classical mechanics and quantum
-mechanics allows us to give a meaning to quantum chaos.
-{\color{red} (Berry $\to$ quantum chaology)}
+The classical concept of sensitivity to initial conditions loses its meaning
+in the quantum realm since the trajectory cannot be defined due to
+Heisenberg's uncertainty principle. However, there are some other
+ways in which we can link classically chaotic dynamics to quantum features.
+These bridges between classical mechanics and quantum
+mechanics allows us to give a meaning to quantum chaos~\cite{Berry1989}.
 
-There are two important conjectures that allow us to link classical systems
-and quantum systems as mentioned above.
+% In the terms of classical mechanics, such as the sensitivity to initial conditions
+% quantum chaos does not exist~\cite{Berry1989} because of the Heisenberg's uncertainty principle,
+% the absence of trajectories and many other reasons. In turn, there are some other
+% ways in which we can link classically chaotic systems to their
+% quantum counterparts. These bridges between classical mechanics and quantum
+% mechanics allows us to give a meaning to quantum chaos.
+% {\color{red} (Berry $\to$ quantum chaology)}
 
-\subsubsection{The Berry-Tabor {\color{red}conjecture (or theorem?)}}
+Specifically, there are two important conjectures that allow us to connect
+classical systems and quantum systems as mentioned above.
+
+\subsubsection{The Berry-Tabor conjecture}% {\color{red}(or theorem?)}}
 
 This conjecture states that the quantum counterpart of a classically integrable
 system has a Poissonian nearest neighbour distribution.

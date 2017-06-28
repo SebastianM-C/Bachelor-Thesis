@@ -8,6 +8,7 @@
 \begin{document}
 
 \chapter{Classical chaos}
+\label{chap:classical-chaos}
 
 \section{Fundamental notions}
 
@@ -56,12 +57,13 @@ The Hamiltonian can be obtained from the Lagrangian through a \emph{Legendre tra
 The Euler-Lagrange equations are replaced by Hamilton's equations
 \begin{align*}
   \dot{q_k} = \pdv{\mathcal{H}}{p_k}, &&
-  \dot{p_k} = -\pdv{\mathcal{H}}{q_k}
+  \dot{p_k} = -\pdv{\mathcal{H}}{q_k}.
 \end{align*}
-We now have \(2n\) first order ordinary differential equations. {\color{red}comments?}
+We now have \(2n\) first order ordinary differential equations.
 
 \section{Canonical transformations}
 
+This section follows mainly the steps described in~\cite{Hand1998}.
 In the Hamiltonian formulation of classical mechanics \emph{canonical transformations}
 represent all the transformations of the canonically conjugate variables from
 $q$ and $p$ to $Q$ and $P$ such that the structure of the Hamilton equations remains intact.
@@ -69,21 +71,21 @@ $q$ and $p$ to $Q$ and $P$ such that the structure of the Hamilton equations rem
 The Lagrange equations of a system are invariant to a transformation of the
 Lagrange function such that:
 \[
-  \mathcal{L'}(Q, \dot{Q}, t) = \mathcal{L}(q, \dot{q}, t) - \dv{t}F(q, Q, t)
+  \mathcal{L'}(Q, \dot{Q}, t) = \mathcal{L}(q, \dot{q}, t) - \dv{t}F(q, Q, t).
 \]
 Integrating we obtain
 \[
   \int_{t_1}^{t_2} \mathcal{L'} \dd{t} = \int_{t_1}^{t_2} \mathcal{L} \dd{t}
-  - \left( F(q, Q, t_2) - F(q, Q, t_1) \right)
+  - \left( F(q, Q, t_2) - F(q, Q, t_1) \right).
 \]
 The variation of the above equation is given by
 \[
   \var{\int_{t_1}^{t_2} \mathcal{L'} \dd{t}} = \var{\int_{t_1}^{t_2} \mathcal{L} \dd{t}}
-  - \var{F(q, Q, t_2)} + \var{F(q, Q, t_1)}
+  - \var{F(q, Q, t_2)} + \var{F(q, Q, t_1)}.
 \]
 Fixing the variations at the end points to be $0$, we get
 \[
-  \var{\int_{t_1}^{t_2} \mathcal{L'} \dd{t}} = \var{\int_{t_1}^{t_2} \mathcal{L} \dd{t}}
+  \var{\int_{t_1}^{t_2} \mathcal{L'} \dd{t}} = \var{\int_{t_1}^{t_2} \mathcal{L} \dd{t}}.
 \]
 So indeed the two Lagrangian descriptions of the system are identical since if the
 \mbox{Hamilton} principle holds in the first description it also holds in the second.
@@ -94,7 +96,7 @@ We can classify the generating functions in four possible types
 as a function of their variables.
 The conjugate momenta corresponding to $q$ and $Q$ are given by
 \[
-  p = \pdv{\mathcal{L}}{\dot{q}} \text{ and } P = \pdv{\mathcal{L'}}{\dot{Q}}
+  p = \pdv{\mathcal{L}}{\dot{q}} \text{ and } P = \pdv{\mathcal{L'}}{\dot{Q}}.
 \]
 In order to express those as a function of \(F(q, Q, t)\) we use the fact
 that \(\dot{q}\) is a cyclic coordinate for \(\mathcal{L'}\)
@@ -113,7 +115,7 @@ Thus we obtain
 \]
 and
 \[
-  P = \pdv{\mathcal{L'}}{\dot{Q}} = - \pdv{F}{Q}
+  P = \pdv{\mathcal{L'}}{\dot{Q}} = - \pdv{F}{Q}.
 \]
 
 To find the Hamiltonian corresponding to the new coordinates $Q$ and $P$ we
@@ -144,7 +146,7 @@ they represent the same canonical transformation. We denote the above mentioned
   F_3(p, Q, t) &= F_1(q, Q, t) - pq &&
   q = - \pdv{F_3}{p}, & P = \pdv{F_3}{Q} \\
   F_4(p, P, t) &= F_1(q, Q, t) - pq + PQ &&
-  q = - \pdv{F_4}{p}, & Q = \pdv{F_4}{P}
+  q = - \pdv{F_4}{p}, & Q = \pdv{F_4}{P}.
 \end{align*}
 
 The \emph{Poisson bracket} of two arbitrary functions with respect to the canonical coordinates
@@ -161,7 +163,8 @@ We can use the Poisson bracket to express Hamilton's equations more elegantly
 Expressed in this form, the Hamilton equations have a close resemblance to
 Heisenberg's form for the equations of motion in the Heisenberg picture of
 quantum mechanics. The Poisson bracket structure of classical mechanics is
-one of the fundamental links to quantum mechanics. \cite{Dirac1967} {\color{red}(cite Dirac)}.
+fundamental and provides a link with quantum mechanics, being in correspondence
+with the commutator algebra~\cite{Dirac1967}.
 
 As with the above discussion we will limit to the case of one degree of freedom,
 but the results are easily generalisable to $n$ degrees of freedom.
@@ -182,18 +185,20 @@ Preserving the structure of Hamilton's equations is equivalent with the invarian
 Poisson bracket and thus we can use this invariance as the definition for canonical
 transformations.
 
-An other equivalent condition would require the Jacobian matrix
-\(\frac{\partial(Q,P)}{\partial(q,p)}\) to be {\color{red}symplectic}.
+% An other equivalent condition would require the Jacobian matrix
+% \(\frac{\partial(Q,P)}{\partial(q,p)}\) to be {\color{red}symplectic}.
 
 \section{The Hamilton-Jacobi equation}
 
+This section will describe the Hamilton-Jacobi formalism. For further details,
+one can see for example~\cite{Hand1998, Goldstein2002}.
 Instead of finding the equations of motion through solving a set of \(2n\) ordinary differential
 equations with \(2n\) dependent variables (\(q_1, \dotsc, q_n\) and \(p_1, \dotsc, p_n\))
 and one independent variable (\(t\)), we can use a single first order partial differential equation
 having \(n+1\) independent variables (\(q_1, \dotsc, q_n\) and \(t\)) and one
 dependent variable (\(S\)).
 
-Suppose there exists a generating function \(S\) of type \(F_2\) {\color{red}why?} such that
+Suppose there exists a generating function \(S\) of type \(F_2\) such that
 \[
   \mathcal{H'} = 0.
 \]
@@ -214,7 +219,7 @@ We can find \(n\) of these constants as \(P_1,\dotsc,P_n\) and the remaining con
 incorporated in \(S\) since if \(S\) is a solution for the Hamilton-Jacobi equation,
 \(S+const.\) is also a solution.
 
-It is a standard convention (Goldstein) to rename the constants as follows
+It is a standard convention~\cite{Goldstein2002} to rename the constants as follows
 \begin{align*}
   P_k &\equiv \alpha_k \\
   Q_k &\equiv \beta_k = \pdv{S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t)}{\alpha_k}.
@@ -225,13 +230,13 @@ These constants depend on the initial conditions \(q_k(0)\) and \(p_k(0)\). From
 \]
 we can obtain \(\alpha_k\)s, and \(\beta_k\)s are given by
 \[
-  \beta_k = \eval{\pdv{S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t)}{\alpha_k}}_{t=0}
+  \beta_k = \eval{\pdv{S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t)}{\alpha_k}}_{t=0}.
 \]
 
 We can obtain the initial generalised coordinates
 \(q_k(\alpha_1,\dotsc,\alpha_n,\beta_1,\dotsc,\beta_n,t)\) by solving
 \[
-  \beta_k=\pdv{S}{\alpha_k}
+  \beta_k=\pdv{S}{\alpha_k}.
 \]
 
 If we take the total time derivative of \(S\)
@@ -240,11 +245,11 @@ If we take the total time derivative of \(S\)
 \]
 and use eq.~\eqref{eq:canonical-transf}
 \[
-  \dv{S}{t} = \sum_{k=0}^{n} p_k \dot{q_k} - \mathcal{H}
+  \dv{S}{t} = \sum_{k=0}^{n} p_k \dot{q_k} - \mathcal{H},
 \]
 we recognise the Legendre transform from eq.~\eqref{eq:legendre-tr}. Thus
 \[
-  \dv{S}{t} = \mathcal{L}
+  \dv{S}{t} = \mathcal{L},
 \]
 or equivalently
 \[
@@ -258,17 +263,17 @@ will be a constant of the motion and will represent the energy of the system \(E
 
 We can rewrite eq.~\eqref{eq:hamilton-jacobi-first} as follows
 \[
-  \mathcal{H}(q_1,\dotsc,q_n,\pdv{S}{q_1},\dotsc,\pdv{S}{q_n},t) = - \pdv{S}{t} = E
+  \mathcal{H}(q_1,\dotsc,q_n,\pdv{S}{q_1},\dotsc,\pdv{S}{q_n},t) = - \pdv{S}{t} = E.
 \]
 Thus we can suppose that for this case \(S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t)\)
 has the following form
 \[
-  S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t) \equiv W(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n) - Et
+  S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t) \equiv W(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n) - Et.
 \]
 Using this expression in eq.~\eqref{eq:hamilton-jacobi-first}, we obtain
 \begin{equation}
   \label{eq:hamilton-jacobi-second}
-  \mathcal{H}(q_1,\dotsc,q_n,\pdv{W}{q_1},\dotsc,\pdv{W}{q_n}) = E
+  \mathcal{H}(q_1,\dotsc,q_n,\pdv{W}{q_1},\dotsc,\pdv{W}{q_n}) = E.
 \end{equation}
 which represents the second form of the Hamilton-Jacobi equation.
 
@@ -277,9 +282,9 @@ The solution to this equation is called \emph{Hamilton's Characteristic Function
 \[
   W = S + Et = \int \left(\mathcal{L} + \mathcal{H} \right) \dd{t}
     = \int \sum_{k=0}^n p_k \dot{q_k} \dd{t}
-    = \sum_{k=0}^n \int p_k \dd{q_k}
+    = \sum_{k=0}^n \int p_k \dd{q_k}.
 \]
-{\color{red}physical interpretation?}
+% {\color{red}physical interpretation?}
 
 \(W\) is a generating function of type \(F_2\). The canonical transformation given by \(W\)
 is different from the one given by \(S\), since
@@ -293,7 +298,7 @@ all the generalised momenta are constants \(\dot{P_k}=-\pdv{\mathcal{H'}}{Q_k}=0
 but not all the generalised coordinates are constants.
 If we choose to define \(P_1 \equiv E\),
 \[
-  \dot{Q_1} = \pdv{\mathcal{H'}}{P_1} = \pdv{E}{P_1} = 1
+  \dot{Q_1} = \pdv{\mathcal{H'}}{P_1} = \pdv{E}{P_1} = 1.
 \]
 Thus
 \[
@@ -321,22 +326,22 @@ From the initial generalised momenta \(p_k(0)\)
 we can obtain \(E\) and \(\alpha_j\). Using the initial generalised coordinates \(q_k(0)\)
 we obtain \(\beta_j\) as follows
 \[
-  \beta_j = \eval{\pdv{W(q_1,\dotsc,q_n,E,\alpha_1,\dotsc,\alpha_{n-1})}{\alpha_j}}_{t=0}
+  \beta_j = \eval{\pdv{W(q_1,\dotsc,q_n,E,\alpha_1,\dotsc,\alpha_{n-1})}{\alpha_j}}_{t=0}.
 \]
 Thus, having \(E, \alpha_j\) and \(\beta_j\), we can obtain the time evolution
 for the generalised coordinates from
 \[
-  \beta_j = \pdv{W(q_1,\dotsc,q_n,E,\alpha_1,\dotsc,\alpha_{n-1})}{\alpha_j}
+  \beta_j = \pdv{W(q_1,\dotsc,q_n,E,\alpha_1,\dotsc,\alpha_{n-1})}{\alpha_j}.
 \]
 
 For systems with \(n>1\) degrees of freedom, the Hamilton-Jacobi equation can be separated in
 \(n\) equations if we can write \(S\) as
 \[
-  S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t) = \sum_{k=1}^n W_k(q_k,\alpha_1,\dotsc,\alpha_n)-Et
+  S(q_1,\dotsc,q_n,\alpha_1,\dotsc,\alpha_n,t) = \sum_{k=1}^n W_k(q_k,\alpha_1,\dotsc,\alpha_n)-Et.
 \]
 A simpler form of separability exists if the Hamiltonian itself is separable
 \[
-  \mathcal{H}(q_1,\dotsc,q_n,p_1,\dotsc,p_n) = \sum_{k=1}^n \mathcal{H}_k(q_k,p_k)
+  \mathcal{H}(q_1,\dotsc,q_n,p_1,\dotsc,p_n) = \sum_{k=1}^n \mathcal{H}_k(q_k,p_k).
 \]
 In this case the second form of the Hamilton-Jacobi equation splits in \(n\) independent equations
 \[
@@ -344,9 +349,9 @@ In this case the second form of the Hamilton-Jacobi equation splits in \(n\) ind
 \]
 so
 \[
-  \mathcal{H}_k(q_k,\pdv{W_k}{q_k}) = \alpha_k,\qquad E = \sum_{k=1}^n \alpha_k
+  \mathcal{H}_k(q_k,\pdv{W_k}{q_k}) = \alpha_k,\qquad E = \sum_{k=1}^n \alpha_k.
 \]
-{\color{red}why \(E = \sum_{k=1}^n \alpha_k\)?}
+% {\color{red}why \(E = \sum_{k=1}^n \alpha_k\)?}
 
 The Hamilton-Jacobi equation can be solved only if the variables can be separated.
 The separability depends both on the problem and the chosen coordinate system.
@@ -362,7 +367,7 @@ which has a periodic motion. We search for a canonical transformation from \(q,p
 a new set of canonically conjugate coordinates \(\theta, I\) such that the new
 Hamiltonian does not depend on \(\theta \).
 
-Since \(\theta \) is an ignorable coordinate
+Since \(\theta \) is an cyclic coordinate
 \[
   \dot{I} = -\pdv{\mathcal{H'}}{\theta} = 0,
 \]
@@ -406,13 +411,14 @@ action variable, where the integral is taken around a single period of the motio
 
 \section{Integrability}
 
-A system called \emph{integrable} if the number of degrees of freedom is equal to the number
+A system is called \emph{integrable} if the number of degrees of freedom is equal to the number
 of constants of the motion in involution which each other. Two constants of the motion
 are in \emph{involution} with each other if their mutual Poisson brackets are equal to \(0\).
 
 The previously mentioned constants of the motion are not required to be known in analytic form,
-they are only required to exist. Thus, for example \(n=1\) systems are always integrable if
-the Hamiltonian is time independent.
+they are only required to exist. Thus a Hamiltonian system with one degree of
+freedom, if the Hamiltonian function is time independent, is integrable.
+The conserved quantity is the energy.
 
 An important consequence of integrability is that we can always find a canonical
 transformation to action-angle variables and express the new Hamiltonian as a function
@@ -424,16 +430,14 @@ For integrable systems, the \(n\) constants of the motion restrict the motion in
 also periodic, then the motion is constrained to a \(n\) dimensional closed surface
 (with finite volume).
 
-For a system with \(n=2\) and periodic motion, the motion in the phase space is confined
+For an integrable system with \(n=2\), the motion in the phase space is confined
 to a torus. In order to understand why, we can use the previously defined action-angle variables.
-In this case, the motion will be described by \(I_1, \theta_1, I_2, \theta_2\).
-Since the motion is constrained to a \(2\) dimensional subspace, we can imagine the phase space
-as a plane with the \(Ox\) axis given by the direction in which \(\theta_1\) increases and
-with the \(Oy\) axis given by the direction in which \(\theta_2\) increases. Because the motion
-is periodic, we can consider that \(\theta_i\), \(i=1,2\) takes values in \([0,2\pi)\).    % chktex 9
-
-Since the values for \(0\) and \(2\pi \) are equivalent, we can join the ends of the
-intervals in both directions, thus forming a torus.
+In this case, the motion will be described by \(I_1, \theta_1, I_2, \theta_2\) and
+the trajectory is constrained to a \(2\) dimensional subspace, obtained as a direct
+product of two circles, having as radii the values of the two conserved quantities,
+\(I_1\) and \(I_2\), while \(\theta_1\) and \(\theta_2\) will define the polar angles
+of the two circular motions. Thus, the trajectory will be confined on the surface
+of a torus.
 
 To extend the discussion to systems with \(n\) degrees of freedom,
 we replace the 2D plane with an \(n\) dimensional cube. If we join the sides of
@@ -451,18 +455,18 @@ this cube we obtain a \(n\) dimensional torus.
 % tangent vector field on even-dimensional $n$-spheres. (what happens for odd $n$?)
 % }
 
-{\color{red}+ explanation for the fact that the constants of motion must be
-in involution with each other
-
-Observation:
-If we make a canonical transformation such that \(\mathcal{H'} = 0\), the new
-coordinates and momenta will be constants, so we have \(2n\) constants of the motion.
-If we make a canonical transformation to action-angle variables, we get
-\(n\) constants of the motion (the action variables).
-There is no contradiction since the \(2n\) constants obtained in the first case
-are not all in involution with each other (\( \{q_i,p_j\}=\delta_{i,j} \)), but
-we can choose \(n\) of them in involution with each other.
-}
+% {\color{red}+ explanation for the fact that the constants of motion must be
+% in involution with each other
+%
+% Observation:
+% If we make a canonical transformation such that \(\mathcal{H'} = 0\), the new
+% coordinates and momenta will be constants, so we have \(2n\) constants of the motion.
+% If we make a canonical transformation to action-angle variables, we get
+% \(n\) constants of the motion (the action variables).
+% There is no contradiction since the \(2n\) constants obtained in the first case
+% are not all in involution with each other (\( \{q_i,p_j\}=\delta_{i,j} \)), but
+% we can choose \(n\) of them in involution with each other.
+% }
 
 
 \section{Chaos notions}
@@ -472,7 +476,7 @@ by high sensitivity to initial conditions: for two dynamical systems with
 nearly identical initial conditions, the long time evolution is uncorrelated,
 the motion in the two systems being very different.
 Poincaré was the first to bring attention to this type of behaviour when he
-proved that there are no analytic solutions to the 3-body problem. ({\color{red}cite?})
+proved that there are no analytic solutions to the 3-body problem~\cite{Diacu1996}.
 Even if the equations of motion are deterministic, long time predictions are
 rendered useless since an arbitrary small variation in the initial conditions
 can produce very different results.
@@ -481,6 +485,8 @@ In chaotic systems, the motion is no longer constrained on tori as for the case
 of integrable systems. The trajectories escape from the \(n\) dimensional subspace
 in the \(2n\) phase space space, or in a \(2n-1\) subspace if the energy is
 conserved.
+
+For the following concepts we use mainly the notations in~\cite{Strogatz1994}.
 
 
 \subsection{The Liapunov exponent}
@@ -523,9 +529,9 @@ space which reduces the dimensionality by $1$. This slices are called
 \emph{Poincaré sections}.
 If the energy is conserved, the section will be a plane.
 
-If \(\Sigma \) is a surface section{\color{red} (Poincaré section)} intersecting the
-trajectories of the system in phase space in the points \(\vb{x}_i\), then we can
-define the \emph{Poincaré map} as a mapping \({P:\Sigma \to \Sigma}\) such that
+If \(\Sigma \) is a Poincaré section intersecting the trajectories of the system
+in phase space in the points \(\vb{x}_i\), then we can define the \emph{Poincaré map}
+as a mapping \({P:\Sigma \to \Sigma}\) such that
 \[
   \vb{x}_{i+1} = P(\vb{x}_i).
 \]
@@ -546,25 +552,26 @@ Assuming we can neglect \(\order{\norm{\vb{v}_i}^2}\), we get
 \[
   \vb{x}^* + \vb{v}_{i+1} = \vb{x}^* + \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{v}_i,
 \]
-where \(\vb{x}^* + \vb{v}_{i+1} = P(\vb{x}^* + \vb{v}_i)\).{\color{red} (\(P(\vb{x}^* + \vb{v}_i) = P(\vb{x}^*) + P(\vb{v}_i)\)?)} Thus
+where \(\vb{x}^* + \vb{v}_{i+1} = P(\vb{x}^* + \vb{v}_i)\).%{\color{red} (\(P(\vb{x}^* + \vb{v}_i) = P(\vb{x}^*) + P(\vb{v}_i)\)?)}
+Thus
 \begin{equation}
   \label{eq:lin-map}
   \vb{v}_{i+1} = \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{v}_i,
 \end{equation}
-{\color{red}also called the \emph{linearised Poincaré map}}.
+also called the \emph{linearised Poincaré map}.
 
 In a basis given by the eigenvectors \( \{\vb{e}_j\} \) of the Jacobian,
-\(\vb{v}_{i} = \sum_{j=1}^{{\color{red}2n-1}} a_j \vb{e}_j\), then
+\(\vb{v}_{i} = \sum_{j=1}^{2n-1} a_j \vb{e}_j\), then
 \[
-  \vb{v}_{i+1} = \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \sum_{j=1}^{{\color{red}2n-1}} a_j \vb{e}_j
-               = \sum_{j=1}^{{\color{red}2n-1}} \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{e}_j a_j
-               = \sum_{j=1}^{{\color{red}2n-1}} \lambda_j a_j \vb{e}_j,
+  \vb{v}_{i+1} = \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \sum_{j=1}^{2n-1} a_j \vb{e}_j
+               = \sum_{j=1}^{2n-1} \eval{\pdv{P}{\vb{x}}}_{\vb{x}=\vb{x}^*} \vb{e}_j a_j
+               = \sum_{j=1}^{2n-1} \lambda_j a_j \vb{e}_j,
 \]
 where \(\lambda_j\) are the eigenvalues of the Jacobian matrix.
 
 If we consider \(k\) iterations of eq.~\eqref{eq:lin-map}
 \[
-  \vb{v}_{i+k} = \sum_{j=1}^{{\color{red}2n-1}} {(\lambda_j)}^k a_j \vb{e}_j
+  \vb{v}_{i+k} = \sum_{j=1}^{2n-1} {(\lambda_j)}^k a_j \vb{e}_j
 \]
 If all \(\abs{\lambda_j} < 1\), then \(\norm{\vb{v}_{i+k}} \to 0\) as \(k\to\infty \)
 and the fixed point is \emph{linearly stable}. If \(\abs{\lambda_j} > 1\) for
@@ -578,7 +585,9 @@ decide and a nonlinear stability analysis is required.
 Since most systems are non-integrable we need approximate methods. One such
 method is canonical perturbation theory which can provide approximate solutions
 when the non-integrable Hamiltonian can be broken in an integrable part and
-a relatively small perturbation.
+a relatively small perturbation. For a detailed treatment, see~\cite{Goldstein2002}.
+
+Let us consider
 \[
   \mathcal{H} = \mathcal{H}_0 + \Delta \mathcal{H},
 \]
@@ -596,8 +605,8 @@ for \(\mathcal{H}\), we obtain
 \]
 Hamilton's equations read
 \begin{align*}
-  \dot{Q} = \pdv{\mathcal{H'}}{P} = \pdv{\Delta \mathcal{H}^0}{P} &&
-  \dot{P} = -\pdv{\mathcal{H'}}{Q} = -\pdv{\Delta \mathcal{H}^0}{Q}
+  \dot{Q} = \pdv{\mathcal{H'}}{P} = \pdv{\Delta \mathcal{H}^0}{P}, &&
+  \dot{P} = -\pdv{\mathcal{H'}}{Q} = -\pdv{\Delta \mathcal{H}^0}{Q}.
 \end{align*}
 
 In order to obtain the first order correction, we replace \(Q\) and \(P\)
@@ -608,10 +617,10 @@ after derivation with \(Q_0\) and \(P_0\).
 \end{align*}
 We can integrate the above differential equations to obtain \(Q_1\) and \(P_1\).
 
-{\color{red}With these corrections we can construct a new generating function
-\(S(Q_1,P_1,t)\) (why not \(S(q,P_1,t)\)?
-will this generating function be of type \(F_2\)?) which we can use to obtain
-a new perturbed Hamiltonian \(\Delta \mathcal{H}^1\) (is \(\mathcal{H''}_0 = 0\)?)}.
+% {\color{red}With these corrections we can construct a new generating function
+% \(S(Q_1,P_1,t)\) (why not \(S(q,P_1,t)\)?
+% will this generating function be of type \(F_2\)?) which we can use to obtain
+% a new perturbed Hamiltonian \(\Delta \mathcal{H}^1\) (is \(\mathcal{H''}_0 = 0\)?)}.
 
 In order to obtain higher order corrections we replace in \(\Delta \mathcal{H}^0\)
 the conjugate variables \(Q_0\) and \(P_0\) with \(Q_1\) and \(P_1\),
@@ -626,18 +635,18 @@ this method and the perturbation will significantly alter the motion.
 Hence, an important question that arises is the stability of the perturbed solutions
 and the domain of applicability for the perturbation theory.
 
-The Kolmogorov-Arnold-Moser theorem or KAM theorem gives the limits of regular (or
+The Kolmogorov-Arnold-Moser theorem or K.A.M. theorem gives the limits of regular (or
 non-chaotic) motion for systems with bounded motion.
 
 
 \begin{theorem*}[Kolmogorov-Arnold-Moser theorem]
   If the bounded motion of an integrable system given by the Hamiltonian \(\mathcal{H}_0\)
   is disturbed by a small perturbation \(\Delta \mathcal{H}\) rendering the system
-  non-integrable and if the unperturbed motion has {\color{red}incommensurate}
+  non-integrable and if the unperturbed motion has incommensurate
   frequencies \(\omega_i=\dot{\theta}_i\), where \(\theta_i\) are the angle
   variables, then the motion will remain confined to an \(n\)-torus, except for
   a small set of initial conditions for which the trajectories escape on the
-  energy hypersurface.
+  energy hyper-surface.
 \end{theorem*}
 
 The theorem tells us that the majority of the tori will survive the perturbation
@@ -648,8 +657,8 @@ Furthermore, the destroyed tori have rationally related frequencies, that is
 there exist \(m_1,\dotsc,m_n \equiv \vb{m} \in \mathbb{Z}^n\) such that
 \(\vb{m} \vdot \vb*{\omega} = 0\), where \(\vb*{\omega} \equiv \omega_1,\dotsc,\omega_n\).
 
-Since the set of rational numbers is {\color{red}dense} in the set of real numbers,
-the set of destroyed tori will be {\color{red}dense in the phase space}. In the
+Since the set of rational numbers is dense in the set of real numbers,
+the set of destroyed tori will be dense in the phase space. In the
 place of the destroyed tori chaotic motion will appear as the trajectories escape
 in the \(2n-1\) subspace of constant energy.
 
