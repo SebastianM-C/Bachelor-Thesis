@@ -9,26 +9,17 @@
 
 \begin{document}
 
+\newgeometry{margin=1in}
 \input{Title/title.tex}
+\restoregeometry
 
-\clearpage
-\begingroup
-  \pagestyle{empty}
-  \null
-  \newpage
-\endgroup
+{\pagestyle{empty}\cleardoublepage}
 
 \tableofcontents
-\clearpage
+{\pagestyle{empty}\cleardoublepage}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
 
-\chapter*{Acknowledgements}
-\thispagestyle{empty}
-
-I would like to thank my advisers, Prof.~dr.~Virgil Băran and Lect.~dr.~Roxana Zus,
-for their help and for delivering one of the most interesting lectures.
-
-\clearpage
-
+\pagenumbering{arabic}
 \subfile{Introduction/intro.tex}
 \subfile{Classical_Chaos/c_chaos.tex}
 \subfile{Quantum_Chaos/q_chaos.tex}
